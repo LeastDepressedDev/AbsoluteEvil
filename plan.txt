@@ -1,0 +1,5 @@
+AbsoluteEvil manager - in progress
+Combat helper[aim] - Done
+Changed registry - Done
+Auto bridging - Done
+Aim breaking key - Done

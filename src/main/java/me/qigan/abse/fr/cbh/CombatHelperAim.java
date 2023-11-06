@@ -1,0 +1,189 @@
+package me.qigan.abse.fr.cbh;
+
+import me.qigan.abse.Holder;
+import me.qigan.abse.Index;
+import me.qigan.abse.config.SetsData;
+import me.qigan.abse.config.ValType;
+import me.qigan.abse.crp.MainWrapper;
+import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.Debug;
+import me.qigan.abse.sync.Utils;
+import me.qigan.abse.vp.Esp;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CombatHelperAim extends Module {
+
+    public static final int ATKTICK_CONST = 10;
+
+    private static int skip = 0;
+    private static int atkTick = 0;
+
+    private static Target lastPrim;
+
+    private static class Target {
+        public final Entity ref;
+        public final double theta;
+        public final double zeta;
+
+        public Target(Entity ref, double theta, double zeta) {
+            this.ref = ref;
+            this.theta = theta;
+            this.zeta = zeta;
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    void overLay(RenderGameOverlayEvent.Pre e) {
+        if (!isEnabled()) return;
+        if (e.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && lastPrim != null) {
+            float fYaw = Minecraft.getMinecraft().thePlayer.rotationYawHead;
+            float fPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
+
+            double dw = e.resolution.getScaledWidth()/180d;
+            double dh = e.resolution.getScaledHeight()/90d;
+
+            int x = (int) ((e.resolution.getScaledWidth()/2f)+(dw*((lastPrim.theta-fYaw))));
+            int y = (int) ((e.resolution.getScaledHeight()/2f)+(dh*(lastPrim.zeta-fPitch)));
+
+            GL11.glPushMatrix();
+            GlStateManager.enableBlend();
+
+            GL11.glTranslatef(x, y, 0);
+            Esp.drawModalRectWithCustomSizedTexture(-4, -4, 8, 8, 0, 0, 8, 8,
+                    new ResourceLocation("abse", "target.png"), new Color(0xFFFFFF));
+            GL11.glPopMatrix();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.icons);
+        }
+    }
+
+    @SubscribeEvent
+    void debugText(RenderGameOverlayEvent.Text e) {
+        if (!isEnabled() || !Debug.GENERAL) return;
+        EntityPlayerSP mplayer = Minecraft.getMinecraft().thePlayer;
+        List<String> tr = new ArrayList<>();
+        tr.add("\u00a7erealY: " + mplayer.rotationYawHead);
+        tr.add("\u00a7erealP: " + mplayer.rotationPitch);
+        tr.add("\u00a7eTarget: " + ((lastPrim == null) ? "None" : lastPrim.ref.getName()));
+        if (lastPrim != null) {
+            tr.add("\u00a7etargetTheta: " + lastPrim.theta);
+            tr.add("\u00a7etargetZeta: " + lastPrim.zeta);
+        }
+        Esp.drawAllignedTextList(tr, e.resolution.getScaledWidth()/2+120, e.resolution.getScaledHeight()/2+10, false, e.resolution);
+    }
+
+    @SubscribeEvent
+    void tick(TickEvent.ClientTickEvent e) {
+        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = ATKTICK_CONST;
+        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
+        if (skip == 0) {
+            if (atkTick == 0) {
+                lastPrim = null;
+                return;
+            }
+
+            boolean advcState = Holder.quickFind("cbh_aim_adv").isEnabled();
+            boolean randState = Holder.quickFind("cbh_aim_rand").isEnabled();
+            boolean selState = Holder.quickFind("cbh_aim_sel").isEnabled();
+
+            int ln = -1;
+            if (selState && Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4) != null) {
+                ln = Utils.getItemColor(Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4));
+            }
+
+            float fYaw = Minecraft.getMinecraft().thePlayer.rotationYawHead;
+            float fPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
+            skip = Index.MAIN_CFG.getIntVal("cbh_tickskip");
+            Target primary = null;
+
+            double distLim = Index.MAIN_CFG.getDouble("cbh_dist");
+            double s = Index.MAIN_CFG.getDouble("cbh_speed");
+
+            for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+                if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
+                if (ent instanceof EntityPlayer || Debug.GENERAL) {
+                    if (selState && !Debug.GENERAL) {
+                        EntityPlayer player = (EntityPlayer) ent;
+                        if (Index.MAIN_CFG.getBoolVal("cbh_aim_sel_team") && player.getEquipmentInSlot(4) != null) {
+                            if (player.getEquipmentInSlot(4).getItem() == Items.leather_helmet) {
+                                int prec = Utils.getItemColor(player.getEquipmentInSlot(4));
+                                if (prec == ln) continue;
+                            }
+                        }
+                    }
+                    double f = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent);
+
+                    if (!ent.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && f < distLim && (primary == null || (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(ent) && f < primary.ref.getDistanceToEntity(Minecraft.getMinecraft().thePlayer)))) {
+                        final float[] rotations = Utils.getRotationsNeeded(Minecraft.getMinecraft().thePlayer, ent);
+                        primary = new Target(ent, rotations[0], rotations[1]);
+                    }
+                }
+            }
+
+            lastPrim = primary;
+
+            if (primary != null) {
+                double d = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(primary.ref);
+                if (d > Index.MAIN_CFG.getDouble("cbh_aim_distbp")) {
+                    if (randState) s+=CombatHelperAimRandomize.createRandomDouble();
+                    double v = (primary.theta - fYaw) * (s / (10 * d));
+                    double u = (primary.zeta - fPitch) * (s / (10 * d));
+                    if (advcState) {
+                        Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(primary.theta - fYaw) < Index.MAIN_CFG.getDouble("cbh_aim_px")) ? 0 : v;
+                        Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(primary.zeta - fPitch) < Index.MAIN_CFG.getDouble("cbh_aim_py")) ? 0 : u;
+                    } else {
+                        Minecraft.getMinecraft().thePlayer.rotationYaw += v;
+                        Minecraft.getMinecraft().thePlayer.rotationPitch += u;
+                    }
+                }
+            }
+
+            atkTick--;
+        } else {
+            skip--;
+        }
+    }
+
+    @Override
+    public String id() {
+        return "cbh_aim";
+    }
+
+    @Override
+    public String fname() {
+        return "Combat helper[aim]";
+    }
+
+    @Override
+    public List<SetsData<String>> sets() {
+        List<SetsData<String>> list = new ArrayList<>();
+        list.add(new SetsData<>("cbh_speed", "Speed Modifier", ValType.DOUBLE_NUMBER, "4"));
+        list.add(new SetsData<>("cbh_dist", "Distance", ValType.DOUBLE_NUMBER, "5"));
+        list.add(new SetsData<>("cbh_tickskip", "Tick skip[don't change if you are not sure]", ValType.NUMBER, "1"));
+        return list;
+    }
+
+    @Override
+    public String description() {
+        return "Complicated thing as a massive problem";
+    }
+}

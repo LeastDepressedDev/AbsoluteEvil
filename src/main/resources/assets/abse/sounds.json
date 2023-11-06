@@ -1,0 +1,34 @@
+{
+  "skeet_hit": {
+    "subtitle": "abse.subtitle.skeet",
+    "sounds": ["abse:skeet"]
+  },
+  "cum_zone": {
+    "subtitle": "abse.subtitle.cum",
+    "sounds": ["abse:cum"]
+  },
+  "stonks": {
+    "subtitle": "abse.subtitle.stonks",
+    "sounds": ["abse:stonks"]
+  },
+  "cashreg": {
+    "subtitle": "abse.subtitle.cashreg",
+    "sounds": ["abse:cashreg"]
+  },
+  "pipe": {
+    "subtitle": "abse.subtitle.metal_pipe",
+    "sounds": ["abse:pipe"]
+  },
+  "fucked": {
+    "subtitle": "abse.subtitle.blevota",
+    "sounds": ["abse:fucked"]
+  },
+  "kurlyk": {
+    "subtitle": "abse.subtitle.kurlyk",
+    "sounds": ["abse:kurlyk"]
+  },
+  "aaaaaa": {
+    "subtitle": "abse.subtitle.aaaaaaaaaaaa",
+    "sounds": ["abse:aaaaaa"]
+  }
+}
