@@ -37,8 +37,9 @@ public class CombatHelperAim extends Module {
 
     private static int skip = 0;
     private static int atkTick = 0;
+    public static boolean OVERRIDE = false;
 
-    private static Target lastPrim;
+    private static Target prim;
 
     private static class Target {
         public final Entity ref;
@@ -55,15 +56,15 @@ public class CombatHelperAim extends Module {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     void overLay(RenderGameOverlayEvent.Pre e) {
         if (!isEnabled()) return;
-        if (e.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && lastPrim != null) {
+        if (e.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && prim != null) {
             float fYaw = Minecraft.getMinecraft().thePlayer.rotationYawHead;
             float fPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
             double dw = e.resolution.getScaledWidth()/180d;
             double dh = e.resolution.getScaledHeight()/90d;
 
-            int x = (int) ((e.resolution.getScaledWidth()/2f)+(dw*((lastPrim.theta-fYaw))));
-            int y = (int) ((e.resolution.getScaledHeight()/2f)+(dh*(lastPrim.zeta-fPitch)));
+            int x = (int) ((e.resolution.getScaledWidth()/2f)+(dw*((prim.theta-fYaw))));
+            int y = (int) ((e.resolution.getScaledHeight()/2f)+(dh*(prim.zeta-fPitch)));
 
             GL11.glPushMatrix();
             GlStateManager.enableBlend();
@@ -83,10 +84,10 @@ public class CombatHelperAim extends Module {
         List<String> tr = new ArrayList<>();
         tr.add("\u00a7erealY: " + mplayer.rotationYawHead);
         tr.add("\u00a7erealP: " + mplayer.rotationPitch);
-        tr.add("\u00a7eTarget: " + ((lastPrim == null) ? "None" : lastPrim.ref.getName()));
-        if (lastPrim != null) {
-            tr.add("\u00a7etargetTheta: " + lastPrim.theta);
-            tr.add("\u00a7etargetZeta: " + lastPrim.zeta);
+        tr.add("\u00a7eTarget: " + ((prim == null || prim.ref == null) ? "None" : prim.ref.getName()));
+        if (prim != null) {
+            tr.add("\u00a7etargetTheta: " + prim.theta);
+            tr.add("\u00a7etargetZeta: " + prim.zeta);
         }
         Esp.drawAllignedTextList(tr, e.resolution.getScaledWidth()/2+120, e.resolution.getScaledHeight()/2+10, false, e.resolution);
     }
@@ -94,10 +95,10 @@ public class CombatHelperAim extends Module {
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = ATKTICK_CONST;
-        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
+        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null || OVERRIDE) return;
         if (skip == 0) {
             if (atkTick == 0) {
-                lastPrim = null;
+                prim = null;
                 return;
             }
 
@@ -139,17 +140,17 @@ public class CombatHelperAim extends Module {
                 }
             }
 
-            lastPrim = primary;
+            prim = primary;
 
-            if (primary != null) {
-                double d = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(primary.ref);
+            if (prim != null) {
+                double d = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(prim.ref);
                 if (d > Index.MAIN_CFG.getDouble("cbh_aim_distbp")) {
                     if (randState) s+=CombatHelperAimRandomize.createRandomDouble();
-                    double v = (primary.theta - fYaw) * (s / (10 * d));
-                    double u = (primary.zeta - fPitch) * (s / (10 * d));
+                    double v = (prim.theta - fYaw) * (s / (10 * d));
+                    double u = (prim.zeta - fPitch) * (s / (10 * d));
                     if (advcState) {
-                        Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(primary.theta - fYaw) < Index.MAIN_CFG.getDouble("cbh_aim_px")) ? 0 : v;
-                        Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(primary.zeta - fPitch) < Index.MAIN_CFG.getDouble("cbh_aim_py")) ? 0 : u;
+                        Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDouble("cbh_aim_px")) ? 0 : v;
+                        Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDouble("cbh_aim_py")) ? 0 : u;
                     } else {
                         Minecraft.getMinecraft().thePlayer.rotationYaw += v;
                         Minecraft.getMinecraft().thePlayer.rotationPitch += u;
