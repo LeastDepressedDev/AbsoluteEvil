@@ -39,17 +39,30 @@ public class CombatHelperAim extends Module {
     private static int atkTick = 0;
     public static boolean OVERRIDE = false;
 
-    private static Target prim;
+    public static Target prim;
 
-    private static class Target {
+    public static class Target {
         public final Entity ref;
         public final double theta;
         public final double zeta;
+
+        public boolean lockTheta = true;
+        public boolean lockZeta = true;
 
         public Target(Entity ref, double theta, double zeta) {
             this.ref = ref;
             this.theta = theta;
             this.zeta = zeta;
+        }
+
+        public Target unlockTheta() {
+            this.lockTheta = false;
+            return this;
+        }
+
+        public Target unlockZeta() {
+            this.lockZeta = false;
+            return this;
         }
     }
 
@@ -95,9 +108,9 @@ public class CombatHelperAim extends Module {
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = ATKTICK_CONST;
-        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null || OVERRIDE) return;
+        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (skip == 0) {
-            if (atkTick == 0) {
+            if (atkTick == 0 && !OVERRIDE) {
                 prim = null;
                 return;
             }
@@ -105,7 +118,6 @@ public class CombatHelperAim extends Module {
             boolean advcState = Holder.quickFind("cbh_aim_adv").isEnabled();
             boolean randState = Holder.quickFind("cbh_aim_rand").isEnabled();
             boolean selState = Holder.quickFind("cbh_aim_sel").isEnabled();
-
             int ln = -1;
             if (selState && Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4) != null) {
                 ln = Utils.getItemColor(Minecraft.getMinecraft().thePlayer.getEquipmentInSlot(4));
@@ -118,29 +130,30 @@ public class CombatHelperAim extends Module {
 
             double distLim = Index.MAIN_CFG.getDouble("cbh_dist");
             double s = Index.MAIN_CFG.getDouble("cbh_speed");
-
-            for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-                if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
-                if (ent instanceof EntityPlayer || Debug.GENERAL) {
-                    if (selState && !Debug.GENERAL) {
-                        EntityPlayer player = (EntityPlayer) ent;
-                        if (Index.MAIN_CFG.getBoolVal("cbh_aim_sel_team") && player.getEquipmentInSlot(4) != null) {
-                            if (player.getEquipmentInSlot(4).getItem() == Items.leather_helmet) {
-                                int prec = Utils.getItemColor(player.getEquipmentInSlot(4));
-                                if (prec == ln) continue;
+            if (OVERRIDE) {
+                for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+                    if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
+                    if (ent instanceof EntityPlayer || Debug.GENERAL) {
+                        if (selState && !Debug.GENERAL) {
+                            EntityPlayer player = (EntityPlayer) ent;
+                            if (Index.MAIN_CFG.getBoolVal("cbh_aim_sel_team") && player.getEquipmentInSlot(4) != null) {
+                                if (player.getEquipmentInSlot(4).getItem() == Items.leather_helmet) {
+                                    int prec = Utils.getItemColor(player.getEquipmentInSlot(4));
+                                    if (prec == ln) continue;
+                                }
                             }
                         }
-                    }
-                    double f = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent);
+                        double f = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent);
 
-                    if (!ent.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && f < distLim && (primary == null || (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(ent) && f < primary.ref.getDistanceToEntity(Minecraft.getMinecraft().thePlayer)))) {
-                        final float[] rotations = Utils.getRotationsNeeded(Minecraft.getMinecraft().thePlayer, ent);
-                        primary = new Target(ent, rotations[0], rotations[1]);
+                        if (!ent.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && f < distLim && (primary == null || (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(ent) && f < primary.ref.getDistanceToEntity(Minecraft.getMinecraft().thePlayer)))) {
+                            final float[] rotations = Utils.getRotationsNeeded(Minecraft.getMinecraft().thePlayer, ent);
+                            primary = new Target(ent, rotations[0], rotations[1]);
+                        }
                     }
                 }
-            }
 
-            prim = primary;
+                prim = primary;
+            }
 
             if (prim != null) {
                 double d = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(prim.ref);
@@ -149,11 +162,11 @@ public class CombatHelperAim extends Module {
                     double v = (prim.theta - fYaw) * (s / (10 * d));
                     double u = (prim.zeta - fPitch) * (s / (10 * d));
                     if (advcState) {
-                        Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDouble("cbh_aim_px")) ? 0 : v;
-                        Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDouble("cbh_aim_py")) ? 0 : u;
+                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDouble("cbh_aim_px")) ? 0 : v;
+                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDouble("cbh_aim_py")) ? 0 : u;
                     } else {
-                        Minecraft.getMinecraft().thePlayer.rotationYaw += v;
-                        Minecraft.getMinecraft().thePlayer.rotationPitch += u;
+                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += v;
+                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += u;
                     }
                 }
             }
