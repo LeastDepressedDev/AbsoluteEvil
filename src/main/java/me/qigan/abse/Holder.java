@@ -53,6 +53,7 @@ public class Holder {
 		register(new CombatHelperSR());
 		register(new FireballDetector());
 		register(new AutoBridging());
+		register(new SaveBot());
 	}
 	
 	public static void register(Module mod) {
