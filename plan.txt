@@ -3,3 +3,4 @@ Combat helper[aim] - Done
 Changed registry - Done
 Auto bridging - Done
 Aim breaking key - Done
+Save bot - in progress
