@@ -63,6 +63,7 @@ public class FireballDetector extends Module {
 
     @SubscribeEvent
     void render(RenderWorldLastEvent e) {
+        if (!isEnabled()) return;
         boolean rendStr = false;
         for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
             if (ent instanceof EntityFireball) {
