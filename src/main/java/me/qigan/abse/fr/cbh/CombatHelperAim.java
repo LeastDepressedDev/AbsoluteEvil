@@ -130,7 +130,7 @@ public class CombatHelperAim extends Module {
 
             double distLim = Index.MAIN_CFG.getDouble("cbh_dist");
             double s = Index.MAIN_CFG.getDouble("cbh_speed");
-            if (OVERRIDE) {
+            if (!OVERRIDE) {
                 for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                     if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
                     if (ent instanceof EntityPlayer || Debug.GENERAL) {
