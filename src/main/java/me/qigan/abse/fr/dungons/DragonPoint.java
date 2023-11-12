@@ -44,7 +44,7 @@ public class DragonPoint extends Module {
                 Esp.autoBox3D(drag, new Color(0, 255, 0, 255), true);
 
                 double dist = drag.getDistance(spawn_pos.getX(), spawn_pos.getY()+1.5, spawn_pos.getZ());
-                Esp.autoBox3D(drag.posX, drag.posY+2, drag.posZ, 1, 1, new Color((int) (dist/AVG_DIST*255), 0, 255 - (int)(dist/AVG_DIST*255), 255), 2f, true);
+                Esp.autoBox3D(drag.posX, drag.posY+2, drag.posZ, 1, 1, new Color(255, 0, 100), 2f, true);
                 if (Index.MAIN_CFG.getBoolVal("m7dp_traj")) {
                     double speedX = drag.posX - drag.lastTickPosX;
                     double speedY = drag.posY - drag.lastTickPosY;
