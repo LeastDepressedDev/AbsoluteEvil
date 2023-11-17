@@ -3,4 +3,5 @@ Combat helper[aim] - Done
 Changed registry - Done
 Auto bridging - Done
 Aim breaking key - Done
+Randomize aim point (Shake type) - in plans
 Save bot - in progress

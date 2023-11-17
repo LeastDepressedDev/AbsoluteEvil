@@ -48,6 +48,7 @@ public class SaveBot extends Module {
     int bucketCheck() {
         for (int i = 0; i < 9; i++) {
             ItemStack stack = Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(i);
+            if (stack == null) continue;
             if (stack.getItem() == Items.water_bucket) return i;
         }
         return -1;
