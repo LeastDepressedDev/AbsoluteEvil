@@ -11,7 +11,7 @@ public class CombatHelperAimShake extends Module {
 
     @Override
     public String fname() {
-        return "Shake";
+        return "Aim shake";
     }
 
     @Override

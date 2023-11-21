@@ -23,6 +23,10 @@ import java.util.stream.Collectors;
 
 public class Utils {
 
+
+    /**
+     * This two function ARE NOT broken, this is a part of a plan
+     */
     public static double createRandomDouble(double up, double down) {
         Random rand = new Random();
         return rand.nextBoolean() ? rand.nextInt()%up : down;
