@@ -14,6 +14,7 @@ import net.minecraft.util.*;
 import org.lwjgl.opengl.GL11;
 import scala.reflect.internal.pickling.Translations;
 
+import javax.vecmath.Point3d;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
@@ -61,6 +62,55 @@ public class Esp {
         }
     }
 
+    public static void drawAsSingleLine(List<Point3d> vec, Color color, float lineWidth, boolean esp) {
+        drawAsSingleLine(vec, color, lineWidth, esp, 1);
+    }
+
+    public static void drawAsSingleLine(List<Point3d> vec, Color color, float lineWidth, boolean esp, int beginMode) {
+        if (vec.size() <= 2) return;
+        double renderPosX = Minecraft.getMinecraft().getRenderManager().viewerPosX;
+        double renderPosY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
+        double renderPosZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+
+        GL11.glPushMatrix();
+        if (esp) {
+            VisualApi.prepareGLL();
+        }
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        VisualApi.setupLine(lineWidth, color);
+        GlStateManager.translate(0, 0, 0);
+        GL11.glBegin(1);
+        for (int i = 0; i < vec.size()-1; i++) {
+
+            Point3d pt1 = vec.get(i);
+            Point3d pt2 = vec.get(i+1);
+
+            double x = pt1.x, y = pt1.y, z = pt1.z;
+            double x1 = pt2.x, y1 = pt2.y, z1 = pt2.z;
+
+            x -= renderPosX;
+            y -= renderPosY;
+            z -= renderPosZ;
+
+            x1 -= renderPosX;
+            y1 -= renderPosY;
+            z1 -= renderPosZ;
+
+            GL11.glVertex3d(x, y, z);
+            GL11.glVertex3d(x1, y1, z1);
+        }
+        GL11.glEnd();
+
+        if (esp) {
+            VisualApi.endGLL();
+        }
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GL11.glColor4f(255, 255, 255, 1f);
+        GL11.glPopMatrix();
+    }
 
     public static void drawTracer(double x, double y, double z, double x1, double y1, double z1, Color color, float lineWidth) {
         drawTracer(x, y, z, x1, y1, z1, color, lineWidth, false);
@@ -120,7 +170,6 @@ public class Esp {
         VisualApi.setupLine(lineWidth, color);
         GlStateManager.translate(posX, posY, posZ);
         GL11.glBegin(1);
-        //RenderGlobal.drawOutlinedBoundingBox();
         GL11.glVertex3d(0, 0, 0);
         GL11.glVertex3d(0, height, 0);
         GL11.glVertex3d(0, 0, 0);
