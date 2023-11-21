@@ -25,13 +25,6 @@ public class Experimental extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
-        list.add(new SetsData<>("exptl_1", "Dist", ValType.NUMBER, "562"));
-        return list;
-    }
-
-    @Override
     public String description() {
         return "Being used for testing some crazy stuff";
     }

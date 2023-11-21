@@ -81,9 +81,9 @@ public class TemporaryGb extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("temp_gb_time", "Time(client ticks)", ValType.NUMBER, "200"));
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("temp_gb_time", "Time(client ticks)", ValType.NUMBER, "200"));
         return list;
     }
 

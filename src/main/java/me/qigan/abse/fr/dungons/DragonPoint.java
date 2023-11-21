@@ -136,9 +136,9 @@ public class DragonPoint extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("m7dp_traj", "Draw trajectory", ValType.BOOLEAN, "false"));
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("m7dp_traj", "Draw trajectory", ValType.BOOLEAN, "false"));
         return list;
     }
 

@@ -54,8 +54,8 @@ public class MelodyShit extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<String>("melody_message", "Message", ValType.STRING, "Melody"));
         return list;
     }

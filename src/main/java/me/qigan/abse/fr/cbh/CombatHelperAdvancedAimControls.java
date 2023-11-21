@@ -15,8 +15,8 @@ public class CombatHelperAdvancedAimControls extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_aim_px", "Yaw limiter", ValType.DOUBLE_NUMBER, "0.5"));
         list.add(new SetsData<>("cbh_aim_py", "Pitch limiter", ValType.DOUBLE_NUMBER, "1.4"));
         list.add(new SetsData<>("cbh_aim_distbp", "Distance break point", ValType.DOUBLE_NUMBER, "1"));

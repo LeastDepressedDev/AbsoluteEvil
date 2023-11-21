@@ -208,8 +208,8 @@ public class CombatHelperAim extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_speed", "Speed Modifier", ValType.DOUBLE_NUMBER, "4"));
         list.add(new SetsData<>("cbh_dist", "Distance", ValType.DOUBLE_NUMBER, "5"));
         list.add(new SetsData<>("cbh_tickskip", "Tick skip[don't change if you are not sure]", ValType.NUMBER, "1"));

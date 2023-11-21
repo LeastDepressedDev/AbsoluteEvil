@@ -107,8 +107,8 @@ public class BWTeamTracker extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("bwtt_rpt", "Respawn time(seconds)", ValType.NUMBER, "5"));
         return list;
     }

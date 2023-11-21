@@ -104,8 +104,8 @@ public class BWEsp extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("bwesp_tracer", "Tracers", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("bwesp_team", "Track team", ValType.BOOLEAN, "false"));
         return list;

@@ -131,11 +131,11 @@ public class GhostUtils extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("box_ghost", "Ghost box", ValType.BOOLEAN, "true"));
-        list.add(new SetsData<String>("ghost_hud", "Hud", ValType.BOOLEAN, "true"));
-        list.add(new SetsData<String>("custom_ghost_sound", "Custom kill sound[WIP]", ValType.BOOLEAN, "false"));
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("box_ghost", "Ghost box", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("ghost_hud", "Hud", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("custom_ghost_sound", "Custom kill sound[WIP]", ValType.BOOLEAN, "false"));
         return list;
     }
 

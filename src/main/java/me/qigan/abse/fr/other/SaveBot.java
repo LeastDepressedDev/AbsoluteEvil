@@ -119,8 +119,8 @@ public class SaveBot extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("sbot_bucket", "Water bucket", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("sbot_blocks", "Block Save", ValType.BOOLEAN, "true"));
         return list;

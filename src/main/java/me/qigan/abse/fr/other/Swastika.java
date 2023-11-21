@@ -69,8 +69,8 @@ public class Swastika extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("swastair_size", "Size", ValType.NUMBER, "16"));
         list.add(new SetsData<>("swastair_speed", "Speed", ValType.DOUBLE_NUMBER, "4"));
         list.add(new SetsData<>("swastair_chroma", "Chroma speed", ValType.DOUBLE_NUMBER, "1"));

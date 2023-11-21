@@ -63,10 +63,10 @@ public class Debug extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("debug_render_names", "Render names", ValType.BOOLEAN, "true"));
-        list.add(new SetsData<String>("debug_render_id", "Render id", ValType.BOOLEAN, "true"));
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("debug_render_names", "Render names", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("debug_render_id", "Render id", ValType.BOOLEAN, "true"));
         return list;
     }
 

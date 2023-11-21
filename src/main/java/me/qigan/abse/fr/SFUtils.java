@@ -129,9 +129,9 @@ public class SFUtils extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("sf_trace_mob", "Trace closest mob", ValType.BOOLEAN, "true"));
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("sf_trace_mob", "Trace closest mob", ValType.BOOLEAN, "true"));
         return list;
     }
 

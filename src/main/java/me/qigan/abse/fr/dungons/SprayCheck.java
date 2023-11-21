@@ -72,8 +72,8 @@ public class SprayCheck extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<String>("scan_time", "Scan time(ticks)", ValType.NUMBER, "40"));
         list.add(new SetsData<String>("spray_msg", "Spray message", ValType.STRING, "Sprayed!"));
         return list;

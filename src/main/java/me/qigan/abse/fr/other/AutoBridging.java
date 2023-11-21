@@ -69,8 +69,8 @@ public class AutoBridging extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("abrig_tog", "Toggle mode", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("abrig_tracel", "Trace length", ValType.DOUBLE_NUMBER, "1.7"));
         list.add(new SetsData<>("abrig_hold", "Hold time(ms)", ValType.NUMBER, "30"));

@@ -4,5 +4,9 @@ public enum ValType {
 	NUMBER,
 	DOUBLE_NUMBER,
 	STRING,
-	BOOLEAN
+	BOOLEAN,
+
+
+
+	BUTTON
 }

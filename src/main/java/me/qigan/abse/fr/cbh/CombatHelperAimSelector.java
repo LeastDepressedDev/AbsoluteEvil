@@ -20,8 +20,8 @@ public class CombatHelperAimSelector extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_aim_sel_team", "Trigger team", ValType.BOOLEAN, "true"));
         //list.add(new SetsData<>("cbh_aim_downs", "Down scale", ValType.BOOLEAN, "2"));
         return list;

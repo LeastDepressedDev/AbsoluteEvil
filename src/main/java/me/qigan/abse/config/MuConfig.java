@@ -28,9 +28,11 @@ public class MuConfig {
 			if(!writer.contains(mdl.id()) || Debug.DISABLE_STATE.contains(mdl.id())) {
 				this.writer.set(mdl.id(), "false");
 			}
-			for (SetsData<String> dat : mdl.sets()) {
-				if(!writer.contains(dat.setId)) {
-					this.writer.set(dat.setId, dat.defVal);
+			for (SetsData<?> dat : mdl.sets()) {
+				if (dat.dataType != ValType.BUTTON) {
+					if (!writer.contains(dat.setId)) {
+						this.writer.set(dat.setId, (String) dat.defVal);
+					}
 				}
 			}
 		}

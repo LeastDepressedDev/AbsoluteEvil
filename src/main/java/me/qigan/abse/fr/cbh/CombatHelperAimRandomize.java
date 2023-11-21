@@ -22,8 +22,8 @@ public class CombatHelperAimRandomize extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_aim_ups", "Up scale", ValType.DOUBLE_NUMBER, "2"));
         list.add(new SetsData<>("cbh_aim_downs", "Down scale", ValType.DOUBLE_NUMBER, "2"));
         return list;

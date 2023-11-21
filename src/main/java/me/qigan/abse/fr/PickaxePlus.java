@@ -45,13 +45,6 @@ public class PickaxePlus extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("show_hud_ghostblocks", "Hud", ValType.BOOLEAN, "true"));
-        return list;
-    }
-
-    @Override
     public String description() {
         return "While holding use button adding ghost blocks when mining.";
     }

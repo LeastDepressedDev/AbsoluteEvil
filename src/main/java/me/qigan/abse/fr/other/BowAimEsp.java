@@ -53,8 +53,8 @@ public class BowAimEsp extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("baimesp_dist", "Distance impact", ValType.DOUBLE_NUMBER, "280"));
         list.add(new SetsData<>("baimesp_col", "Color[int]", ValType.NUMBER, Integer.toString(0xFF0000)));
         list.add(new SetsData<>("baimesp_a", "Alpha[0; 255]", ValType.NUMBER, "255"));

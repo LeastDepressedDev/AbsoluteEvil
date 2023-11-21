@@ -100,9 +100,9 @@ public class MainGui extends QGuiScreen {
             Id++;
 
             int sumSize = 100 + 2*sizeW;
-            for (SetsData<String> ddr : mod.sets()) {
+            for (SetsData<?> ddr : mod.sets()) {
                 String call = ddr.guiName + ":";
-                //const move size 100
+                //const move size = 100
                 int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth(call);
                 int cumSize = size + comMove + sizeW;
                 if (sumSize + cumSize > width) {i++; sumSize = 60;}

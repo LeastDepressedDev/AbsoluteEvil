@@ -20,8 +20,8 @@ public class CombatHelperAimShake extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_shake_amount", "Amount", ValType.DOUBLE_NUMBER, "1.5"));
         return list;
     }

@@ -83,8 +83,8 @@ public class BowPracticeMod extends Module implements EDLogic {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("bowpm_alpha", "Alpha[0-255]", ValType.NUMBER, "200"));
         list.add(new SetsData<>("bowpm_lsize", "Line size", ValType.NUMBER, "2"));
         list.add(new SetsData<>("bowpm_esp", "Esp mode", ValType.BOOLEAN, "false"));

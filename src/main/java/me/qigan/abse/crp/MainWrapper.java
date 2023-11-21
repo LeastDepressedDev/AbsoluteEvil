@@ -23,6 +23,9 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainWrapper {
 
     public static class Keybinds {
@@ -37,6 +40,7 @@ public class MainWrapper {
     }
 
     public static LoginScreen ls = new LoginScreen();
+    public static Map<String, Runnable> linkedScripts = new HashMap<>();
 
     private static void keyBinds() {
         Keybinds.unlimitedRange = new KeyBinding("Unlimited render range.", Keyboard.KEY_V, "key.abse");

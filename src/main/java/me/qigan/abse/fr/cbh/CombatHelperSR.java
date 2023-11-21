@@ -46,8 +46,8 @@ public class CombatHelperSR extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_resd", "Resprint distance[double(1-3)]", ValType.DOUBLE_NUMBER, "3"));
         return list;
     }

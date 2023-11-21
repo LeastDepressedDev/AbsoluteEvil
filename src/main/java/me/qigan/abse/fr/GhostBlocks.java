@@ -36,7 +36,7 @@ public class GhostBlocks extends Module {
 
     public static int tick = 0;
     /**
-     * In adressed data: 1 is new block, 2 is old block
+     * In addressed data: 1 is new block, 2 is old block
      */
     public static Map<BlockPos, AddressedData<Block, Block>> blocks = new HashMap<>();
 
@@ -128,11 +128,12 @@ public class GhostBlocks extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<SetsData<String>>();
-        list.add(new SetsData<String>("render_gb_box", "Render ghost block box", ValType.BOOLEAN, "true"));
-        list.add(new SetsData<String>("ignore_except", "Ignore exception blocks", ValType.BOOLEAN, "false"));
-        list.add(new SetsData<String>("tick_upt", "Tick update", ValType.NUMBER, "0"));
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("render_gb_box", "Render ghost block box", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("ignore_except", "Ignore exception blocks", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("tick_upt", "Tick update", ValType.NUMBER, "0"));
+        list.add(new SetsData<>("show_hud_ghostblocks", "Hud", ValType.BOOLEAN, "true"));
         return list;
     }
 

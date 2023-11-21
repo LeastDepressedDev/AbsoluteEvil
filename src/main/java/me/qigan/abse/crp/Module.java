@@ -18,7 +18,7 @@ public abstract class Module {
 	public boolean isEnabled() {
 		return Index.MAIN_CFG.getBoolVal(id());
 	}
-	public List<SetsData<String>> sets() {
+	public List<SetsData<?>> sets() {
 		return new ArrayList<>();
 	}
 	public void onRegister() {}

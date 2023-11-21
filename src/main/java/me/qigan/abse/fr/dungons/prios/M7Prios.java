@@ -115,8 +115,8 @@ public class M7Prios extends Module {
     }
 
     @Override
-    public List<SetsData<String>> sets() {
-        List<SetsData<String>> list = new ArrayList<>();
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("m7priostr", "Prio string", ValType.STRING, "robpg"));
         return list;
     }
