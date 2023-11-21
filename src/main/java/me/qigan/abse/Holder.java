@@ -55,6 +55,7 @@ public class Holder {
 		register(new FireballDetector());
 		register(new AutoBridging());
 		register(new SaveBot());
+		register(new BowPracticeMod());
 	}
 	
 	public static void register(Module mod) {
