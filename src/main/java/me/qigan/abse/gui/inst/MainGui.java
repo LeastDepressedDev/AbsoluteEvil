@@ -3,6 +3,7 @@ package me.qigan.abse.gui.inst;
 import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
+import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import me.qigan.abse.gui.GuiDoubleNumberField;
@@ -22,10 +23,10 @@ import java.util.Map;
 
 public class MainGui extends QGuiScreen {
 
-    private static Map<Integer, String> sch = new HashMap<Integer, String>();
-    private static Map<Integer, String> tsc = new HashMap<Integer, String>();
+    private static final Map<Integer, String> sch = new HashMap<>();
+    private static final Map<Integer, String> tsc = new HashMap<>();
 
-    public static List<Integer> moduleIDs = new ArrayList<>();
+    public static Map<Integer, Runnable> actButtons = new HashMap<>();
 
     public static final int PAGE_SIZE = 16;
 
@@ -35,9 +36,20 @@ public class MainGui extends QGuiScreen {
 
     public final int page;
 
-    public static final int sizeH = 10;
+
+
+    /**
+     * A bit of a constants
+     */
+    //sizeW - component width; sizeH - component height
     public static final int sizeW = 130;
+    public static final int sizeH = 10;
+    //Space between components
     public static final int comMove = 20;
+    //Separator things
+    public static final int sepSpace = 30;
+
+
 
     public static boolean queue = false;
 
@@ -95,16 +107,20 @@ public class MainGui extends QGuiScreen {
                 tooltipBoxList.add(new TooltipBox(60+sizeW, 60 + i*2*sizeH, sizeW, sizeH, stack1));
             }
             sch.put(button.id, mod.id());
-            moduleIDs.add(button.id);
             buttonList.add(button);
             Id++;
 
+            //const move size = 100
             int sumSize = 100 + 2*sizeW;
             for (SetsData<?> ddr : mod.sets()) {
                 String call = ddr.guiName + ":";
-                //const move size = 100
                 int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth(call);
-                int cumSize = size + comMove + sizeW;
+                int cumSize;
+                if (ddr.dataType == ValType.BUTTON) {
+                    cumSize = sizeW;
+                } else {
+                    cumSize = size + comMove + sizeW/2;
+                }
                 if (sumSize + cumSize > width) {i++; sumSize = 60;}
                 switch (ddr.dataType) {
                     case BOOLEAN:
@@ -168,8 +184,23 @@ public class MainGui extends QGuiScreen {
                         Id++;
                     }
                     break;
+                    case BUTTON:
+                    {
+                        GuiButton button1 = new GuiButton(Id, sumSize, 60 + i*2*sizeH, sizeW, sizeH, ddr.guiName);
+                        if (Debug.DISABLE_STATE.contains(ddr.setId)) {
+                            button1.enabled = false;
+                            ItemStack stack1 = new ItemStack(Items.arrow);
+                            stack1.setStackDisplayName("\u00A7f\u00A7cTemporary disabled!");
+                            tooltipBoxList.add(new TooltipBox(sumSize, 60 + i*2*sizeH, sizeW, sizeH, stack1));
+                        }
+                        sch.put(button1.id, ddr.setId);
+                        actButtons.put(button1.id, (Runnable) ddr.defVal);
+                        buttonList.add(button1);
+                        Id++;
+                    }
+                    break;
                 }
-                sumSize += cumSize;
+                sumSize += cumSize + sepSpace;
             }
 
             i++;
@@ -180,12 +211,7 @@ public class MainGui extends QGuiScreen {
     }
 
     private void reopen(final int page) {
-        Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                Minecraft.getMinecraft().displayGuiScreen(new MainGui(page, null));
-            }
-        });
+        Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(new MainGui(page, null)));
     }
 
     @Override
@@ -240,8 +266,12 @@ public class MainGui extends QGuiScreen {
                 Minecraft.getMinecraft().displayGuiScreen(new PositionsGui(this));
                 break;
             default:
-                button.displayString = (button.displayString.contains("ON") ? "\u00A7l\u00A7c OFF" : "\u00A7l\u00A7a ON");
-                Index.MAIN_CFG.toggle(sch.get(button.id));
+                if (actButtons.containsKey(button.id)) {
+                    actButtons.get(button.id).run();
+                } else {
+                    button.displayString = (button.displayString.contains("ON") ? "\u00A7l\u00A7c OFF" : "\u00A7l\u00A7a ON");
+                    Index.MAIN_CFG.toggle(sch.get(button.id));
+                }
                 break;
         }
     }

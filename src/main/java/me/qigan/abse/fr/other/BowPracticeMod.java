@@ -42,6 +42,11 @@ public class BowPracticeMod extends Module implements EDLogic {
         try {
             for (Map.Entry<EntityArrow, AddressedData<List<Point3d>, Boolean>> data : tracking.entrySet()) {
                 if (!data.getValue().getObject()) continue;
+                if (!data.getKey().isEntityAlive()) {
+                    AddressedData<List<Point3d>, Boolean> dat = data.getValue();
+                    dat.setObject(false);
+                    data.setValue(dat);
+                }
 
                 double dx = data.getKey().posX - data.getKey().prevPosX;
                 double dy = data.getKey().posY - data.getKey().prevPosY;
@@ -89,6 +94,7 @@ public class BowPracticeMod extends Module implements EDLogic {
         list.add(new SetsData<>("bowpm_lsize", "Line size", ValType.NUMBER, "2"));
         list.add(new SetsData<>("bowpm_esp", "Esp mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("bowpm_trig", "Double tracer mode", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("bowpm_reset", "Reset tracks", ValType.BUTTON, (Runnable) () -> tracking.clear()));
         return list;
     }
 
