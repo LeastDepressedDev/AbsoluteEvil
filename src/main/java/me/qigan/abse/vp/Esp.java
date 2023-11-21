@@ -321,12 +321,6 @@ public class Esp {
 
         drawNametag(str, col, false);
 
-//        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-//        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-//        GlStateManager.translate(0, -0.25f, 0);
-//        GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-//        GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-
         GlStateManager.popMatrix();
 
         GlStateManager.disableLighting();
