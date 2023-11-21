@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.qigan.abse.Holder;
+import me.qigan.abse.crp.EDLogic;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import net.minecraftforge.fml.common.Loader;
@@ -77,13 +78,13 @@ public class MuConfig {
 		return sets.get(namespace).equalsIgnoreCase("true");
 	}
 	
-	public void toggle(String namespace, boolean modular) {
+	public void toggle(String namespace) {
 		if (sets.get(namespace).equalsIgnoreCase("true")) {
 			this.set(namespace, "false");
-			if (modular) Holder.quickFind(namespace).onDisable();
+			EDLogic.tryDisableLogic(namespace);
 		} else {
 			this.set(namespace, "true");
-			if (modular) Holder.quickFind(namespace).onEnable();
+			EDLogic.tryEnableLogic(namespace);
 		}
 	}
 }

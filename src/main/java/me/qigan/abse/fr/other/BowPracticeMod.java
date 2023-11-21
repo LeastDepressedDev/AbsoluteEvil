@@ -4,6 +4,7 @@ import me.qigan.abse.Index;
 import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
+import me.qigan.abse.crp.EDLogic;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import me.qigan.abse.vp.Esp;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BowPracticeMod extends Module {
+public class BowPracticeMod extends Module implements EDLogic {
 
     public static Map<EntityArrow, AddressedData<List<Point3d>, Boolean>> tracking = new HashMap<>();
 
@@ -100,6 +101,9 @@ public class BowPracticeMod extends Module {
     public String fname() {
         return "Bow practice mod";
     }
+
+    @Override
+    public void onEnable() {}
 
     @Override
     public void onDisable() {

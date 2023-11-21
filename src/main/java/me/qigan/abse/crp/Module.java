@@ -21,7 +21,5 @@ public abstract class Module {
 	public List<SetsData<String>> sets() {
 		return new ArrayList<>();
 	}
-
-	public void onEnable() {};
-	public void onDisable() {};
+	public void onRegister() {}
 }

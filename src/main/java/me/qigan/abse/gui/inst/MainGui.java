@@ -37,6 +37,7 @@ public class MainGui extends QGuiScreen {
 
     public static final int sizeH = 10;
     public static final int sizeW = 130;
+    public static final int comMove = 20;
 
     public static boolean queue = false;
 
@@ -98,42 +99,40 @@ public class MainGui extends QGuiScreen {
             buttonList.add(button);
             Id++;
 
-            int r = 2;
-            int gr = 0;
+            int sumSize = 100 + 2*sizeW;
             for (SetsData<String> ddr : mod.sets()) {
                 String call = ddr.guiName + ":";
+                //const move size 100
                 int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth(call);
-                int kprf = ((100+size+r*sizeW) + (sizeW/2)) * gr;
-                if ((100+size+r*sizeW) + (sizeW/2) - kprf > width) {i++; gr++; }
-                kprf = (100+r*sizeW - 150) * gr;
+                int cumSize = size + comMove + sizeW;
+                if (sumSize + cumSize > width) {i++; sumSize = 60;}
                 switch (ddr.dataType) {
                     case BOOLEAN:
                     {
-                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, 80+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
+                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
                         label1.func_175202_a(call);
                         labelList.add(label1);
                         Id++;
-                        GuiButton button1 = new GuiButton(Id, 100+size+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH,
+                        GuiButton button1 = new GuiButton(Id, sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH,
                                 "\u00A7l" + (Index.MAIN_CFG.getBoolVal(ddr.setId) ? "\u00A7a ON" : "\u00A7c OFF"));
                         if (Debug.DISABLE_STATE.contains(ddr.setId)) {
                             button1.enabled = false;
                             ItemStack stack1 = new ItemStack(Items.arrow);
                             stack1.setStackDisplayName("\u00A7f\u00A7cTemporary disabled!");
-                            tooltipBoxList.add(new TooltipBox(100+size+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH, stack1));
+                            tooltipBoxList.add(new TooltipBox(sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH, stack1));
                         }
                         sch.put(button1.id, ddr.setId);
                         buttonList.add(button1);
                         Id++;
-
                     }
                     break;
                     case STRING:
                     {
-                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, 80+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
+                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
                         label1.func_175202_a(call);
                         labelList.add(label1);
                         Id++;
-                        GuiTextField textField = new GuiTextField(Id, Minecraft.getMinecraft().fontRendererObj, 100+size+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH);
+                        GuiTextField textField = new GuiTextField(Id, fontRendererObj, sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH);
                         textField.setText(Index.MAIN_CFG.getStrVal(ddr.setId));
                         textField.setMaxStringLength(256);
                         tsc.put(textField.getId(), ddr.setId);
@@ -143,23 +142,25 @@ public class MainGui extends QGuiScreen {
                     break;
                     case NUMBER:
                     {
-                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, 80+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
+                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
                         label1.func_175202_a(call);
                         labelList.add(label1);
                         Id++;
-                        GuiNumberField textField = new GuiNumberField(Id, Minecraft.getMinecraft().fontRendererObj, 100+size+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH);
+                        GuiNumberField textField = new GuiNumberField(Id, fontRendererObj, sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH);
                         textField.setText(Index.MAIN_CFG.getStrVal(ddr.setId));
                         textField.setMaxStringLength(256);
                         tsc.put(textField.getId(), ddr.setId);
                         textFieldList.add(textField);
                         Id++;
-                    } case DOUBLE_NUMBER:
+                    }
+                    break;
+                    case DOUBLE_NUMBER:
                     {
-                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, 80+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
+                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
                         label1.func_175202_a(call);
                         labelList.add(label1);
                         Id++;
-                        GuiDoubleNumberField textField = new GuiDoubleNumberField(Id, Minecraft.getMinecraft().fontRendererObj, 100+size+r*sizeW - kprf, 60 + i*2*sizeH, sizeW/2, sizeH);
+                        GuiDoubleNumberField textField = new GuiDoubleNumberField(Id, fontRendererObj, sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH);
                         textField.setText(Index.MAIN_CFG.getStrVal(ddr.setId));
                         textField.setMaxStringLength(256);
                         tsc.put(textField.getId(), ddr.setId);
@@ -168,7 +169,7 @@ public class MainGui extends QGuiScreen {
                     }
                     break;
                 }
-                r+=2;
+                sumSize += cumSize;
             }
 
             i++;
@@ -240,7 +241,7 @@ public class MainGui extends QGuiScreen {
                 break;
             default:
                 button.displayString = (button.displayString.contains("ON") ? "\u00A7l\u00A7c OFF" : "\u00A7l\u00A7a ON");
-                Index.MAIN_CFG.toggle(sch.get(button.id), moduleIDs.contains(button.id));
+                Index.MAIN_CFG.toggle(sch.get(button.id));
                 break;
         }
     }

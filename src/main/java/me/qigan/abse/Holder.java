@@ -59,6 +59,13 @@ public class Holder {
 	}
 	
 	public static void register(Module mod) {
+		try {
+			mod.onRegister();
+		} catch (Exception ex) {
+			System.out.println(mod.id() + " - " + mod.fname());
+			System.out.println("register script is incorrect: SKIPPING");
+			return;
+		}
 		linker.put(mod.id(), MRL.size());
 		MRL.add(mod);
 		MinecraftForge.EVENT_BUS.register(mod);
