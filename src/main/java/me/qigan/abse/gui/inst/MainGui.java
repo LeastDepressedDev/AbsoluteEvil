@@ -15,13 +15,17 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainGui extends QGuiScreen {
 
     private static Map<Integer, String> sch = new HashMap<Integer, String>();
     private static Map<Integer, String> tsc = new HashMap<Integer, String>();
+
+    public static List<Integer> moduleIDs = new ArrayList<>();
 
     public static final int PAGE_SIZE = 16;
 
@@ -90,6 +94,7 @@ public class MainGui extends QGuiScreen {
                 tooltipBoxList.add(new TooltipBox(60+sizeW, 60 + i*2*sizeH, sizeW, sizeH, stack1));
             }
             sch.put(button.id, mod.id());
+            moduleIDs.add(button.id);
             buttonList.add(button);
             Id++;
 
@@ -235,7 +240,7 @@ public class MainGui extends QGuiScreen {
                 break;
             default:
                 button.displayString = (button.displayString.contains("ON") ? "\u00A7l\u00A7c OFF" : "\u00A7l\u00A7a ON");
-                Index.MAIN_CFG.toggle(sch.get(button.id));
+                Index.MAIN_CFG.toggle(sch.get(button.id), moduleIDs.contains(button.id));
                 break;
         }
     }

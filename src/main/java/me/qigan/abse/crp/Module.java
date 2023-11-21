@@ -19,6 +19,9 @@ public abstract class Module {
 		return Index.MAIN_CFG.getBoolVal(id());
 	}
 	public List<SetsData<String>> sets() {
-		return new ArrayList<SetsData<String>>();
+		return new ArrayList<>();
 	}
+
+	public void onEnable() {};
+	public void onDisable() {};
 }

@@ -77,11 +77,13 @@ public class MuConfig {
 		return sets.get(namespace).equalsIgnoreCase("true");
 	}
 	
-	public void toggle(String namespace) {
+	public void toggle(String namespace, boolean modular) {
 		if (sets.get(namespace).equalsIgnoreCase("true")) {
 			this.set(namespace, "false");
+			if (modular) Holder.quickFind(namespace).onDisable();
 		} else {
 			this.set(namespace, "true");
+			if (modular) Holder.quickFind(namespace).onEnable();
 		}
 	}
 }
