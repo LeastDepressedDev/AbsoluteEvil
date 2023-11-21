@@ -23,13 +23,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CombatHelperAim extends Module {
 
@@ -103,6 +106,23 @@ public class CombatHelperAim extends Module {
             tr.add("\u00a7etargetZeta: " + prim.zeta);
         }
         Esp.drawAllignedTextList(tr, e.resolution.getScaledWidth()/2+120, e.resolution.getScaledHeight()/2+10, false, e.resolution);
+    }
+
+    @SubscribeEvent
+    void mouseClick(InputEvent.MouseInputEvent e) {
+        click(null);
+    }
+
+    @SubscribeEvent
+    void click(InputEvent.KeyInputEvent e) {
+        if (!isEnabled() || !Index.MAIN_CFG.getBoolVal("cbh_shake") || prim == null || prim.ref == null) return;
+        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown()) {
+            Random rand = new Random();
+            double xv = Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_shake_amount"), 0);
+            double yv = Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_shake_amount"), 0);
+            Minecraft.getMinecraft().thePlayer.rotationYaw += rand.nextBoolean() ? xv : -xv;
+            Minecraft.getMinecraft().thePlayer.rotationPitch += rand.nextBoolean() ? yv : -yv;
+        }
     }
 
     @SubscribeEvent

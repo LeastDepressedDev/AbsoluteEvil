@@ -50,6 +50,7 @@ public class Holder {
 		register(new CombatHelperAdvancedAimControls());
 		register(new CombatHelperAimRandomize());
 		register(new CombatHelperAimSelector());
+		register(new CombatHelperAimShake());
 		register(new CombatHelperSR());
 		register(new FireballDetector());
 		register(new AutoBridging());
