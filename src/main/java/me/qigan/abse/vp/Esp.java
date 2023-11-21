@@ -81,7 +81,7 @@ public class Esp {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         VisualApi.setupLine(lineWidth, color);
         GlStateManager.translate(0, 0, 0);
-        GL11.glBegin(1);
+        GL11.glBegin(beginMode);
         for (int i = 0; i < vec.size()-1; i++) {
 
             Point3d pt1 = vec.get(i);
