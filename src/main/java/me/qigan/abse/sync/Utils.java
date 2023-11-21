@@ -2,6 +2,7 @@ package me.qigan.abse.sync;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import me.qigan.abse.Index;
 import me.qigan.abse.config.AddressedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -16,14 +17,21 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Utils {
+
+    public static double createRandomDouble(double up, double down) {
+        Random rand = new Random();
+        return rand.nextBoolean() ? rand.nextInt()%up : down;
+    }
+
+    public static double createRandomDouble(double up, double down, long seed) {
+        Random rand = new Random(seed);
+        return rand.nextBoolean() ? rand.nextInt()%up : down;
+    }
 
     public static float[] getRotationsNeeded(Entity entity1, Entity entity2) {
         if (entity1 == null || entity2 == null) {

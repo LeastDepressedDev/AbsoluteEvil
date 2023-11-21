@@ -4,6 +4,7 @@ import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.sync.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,7 @@ import java.util.Random;
 public class CombatHelperAimRandomize extends Module {
 
     public static double createRandomDouble() {
-        Random rand = new Random();
-        return rand.nextBoolean() ? rand.nextInt()%Index.MAIN_CFG.getDouble("cbh_aim_ups") :
-                rand.nextInt()%Index.MAIN_CFG.getDouble("cbh_aim_downs");
+        return Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_aim_ups"), Index.MAIN_CFG.getDouble("cbh_aim_downs"));
     }
 
     @Override
