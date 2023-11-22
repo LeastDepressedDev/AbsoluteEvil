@@ -35,8 +35,11 @@ public class BowPracticeMod extends Module implements EDLogic {
     void onProjectileJoin(EntityJoinWorldEvent e) {
         if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (e.entity instanceof EntityArrow) {
-            tracking.put((EntityArrow) e.entity, new AddressedData<>(new ArrayList<>(),
-                    new AddressedData<>(true, Index.MAIN_CFG.getIntVal("bowpm_tmp"))));
+            AddressedData<List<Point3d>, AddressedData<Boolean, Integer>> pre = null;
+            if (tracking.containsKey((EntityArrow) e.entity)) pre = tracking.get((EntityArrow) e.entity);
+            tracking.put((EntityArrow) e.entity,
+                    (pre == null) ? new AddressedData<>(new ArrayList<>(), new AddressedData<>(true, Index.MAIN_CFG.getIntVal("bowpm_tmp"))) :
+                    new AddressedData<>(pre.getNamespace(), new AddressedData<>(true, pre.getObject().getObject())));
         }
     }
 
@@ -48,7 +51,7 @@ public class BowPracticeMod extends Module implements EDLogic {
             List<EntityArrow> toRemove = new ArrayList<>();
             for (Map.Entry<EntityArrow, AddressedData<List<Point3d>, AddressedData<Boolean, Integer>>> data : tracking.entrySet()) {
                 if (data.getValue().getObject().getObject() == 0) toRemove.add(data.getKey());
-                if (data.getValue().getObject().getObject() > 0 && swapTick)
+                if (data.getValue().getObject().getObject() > 0 && swapTick && !data.getValue().getObject().getNamespace())
                     data.getValue().getObject().setObject(data.getValue().getObject().getObject()-1);
                 if (!data.getValue().getObject().getNamespace()) continue;
                 if (!data.getKey().isEntityAlive()) {
