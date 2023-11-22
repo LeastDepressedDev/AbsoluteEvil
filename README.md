@@ -16,3 +16,4 @@ If you are someone from hypixel stuff you can contact me in discord - `qigan` an
 - Custom dungeon drop sounds(that's why it's weight is so high. yeah...)
 - A lot of QOL stuff
 - Some shit for other minigames(`Bedwars`)
+- Function to play like pro in pvp minigames
