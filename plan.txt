@@ -1,9 +1,9 @@
-AbsoluteEvil manager - in progress
+AbsoluteEvil manager - stopped
 Combat helper[aim] - Done
 Changed registry - Done
 Auto bridging - Done
 Aim breaking key - Done
-Bow practice mod - in progress
+Bow practice mod - Done
 Recode gui - Done
 Implement EDLogic (somehow) - Done
 Randomize aim point (Shake type) - Done

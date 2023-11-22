@@ -12,5 +12,8 @@ public class MainWind extends JFrame {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setBackground(Color.WHITE);
+        JTextPane pane = new JTextPane();
+        pane.setText("This thing is COMPLETELY unfinished so you can use it to make notes, lol");
+        add(pane);
     }
 }
