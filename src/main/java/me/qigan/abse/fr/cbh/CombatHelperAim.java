@@ -109,23 +109,6 @@ public class CombatHelperAim extends Module {
     }
 
     @SubscribeEvent
-    void mouseClick(InputEvent.MouseInputEvent e) {
-        click(null);
-    }
-
-    @SubscribeEvent
-    void click(InputEvent.KeyInputEvent e) {
-        if (!isEnabled() || !Index.MAIN_CFG.getBoolVal("cbh_shake") || prim == null || prim.ref == null) return;
-        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown()) {
-            Random rand = new Random();
-            double xv = Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_shake_amount"), 0);
-            double yv = Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_shake_amount"), 0);
-            Minecraft.getMinecraft().thePlayer.rotationYaw += rand.nextBoolean() ? xv : -xv;
-            Minecraft.getMinecraft().thePlayer.rotationPitch += rand.nextBoolean() ? yv : -yv;
-        }
-    }
-
-    @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = ATKTICK_CONST;
         if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
