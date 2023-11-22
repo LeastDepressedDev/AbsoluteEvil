@@ -14,6 +14,7 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -26,25 +27,33 @@ import java.util.Map;
 
 public class BowPracticeMod extends Module implements EDLogic {
 
-    public static Map<EntityArrow, AddressedData<List<Point3d>, Boolean>> tracking = new HashMap<>();
+    private static boolean swapTick = false;
+
+    public static Map<EntityArrow, AddressedData<List<Point3d>, AddressedData<Boolean, Integer>>> tracking = new HashMap<>();
 
     @SubscribeEvent
     void onProjectileJoin(EntityJoinWorldEvent e) {
         if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (e.entity instanceof EntityArrow) {
-            tracking.put((EntityArrow) e.entity, new AddressedData<>(new ArrayList<>(), true));
+            tracking.put((EntityArrow) e.entity, new AddressedData<>(new ArrayList<>(),
+                    new AddressedData<>(true, Index.MAIN_CFG.getIntVal("bowpm_tmp"))));
         }
     }
 
     @SubscribeEvent
     void onUpdate(TickEvent.ClientTickEvent e) {
         if (!isEnabled()) return;
+        swapTick=!swapTick;
         try {
-            for (Map.Entry<EntityArrow, AddressedData<List<Point3d>, Boolean>> data : tracking.entrySet()) {
-                if (!data.getValue().getObject()) continue;
+            List<EntityArrow> toRemove = new ArrayList<>();
+            for (Map.Entry<EntityArrow, AddressedData<List<Point3d>, AddressedData<Boolean, Integer>>> data : tracking.entrySet()) {
+                if (data.getValue().getObject().getObject() == 0) toRemove.add(data.getKey());
+                if (data.getValue().getObject().getObject() > 0 && swapTick)
+                    data.getValue().getObject().setObject(data.getValue().getObject().getObject()-1);
+                if (!data.getValue().getObject().getNamespace()) continue;
                 if (!data.getKey().isEntityAlive()) {
-                    AddressedData<List<Point3d>, Boolean> dat = data.getValue();
-                    dat.setObject(false);
+                    AddressedData<List<Point3d>, AddressedData<Boolean, Integer>> dat = data.getValue();
+                    dat.setObject(new AddressedData<>(false, dat.getObject().getObject()));
                     data.setValue(dat);
                 }
 
@@ -53,22 +62,30 @@ public class BowPracticeMod extends Module implements EDLogic {
                 double dz = data.getKey().posZ - data.getKey().prevPosZ;
 
                 if (dx == 0 && dy == 0 && dz == 0 && data.getKey().ticksExisted > 2) {
-                    AddressedData<List<Point3d>, Boolean> dat = data.getValue();
-                    dat.setObject(false);
+                    AddressedData<List<Point3d>, AddressedData<Boolean, Integer>> dat = data.getValue();
+                    dat.setObject(new AddressedData<>(false, dat.getObject().getObject()));
                     data.setValue(dat);
                 }
                 data.getValue().getNamespace().add(new Point3d(data.getKey().posX,
                         data.getKey().posY,
                         data.getKey().posZ));
             }
+            for (EntityArrow key : toRemove) {
+                tracking.remove(key);
+            }
         } catch (Exception ex) {}
+    }
+
+    @SubscribeEvent
+    void onLoad(WorldEvent.Load e) {
+        if (isEnabled() && Index.MAIN_CFG.getBoolVal("bowpm_ars")) tracking.clear();
     }
 
     @SubscribeEvent
     void render(RenderWorldLastEvent e) {
         if (!isEnabled()) return;
         try {
-            for (Map.Entry<EntityArrow, AddressedData<List<Point3d>, Boolean>> data : tracking.entrySet()) {
+            for (Map.Entry<EntityArrow, AddressedData<List<Point3d>, AddressedData<Boolean, Integer>>> data : tracking.entrySet()) {
                 Esp.drawAsSingleLine(data.getValue().getNamespace(),
                         new Color(255, 0, 0, Index.MAIN_CFG.getIntVal("bowpm_alpha")),
                         Index.MAIN_CFG.getIntVal("bowpm_lsize"), Index.MAIN_CFG.getBoolVal("bowpm_esp"),
@@ -95,6 +112,8 @@ public class BowPracticeMod extends Module implements EDLogic {
         list.add(new SetsData<>("bowpm_esp", "Esp mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("bowpm_trig", "Double tracer mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("bowpm_reset", "Reset tracks", ValType.BUTTON, (Runnable) () -> tracking.clear()));
+        list.add(new SetsData<>("bowpm_tmp", "Exist ticks[if lower then 0 - forever]", ValType.NUMBER, "2000"));
+        list.add(new SetsData<>("bowpm_ars", "Auto reset on world change", ValType.BOOLEAN, "true"));
         return list;
     }
 
