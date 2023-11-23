@@ -132,7 +132,7 @@ public class InCmd extends CommandBase{
 				}
 			}
 		} else {
-			sender.addChatMessage(new ChatComponentText("\u00A7aAbsoluteEvil 1.5 by qigan"));
+			sender.addChatMessage(new ChatComponentText("\u00A7aAbsoluteEvil " + Index.VERSION + " by qigan"));
 			MainGui.queue = true;
 		}
 	}
