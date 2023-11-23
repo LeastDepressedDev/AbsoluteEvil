@@ -1,3 +1,3 @@
 AbsoluteEvil manager - stopped
-Add option to controll attack ticks
+Add option to controll attack ticks - Done
 Save bot - in progress

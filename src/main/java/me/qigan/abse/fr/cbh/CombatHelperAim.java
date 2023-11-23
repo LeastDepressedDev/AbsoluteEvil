@@ -35,9 +35,6 @@ import java.util.List;
 import java.util.Random;
 
 public class CombatHelperAim extends Module {
-
-    public static final int ATKTICK_CONST = 10;
-
     private static int skip = 0;
     private static int atkTick = 0;
     public static boolean OVERRIDE = false;
@@ -110,7 +107,7 @@ public class CombatHelperAim extends Module {
 
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
-        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = ATKTICK_CONST;
+        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = Index.MAIN_CFG.getIntVal("cbh_atk");
         if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (skip == 0) {
             if (atkTick == 0 && !OVERRIDE) {
@@ -196,6 +193,7 @@ public class CombatHelperAim extends Module {
         list.add(new SetsData<>("cbh_speed", "Speed Modifier", ValType.DOUBLE_NUMBER, "4"));
         list.add(new SetsData<>("cbh_dist", "Distance", ValType.DOUBLE_NUMBER, "5"));
         list.add(new SetsData<>("cbh_tickskip", "Tick skip[don't change if you are not sure]", ValType.NUMBER, "1"));
+        list.add(new SetsData<>("cbh_atk", "Attack tick mod", ValType.NUMBER, "20"));
         return list;
     }
 
