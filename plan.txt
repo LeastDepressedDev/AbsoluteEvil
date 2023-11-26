@@ -1,5 +1,6 @@
 AbsoluteEvil manager - stopped
 Add option to controll attack ticks - Done
 Add important chat option - in progress
-Add absolute fix button - in progress
+Add mouse drag option to position selector - active testing and debugging
+Add absolute fix button - Done
 Save bot - in progress
