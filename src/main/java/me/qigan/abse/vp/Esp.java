@@ -450,6 +450,17 @@ public class Esp {
         tessellator.draw();
     }
 
+    public static void drawOutlineRect(int x, int y, int width, int height, Color color) {
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(1, DefaultVertexFormats.POSITION_COLOR);
+        worldrenderer.pos(x, y + height, 0.0D).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        worldrenderer.pos(x + width, y + height, 0.0D).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        worldrenderer.pos(x + width, y, 0.0D).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        worldrenderer.pos(x, y, 0.0D).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        tessellator.draw();
+    }
+
     //Code from SkyblockAddons
     public static void renderNotification(String text, boolean renderCorner, int color) {
         int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
