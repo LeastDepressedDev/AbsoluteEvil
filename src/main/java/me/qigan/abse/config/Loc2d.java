@@ -15,6 +15,12 @@ public class Loc2d {
         this.aligner = aligner;
     }
 
+    public Loc2d(Loc2d loc) {
+        this.ux = loc.ux;
+        this.uy = loc.uy;
+        this.aligner = loc.aligner;
+    }
+
     public Point get() {
         return aligner.gav(ux, uy);
     }

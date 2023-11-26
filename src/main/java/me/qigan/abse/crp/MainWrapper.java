@@ -77,7 +77,7 @@ public class MainWrapper {
         keyBinds();
 
         Index.POS_CFG = new PositionConfig();
-        Index.POS_CFG.load().defts().update();
+        Index.POS_CFG.load().defts(true).update();
 
 //        int x0 = 0;
 //        if (QGuiScreen.register(MainGui.class, new MainGui(0, null))) x0++;

@@ -66,13 +66,13 @@ public class PositionConfig {
      * Position config register:
      * Reg format - if (!poses.containsKey("xxx")) this.poses.put("xxx", new Loc2d(nx, ny, aligner));
      */
-    public final PositionConfig defts() {
-        if (!poses.containsKey("gbmg")) this.poses.put("gbmg", new Loc2d(30, 70, new AlignRelativePercent(120, 20, 0)));
-        if (!poses.containsKey("module_list")) this.poses.put("module_list", new Loc2d(100, 0, new AlignRelativePercent(100, 100, 0)));
-        if (!poses.containsKey("ghost_utils")) this.poses.put("ghost_utils", new Loc2d(0, 40, new AlignRelativePercent(100, 80, 0)));
-        if (!poses.containsKey("bwa_display")) this.poses.put("bwa_display", new Loc2d(0, 100, new AlignBWA()));
-        if (!poses.containsKey("bwt_display")) this.poses.put("bwt_display", new Loc2d(20, 30, new AlignRelativePercent(70, 100, 0)));
-        if (!poses.containsKey("fbd_display")) this.poses.put("fbd_display", new Loc2d(10, 0, new AlignMidRelative(70, 20, 0)));
+    public final PositionConfig defts(boolean startup) {
+        if (!poses.containsKey("gbmg") || !startup) this.poses.put("gbmg", new Loc2d(30, 70, new AlignRelativePercent(120, 20, 0)));
+        if (!poses.containsKey("module_list") || !startup) this.poses.put("module_list", new Loc2d(100, 0, new AlignRelativePercent(100, 100, 0)));
+        if (!poses.containsKey("ghost_utils") || !startup) this.poses.put("ghost_utils", new Loc2d(0, 40, new AlignRelativePercent(100, 80, 0)));
+        if (!poses.containsKey("bwa_display") || !startup) this.poses.put("bwa_display", new Loc2d(0, 100, new AlignBWA()));
+        if (!poses.containsKey("bwt_display") || !startup) this.poses.put("bwt_display", new Loc2d(20, 30, new AlignRelativePercent(70, 100, 0)));
+        if (!poses.containsKey("fbd_display") || !startup) this.poses.put("fbd_display", new Loc2d(10, 0, new AlignMidRelative(70, 20, 0)));
         return this;
     }
 
