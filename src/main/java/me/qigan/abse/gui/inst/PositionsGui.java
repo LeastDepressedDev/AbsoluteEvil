@@ -1,17 +1,23 @@
 package me.qigan.abse.gui.inst;
 
 import me.qigan.abse.Index;
+import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.Loc2d;
 import me.qigan.abse.gui.QGuiScreen;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import me.qigan.abse.vp.VisualApi;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import javax.vecmath.Point2d;
+import javax.vecmath.Point2i;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
@@ -37,7 +43,13 @@ public class PositionsGui extends QGuiScreen {
         super(screen);
     }
 
+    private Point2i startPos = null;
+    private AddressedData<String, Loc2d> selected = null;
+    private Loc2d tempDraw = null;
+
     public static boolean opened = false;
+
+    private GuiButton reset;
 
     private int mx = -1;
     private int my = -1;
@@ -58,12 +70,23 @@ public class PositionsGui extends QGuiScreen {
     @Override
     public void initGui() {
         opened = true;
-
+        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         for (Map.Entry<String, Loc2d> lond : Index.POS_CFG.poses.entrySet()) {
             colorMap.put(lond.getKey(), new Color(255, 255, 255, 50));
         }
 
+        reset = new GuiButton(0, res.getScaledWidth()/2-100, res.getScaledHeight()-20, 200, 20, "\u00A7fReset");
+        buttonList.add(reset);
+
         super.initGui();
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if (button.id == reset.id) {
+            Index.POS_CFG.defts(false);
+        }
+        super.actionPerformed(button);
     }
 
     @Override
@@ -114,8 +137,6 @@ public class PositionsGui extends QGuiScreen {
             }
         }
 
-        Esp.drawAllignedTextList(INSTRUCTION, 0, 0, false, res);
-
         if (Index.MAIN_CFG.getBoolVal("debug")) {
             String toRender = "\u00A7a" + mouseX + " " + mouseY + "\u00A75 | \u00A7c" + Mouse.getX() + " " + Mouse.getY();
             int ln = fontRendererObj.getStringWidth(toRender);
@@ -123,6 +144,24 @@ public class PositionsGui extends QGuiScreen {
                     toRender,
                     (int) Math.min(mouseX, width-ln), (int) Math.max(mouseY+10, 0), 0xFFFFFF);
         }
+
+        if (tempDraw != null) {
+            Point pt = tempDraw.get();
+            Dimension dim = tempDraw.aligner.hitSelectorSize();
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0,0,1);
+
+            int x = pt.x>res.getScaledWidth()/2 ? pt.x - dim.width : pt.x;
+            int y = pt.y>res.getScaledHeight()/2 ? pt.y - dim.height : pt.y;
+
+            Gui.drawRect(x, y, x+dim.width, y+dim.height, new Color(255, 100, 0, 255).getRGB());
+            GlStateManager.popMatrix();
+        }
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0,0,2);
+        Esp.drawAllignedTextList(INSTRUCTION, 0, 0, false, res);
+        GlStateManager.popMatrix();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -138,7 +177,59 @@ public class PositionsGui extends QGuiScreen {
                 ref.aligner.incStyle();
                 Index.POS_CFG.poses.put(loc.getKey(), ref);
             }
+        } else if (mouseButton == 0) {
+            this.startPos = new Point2i(mouseX, mouseY);
+            Map.Entry<String, Loc2d> loc = find(mx, my, res);
+            if (loc != null) {
+                selected = new AddressedData<>(loc.getKey(), loc.getValue());
+            }
         }
+    }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+        if (selected != null && startPos != null) {
+            switch (selected.getObject().aligner.type()) {
+                case BEDWARS_ADDONS:
+                case RELATIVE_PERCENT:
+                {
+                    ScaledResolution scale = new ScaledResolution(Minecraft.getMinecraft());
+                    int dx = (mouseX-startPos.x)/(int) (((float) scale.getScaledWidth())/100f); // ОДЗ: x' != 0
+                    int dy = (mouseY-startPos.y)/(int) (((float) scale.getScaledHeight())/100f); // ОДЗ: y' != 0
+
+                    Loc2d ref = new Loc2d(selected.getObject());
+                    ref.ux+=dx;
+                    ref.uy+=dy;
+
+                    tempDraw = ref;
+                }
+                break;
+                default:
+                {
+                    int dx = mouseX-startPos.x;
+                    int dy = mouseY-startPos.y;
+
+                    Loc2d ref = new Loc2d(selected.getObject());
+                    ref.ux+=dx;
+                    ref.uy+=dy;
+
+                    tempDraw = ref;
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+        if (selected != null) {
+            Index.POS_CFG.poses.put(selected.getNamespace(), tempDraw);
+            selected = null;
+        }
+        if (startPos != null) startPos = null;
+        tempDraw = null;
     }
 
     @Override
