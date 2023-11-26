@@ -6,6 +6,10 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
+import me.qigan.abse.fr.other.BWTeamTracker;
+import me.qigan.abse.fr.other.BowAimEsp;
+import me.qigan.abse.fr.other.BowPracticeMod;
+import me.qigan.abse.fr.other.FireballDetector;
 import me.qigan.abse.gui.GuiDoubleNumberField;
 import me.qigan.abse.gui.GuiNumberField;
 import me.qigan.abse.gui.QGuiScreen;
@@ -33,6 +37,7 @@ public class MainGui extends QGuiScreen {
     private GuiButton pageUp;
     private GuiButton pageDown;
     private GuiButton colorPicker;
+    private GuiButton absoluteFix;
 
     public final int page;
 
@@ -70,21 +75,34 @@ public class MainGui extends QGuiScreen {
         int height = sr.getScaledHeight();
         int width = sr.getScaledWidth();
 
+        // Id = 1
         pageDown = new GuiButton(Id, width/6*2, 20, 40, 20, "<");
         if (page <= 0) {
             pageDown.enabled = false;
         }
         buttonList.add(pageDown);
         Id++;
+        // Id = 2
         pageUp = new GuiButton(Id, width/6*4, 20, 40, 20, ">");
         if ((page+1)*PAGE_SIZE > Holder.MRL.size()) {
             pageUp.enabled = false;
         }
         buttonList.add(pageUp);
         Id++;
+        // Id = 3
         colorPicker = new GuiButton(Id, width-100, height-20, 100, 20, "Position picker");
         buttonList.add(colorPicker);
         Id++;
+        // Id = 4
+        absoluteFix = new GuiButton(Id, 0, height-20, 100, 20, "Absolute fix");
+        buttonList.add(absoluteFix);
+        Id++;
+        { // Tooltip for absoluteFix
+            ItemStack stack = new ItemStack(Items.arrow);
+            stack.setStackDisplayName("\u00A7aIf somethings breaks, just press it!");
+            tooltipBoxList.add(new TooltipBox(0, height-20, 100, 20, stack));
+        }
+
 
         int i = 0;
         for (int u = PAGE_SIZE * page; u < Holder.MRL.size() && u < PAGE_SIZE*(page+1); u++) {
@@ -264,6 +282,11 @@ public class MainGui extends QGuiScreen {
                 break;
             case 3:
                 Minecraft.getMinecraft().displayGuiScreen(new PositionsGui(this));
+                break;
+            case 4:
+                FireballDetector.scan.clear();
+                BWTeamTracker.team.clear();
+                BowPracticeMod.tracking.clear();
                 break;
             default:
                 if (actButtons.containsKey(button.id)) {
