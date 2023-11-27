@@ -7,6 +7,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
+import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -41,7 +42,7 @@ public class BWTeamTracker extends Module {
 
         Point pos = Index.POS_CFG.calc("bwt_display");
 
-        Esp.drawAllignedTextList(lines, pos.x, pos.y, false, e.resolution);
+        Esp.drawAllignedTextList(lines, pos.x, pos.y, false, e.resolution, S2Dtype.SHADOW);
     }
 
     @SubscribeEvent

@@ -6,6 +6,7 @@ import me.qigan.abse.crp.Module;
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.fr.other.AutoBridging;
 import me.qigan.abse.vp.Esp;
+import me.qigan.abse.vp.S2Dtype;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -52,6 +53,6 @@ public class Hud extends Module{
         if (MainWrapper.Keybinds.aimBreak.isKeyDown()) lines.add("\u00A7cAim break!");
 
         Point point = Index.POS_CFG.calc("module_list");
-        Esp.drawAllignedTextList(lines, point.x, point.y, true, e.resolution);
+        Esp.drawAllignedTextList(lines, point.x, point.y, true, e.resolution, S2Dtype.SHADOW);
     }
 }

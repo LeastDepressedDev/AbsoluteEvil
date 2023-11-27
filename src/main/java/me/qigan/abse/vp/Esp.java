@@ -375,7 +375,7 @@ public class Esp {
         GlStateManager.disableLighting();
     }
 
-    public static void drawAllignedTextList(List<String> lines, int x, int y, boolean sortVertical, ScaledResolution res) {
+    public static void drawAllignedTextList(List<String> lines, int x, int y, boolean sortVertical, ScaledResolution res, S2Dtype mode) {
         FontRenderer fnt = Minecraft.getMinecraft().fontRendererObj;
         int r = 0;
         int kp = lines.size()*10;
@@ -385,8 +385,9 @@ public class Esp {
 
         for (String str : lines) {
             int ln = fnt.getStringWidth(str);
-            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(str, (x > res.getScaledWidth()/2) ? x - ln : x,
-                    y + (r * 10) - (y > res.getScaledHeight()/2 ? kp : 0), 0xFFFFFF);
+            Esp.drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str,
+                    (x > res.getScaledWidth()/2) ? x - ln : x,
+                    y + (r * 10) - (y > res.getScaledHeight()/2 ? kp : 0), 0xFFFFFF, mode);
             r++;
         }
     }

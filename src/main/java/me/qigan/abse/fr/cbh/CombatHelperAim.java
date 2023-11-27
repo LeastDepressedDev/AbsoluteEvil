@@ -9,6 +9,7 @@ import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
+import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
@@ -102,7 +103,7 @@ public class CombatHelperAim extends Module {
             tr.add("\u00a7etargetTheta: " + prim.theta);
             tr.add("\u00a7etargetZeta: " + prim.zeta);
         }
-        Esp.drawAllignedTextList(tr, e.resolution.getScaledWidth()/2+120, e.resolution.getScaledHeight()/2+10, false, e.resolution);
+        Esp.drawAllignedTextList(tr, e.resolution.getScaledWidth()/2+120, e.resolution.getScaledHeight()/2+10, false, e.resolution, S2Dtype.SHADOW);
     }
 
     @SubscribeEvent
