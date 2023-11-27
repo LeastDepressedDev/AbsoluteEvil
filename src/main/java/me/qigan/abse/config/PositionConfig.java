@@ -73,6 +73,7 @@ public class PositionConfig {
         if (!poses.containsKey("bwa_display") || !startup) this.poses.put("bwa_display", new Loc2d(0, 100, new AlignBWA()));
         if (!poses.containsKey("bwt_display") || !startup) this.poses.put("bwt_display", new Loc2d(20, 30, new AlignRelativePercent(70, 100, 0)));
         if (!poses.containsKey("fbd_display") || !startup) this.poses.put("fbd_display", new Loc2d(10, 0, new AlignMidRelative(70, 20, 0)));
+        if (!poses.containsKey("imp_chat") || !startup) this.poses.put("imp_chat", new Loc2d(100, 100, new AlignRelativePercent(400, 100, 0)));
         return this;
     }
 

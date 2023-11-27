@@ -1,7 +1,7 @@
 package me.qigan.abse.fr.dungons;
 
 import me.qigan.abse.Index;
-import me.qigan.abse.gui.GuiNotifier;
+import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;

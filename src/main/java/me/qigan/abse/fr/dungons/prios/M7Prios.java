@@ -4,7 +4,7 @@ import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
-import me.qigan.abse.gui.GuiNotifier;
+import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.network.play.server.S2APacketParticles;

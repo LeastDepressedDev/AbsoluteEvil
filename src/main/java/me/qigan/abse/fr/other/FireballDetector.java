@@ -2,7 +2,7 @@ package me.qigan.abse.fr.other;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.crp.Module;
-import me.qigan.abse.gui.GuiNotifier;
+import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;

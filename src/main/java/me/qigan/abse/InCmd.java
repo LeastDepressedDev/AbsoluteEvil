@@ -6,7 +6,7 @@ import me.qigan.abse.fr.GhostBlocks;
 import me.qigan.abse.fr.GhostUtils;
 import me.qigan.abse.fr.dungons.M7Route;
 import me.qigan.abse.fr.mapping.Mapping;
-import me.qigan.abse.gui.GuiNotifier;
+import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
