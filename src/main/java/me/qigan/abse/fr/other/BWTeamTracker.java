@@ -1,10 +1,12 @@
 package me.qigan.abse.fr.other;
 
+import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.Loc2d;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -84,14 +86,18 @@ public class BWTeamTracker extends Module {
     void chat(ClientChatReceivedEvent e) {
         String msg_s = Utils.cleanSB(e.message.getFormattedText());
         for (Map.Entry<EntityPlayer, Integer> mate : team.entrySet()) {
+            if (msg_s.startsWith(mate.getKey().getName() + " ")) {
+                if (Holder.quickFind("imp_chat").isEnabled()) ImportantChatOVR.add(e.message.getFormattedText());
+            }
+
             if (msg_s.startsWith(mate.getKey().getName() + " ") && !msg_s.contains("purchased")) {
-                team.put(mate.getKey(), (msg_s.contains("FINAL KILL")) ? -1 : Index.MAIN_CFG.getIntVal("bwtt_rpt")*20);
+                team.put(mate.getKey(), (msg_s.contains("FINAL KILL")) ? -1 : (int) Index.MAIN_CFG.getDoubleVal("bwtt_rpt")*20);
                 break;
             } else if (msg_s.contains(mate.getKey().getName())) {
                 if (msg_s.contains("disconnected") || msg_s.contains("left") || msg_s.contains("quit")) {
                     team.put(mate.getKey(), -1);
                 } else if (msg_s.contains("reconnected") || msg_s.contains("rejoined") || msg_s.contains("joined")) {
-                    team.put(mate.getKey(), Index.MAIN_CFG.getIntVal("bwtt_rpt")*20);
+                    team.put(mate.getKey(), (int) Index.MAIN_CFG.getDoubleVal("bwtt_rpt")*20);
                 }
             }
         }
@@ -110,7 +116,7 @@ public class BWTeamTracker extends Module {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
-        list.add(new SetsData<>("bwtt_rpt", "Respawn time(seconds)", ValType.NUMBER, "5"));
+        list.add(new SetsData<>("bwtt_rpt", "Respawn time(seconds)", ValType.DOUBLE_NUMBER, "5"));
         return list;
     }
 
