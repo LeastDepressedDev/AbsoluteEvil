@@ -20,7 +20,7 @@ public class CombatHelperSR extends Module {
     @SubscribeEvent
     void combo(LivingHurtEvent e) {
         if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null) return;
-        if (e.entity.getDistanceToEntity(Minecraft.getMinecraft().thePlayer) < Index.MAIN_CFG.getDouble("cbh_resd") && e.entity.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
+        if (e.entity.getDistanceToEntity(Minecraft.getMinecraft().thePlayer) < Index.MAIN_CFG.getDoubleVal("cbh_resd") && e.entity.getUniqueID() != Minecraft.getMinecraft().thePlayer.getUniqueID()) {
             if (Minecraft.getMinecraft().thePlayer.isSprinting()) {
                 new Thread(() -> {
                     try {

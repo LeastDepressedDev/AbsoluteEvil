@@ -29,7 +29,7 @@ public class BowAimEsp extends Module {
                 if (ent.getUniqueID() == Minecraft.getMinecraft().thePlayer.getUniqueID()) continue;
                 double dist = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent);
                 if (dist < 114) {
-                    double dl = Index.MAIN_CFG.getDouble("baimesp_dist");
+                    double dl = Index.MAIN_CFG.getDoubleVal("baimesp_dist");
                     double sz = 0.7 + dist / Math.sqrt(4*dl);
                     double fy = ent.posY + 1 + (Math.pow(dist, 2) / dl)/* + (Minecraft.getMinecraft().thePlayer.posY - ent.posY)*/;
                     Color col = new Color(Index.MAIN_CFG.getIntVal("baimesp_col"));

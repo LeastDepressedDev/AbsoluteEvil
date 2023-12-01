@@ -129,8 +129,8 @@ public class CombatHelperAim extends Module {
             skip = Index.MAIN_CFG.getIntVal("cbh_tickskip");
             Target primary = null;
 
-            double distLim = Index.MAIN_CFG.getDouble("cbh_dist");
-            double s = Index.MAIN_CFG.getDouble("cbh_speed");
+            double distLim = Index.MAIN_CFG.getDoubleVal("cbh_dist");
+            double s = Index.MAIN_CFG.getDoubleVal("cbh_speed");
             if (!OVERRIDE) {
                 for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                     if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
@@ -158,13 +158,13 @@ public class CombatHelperAim extends Module {
 
             if (prim != null) {
                 double d = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(prim.ref);
-                if (d > Index.MAIN_CFG.getDouble("cbh_aim_distbp")) {
+                if (d > Index.MAIN_CFG.getDoubleVal("cbh_aim_distbp")) {
                     if (randState) s+=CombatHelperAimRandomize.createRandomDouble();
                     double v = (prim.theta - fYaw) * (s / (10 * d));
                     double u = (prim.zeta - fPitch) * (s / (10 * d));
                     if (advcState) {
-                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDouble("cbh_aim_px")) ? 0 : v;
-                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDouble("cbh_aim_py")) ? 0 : u;
+                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDoubleVal("cbh_aim_px")) ? 0 : v;
+                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDoubleVal("cbh_aim_py")) ? 0 : u;
                     } else {
                         if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += v;
                         if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += u;

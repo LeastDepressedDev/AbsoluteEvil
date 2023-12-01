@@ -49,8 +49,8 @@ public class Swastika extends Module {
     @SubscribeEvent
     void animate (TickEvent.ClientTickEvent e) {
         if (e.phase == TickEvent.Phase.END) {
-            rotation+=Index.MAIN_CFG.getDouble("swastair_speed");
-            col.h+=Index.MAIN_CFG.getDouble("swastair_chroma");
+            rotation+=Index.MAIN_CFG.getDoubleVal("swastair_speed");
+            col.h+=Index.MAIN_CFG.getDoubleVal("swastair_chroma");
         }
         if (col.h >= 100) col.h = 0;
         if (rotation >= 90) rotation = 0;

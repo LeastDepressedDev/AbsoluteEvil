@@ -5,6 +5,7 @@ import java.util.Map;
 
 import me.qigan.abse.Holder;
 import me.qigan.abse.crp.EDLogic;
+import me.qigan.abse.crp.EnabledByDefault;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import net.minecraftforge.fml.common.Loader;
@@ -26,7 +27,8 @@ public class MuConfig {
 		//writer sets deafult
 		for (Module mdl: Holder.MRL) {
 			if(!writer.contains(mdl.id()) || Debug.DISABLE_STATE.contains(mdl.id())) {
-				this.writer.set(mdl.id(), "false");
+				EnabledByDefault enb = mdl.getClass().getAnnotation(EnabledByDefault.class);
+				this.writer.set(mdl.id(), enb == null ? "false" : "true");
 			}
 			for (SetsData<?> dat : mdl.sets()) {
 				if (dat.dataType != ValType.BUTTON) {
@@ -68,7 +70,7 @@ public class MuConfig {
 		return Integer.parseInt(getStrVal(namespace));
 	}
 
-	public double getDouble(String namespace) {
+	public double getDoubleVal(String namespace) {
 		return Double.parseDouble(getStrVal(namespace));
 	}
 

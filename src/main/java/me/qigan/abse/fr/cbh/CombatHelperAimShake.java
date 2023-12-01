@@ -25,8 +25,8 @@ public class CombatHelperAimShake extends Module {
         if (!isEnabled() || !Index.MAIN_CFG.getBoolVal("cbh_shake") || CombatHelperAim.prim == null || CombatHelperAim.prim.ref == null) return;
         if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown()) {
             Random rand = new Random();
-            double xv = Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_shake_amount"), 0);
-            double yv = Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_shake_amount"), 0);
+            double xv = Utils.createRandomDouble(Index.MAIN_CFG.getDoubleVal("cbh_shake_amount"), 0);
+            double yv = Utils.createRandomDouble(Index.MAIN_CFG.getDoubleVal("cbh_shake_amount"), 0);
             Minecraft.getMinecraft().thePlayer.rotationYaw += rand.nextBoolean() ? xv : -xv;
             Minecraft.getMinecraft().thePlayer.rotationPitch += rand.nextBoolean() ? yv : -yv;
         }

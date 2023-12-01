@@ -38,7 +38,7 @@ public class AutoBridging extends Module {
                     Minecraft.getMinecraft().thePlayer.posY - 1,
                     Minecraft.getMinecraft().thePlayer.posZ);
             Block block = Minecraft.getMinecraft().theWorld.getBlockState(blockBelowPlayer).getBlock();
-            MovingObjectPosition prePos = Minecraft.getMinecraft().thePlayer.rayTrace(Index.MAIN_CFG.getDouble("abrig_tracel"), e.partialTicks);
+            MovingObjectPosition prePos = Minecraft.getMinecraft().thePlayer.rayTrace(Index.MAIN_CFG.getDoubleVal("abrig_tracel"), e.partialTicks);
             if (prePos == null) return;
             BlockPos trace = prePos.getBlockPos();
             if (trace == null) return;

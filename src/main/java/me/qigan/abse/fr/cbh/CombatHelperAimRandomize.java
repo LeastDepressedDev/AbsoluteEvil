@@ -13,7 +13,7 @@ import java.util.Random;
 public class CombatHelperAimRandomize extends Module {
 
     public static double createRandomDouble() {
-        return Utils.createRandomDouble(Index.MAIN_CFG.getDouble("cbh_aim_ups"), Index.MAIN_CFG.getDouble("cbh_aim_downs"));
+        return Utils.createRandomDouble(Index.MAIN_CFG.getDoubleVal("cbh_aim_ups"), Index.MAIN_CFG.getDoubleVal("cbh_aim_downs"));
     }
 
     @Override
