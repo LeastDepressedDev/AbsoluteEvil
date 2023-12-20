@@ -387,16 +387,13 @@ public class Esp {
             lines.sort((s, t1) -> (y < res.getScaledHeight()/2) ? Integer.compare(fnt.getStringWidth(t1), fnt.getStringWidth(s)) : Integer.compare(fnt.getStringWidth(s), fnt.getStringWidth(t1)));
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         for (String str : lines) {
             int ln = fnt.getStringWidth(str);
             Esp.drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str,
                     (x > res.getScaledWidth()/2) ? x - ln : x,
-                    y + (r * 10) - (y > res.getScaledHeight()/2 ? kp : 0), 0xFFFFFF, mode);
+                    y + (r * 10) - (y > res.getScaledHeight()/2 ? kp : 0), color.getRGB(), mode, color.getAlpha());
             r++;
         }
-        GlStateManager.popMatrix();
     }
 
     public static void drawOverlayString(String str, int x, int y, int color, S2Dtype mode) {drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str, x, y, color, mode);}
@@ -405,8 +402,9 @@ public class Esp {
 
     public static void drawOverlayString(FontRenderer fntj, String str, int x, int y, Color color, S2Dtype mode) {drawOverlayString(fntj, str, x, y, color.getRGB(), mode);}
 
-    public static void drawOverlayString(FontRenderer fntj, String str, int x, int y, int color, S2Dtype mode) {
-        int colorBlack = new Color(0, 0, 0, 1f).getRGB();
+    public static void drawOverlayString(FontRenderer fntj, String str, int x, int y, int color, S2Dtype mode) {drawOverlayString(fntj, str, x, y, color, mode, 255);}
+    public static void drawOverlayString(FontRenderer fntj, String str, int x, int y, int color, S2Dtype mode, int alpha) {
+        int colorBlack = new Color(0, 0, 0, alpha).getRGB();
         String ssr = TextUtils.stripColor(str);
         switch (mode) {
             case SHADOW:
@@ -423,7 +421,7 @@ public class Esp {
                 fntj.drawString(ssr, x+2, y, colorBlack);
                 fntj.drawString(ssr, x+3, y, colorBlack);
                 fntj.drawString(ssr, x, y+2, colorBlack);
-                fntj.drawString(ssr, x, y+3, 0x000000);
+                fntj.drawString(ssr, x, y+3, colorBlack);
 
                 fntj.drawString(ssr, x-1, y, colorBlack);
                 fntj.drawString(ssr, x+1, y, colorBlack);

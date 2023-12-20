@@ -78,7 +78,10 @@ public class BWTeamTracker extends Module {
             }
             if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(8) == null)
                 return;
-            if (Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(8).getItem() == Items.bed) team.clear();
+            if (Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(8).getItem() == Items.bed) {
+                team.clear();
+                if (Index.MAIN_CFG.getBoolVal("imp_chat_ars")) ImportantChatOVR.clear();
+            }
         }
     }
 
