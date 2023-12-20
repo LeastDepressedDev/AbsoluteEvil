@@ -17,6 +17,10 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -97,31 +101,6 @@ public class Utils {
         }
 
         return cleaned.toString();
-    }
-
-    public static String keepDigit(String str, List<Character> except) {
-        String nstr = "";
-        for (char ch : str.toCharArray()) {
-            switch (ch) {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '.':
-                nstr += ch;
-                default:
-                    if (except != null) {
-                        if (except.contains(ch)) nstr += ch;
-                    }
-            }
-        }
-        return nstr;
     }
 
     public static NBTTagCompound getSbData(ItemStack stack) {

@@ -26,7 +26,6 @@ public class StarredMobs extends Module {
                     if (ent instanceof EntityArmorStand) {
                         if (ent.getName().contains("\u272F") && ent.getName().contains("\u2764")) {
                             Esp.autoBox3D(ent.posX, ent.posY - 0.1, ent.posZ, 1, (ent.getName().contains("Fels") ? 3 : 2), starCol, 3f, true);
-                            Esp.renderTextInWorld("\u00A7a" + Utils.keepDigit(Utils.cleanSB(ent.getName()), null), ent.posX, ent.posY - 1, ent.posZ, 0xFFFFFF, e.partialTicks);
                             if (MainWrapper.Keybinds.unlimitedRange.isKeyDown()) {
                                 EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
                                 Esp.drawTracer(player.posX, player.posY, player.posZ, ent.posX, ent.posY, ent.posZ, starCol, 2f);
