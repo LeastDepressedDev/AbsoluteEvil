@@ -69,7 +69,7 @@ public class CombatHelperAim extends Module {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     void overLay(RenderGameOverlayEvent.Pre e) {
-        if (!isEnabled()) return;
+        if (!isEnabled() || Index.MAIN_CFG.getBoolVal("cbh_hide_target")) return;
         if (e.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS && prim != null) {
             float fYaw = Minecraft.getMinecraft().thePlayer.rotationYawHead;
             float fPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
@@ -195,6 +195,7 @@ public class CombatHelperAim extends Module {
         list.add(new SetsData<>("cbh_dist", "Distance", ValType.DOUBLE_NUMBER, "5"));
         list.add(new SetsData<>("cbh_tickskip", "Tick skip[don't change if you are not sure]", ValType.NUMBER, "1"));
         list.add(new SetsData<>("cbh_atk", "Attack tick mod", ValType.NUMBER, "20"));
+        list.add(new SetsData<>("cbh_hide_target", "Hide aim cursor", ValType.BOOLEAN, "false"));
         return list;
     }
 
