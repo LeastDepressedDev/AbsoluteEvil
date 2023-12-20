@@ -1,7 +1,8 @@
 AbsoluteEvil manager - stopped
 Add option to controll attack ticks - Done
-Add important chat option - in progress
+Add important chat option - Done
 Add mouse drag option to position selector - Done
 Add custom sound register with .wav format - in progress
 Add absolute fix button - Done
+Remove useless numbers in Box starred mobs - Done
 Save bot - in progress
