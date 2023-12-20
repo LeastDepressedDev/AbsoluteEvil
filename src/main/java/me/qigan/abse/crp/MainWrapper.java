@@ -6,23 +6,26 @@ import me.qigan.abse.Index;
 import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
-import me.qigan.abse.gui.GuiNotifier;
-import me.qigan.abse.gui.QGuiScreen;
+import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
-import me.qigan.abse.gui.inst.PositionsGui;
+import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import me.qigan.abse.packets.PacketHandler;
+import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Sync;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,13 +74,17 @@ public class MainWrapper {
 
         ClientCommandHandler.instance.registerCommand(new InCmd());
 
+        File file = new File(Loader.instance().getConfigDir() + "/abse");
+        if (!file.exists()) file.mkdirs();
+
         Holder.link();
+        //System.out.println("ABSE SOUND REG: " + SoundUtils.initialise() + " sounds registered.");
+
         Index.MAIN_CFG = new MuConfig();
-
-        keyBinds();
-
         Index.POS_CFG = new PositionConfig();
         Index.POS_CFG.load().defts(true).update();
+
+        keyBinds();
 
 //        int x0 = 0;
 //        if (QGuiScreen.register(MainGui.class, new MainGui(0, null))) x0++;

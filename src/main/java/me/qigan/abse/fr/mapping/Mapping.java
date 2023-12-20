@@ -23,7 +23,6 @@ public class Mapping {
     public static double startPosY;
     public static double startPosZ;
 
-    @DebugThingy
     public static List<BlockPos> dRedstoneBlocks = new ArrayList<>();
 
 
@@ -63,7 +62,6 @@ public class Mapping {
         }).start();
     }
 
-    @DebugThingy
     @SubscribeEvent
     void renderDebugInfo(RenderGameOverlayEvent.Text e) {
         if (DEBUG) {

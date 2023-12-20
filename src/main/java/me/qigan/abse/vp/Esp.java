@@ -375,7 +375,11 @@ public class Esp {
         GlStateManager.disableLighting();
     }
 
-    public static void drawAllignedTextList(List<String> lines, int x, int y, boolean sortVertical, ScaledResolution res, S2Dtype mode) {
+    public static void  drawAllignedTextList(List<String> lines, int x, int y, boolean sortVertical, ScaledResolution res, S2Dtype mode) {
+        drawAllignedTextList(lines, x, y, sortVertical, res, mode, new Color(0xFFFFFF));
+    }
+
+    public static void  drawAllignedTextList(List<String> lines, int x, int y, boolean sortVertical, ScaledResolution res, S2Dtype mode, Color color) {
         FontRenderer fnt = Minecraft.getMinecraft().fontRendererObj;
         int r = 0;
         int kp = lines.size()*10;
@@ -383,6 +387,8 @@ public class Esp {
             lines.sort((s, t1) -> (y < res.getScaledHeight()/2) ? Integer.compare(fnt.getStringWidth(t1), fnt.getStringWidth(s)) : Integer.compare(fnt.getStringWidth(s), fnt.getStringWidth(t1)));
         }
 
+        GlStateManager.pushMatrix();
+        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         for (String str : lines) {
             int ln = fnt.getStringWidth(str);
             Esp.drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str,
@@ -390,6 +396,7 @@ public class Esp {
                     y + (r * 10) - (y > res.getScaledHeight()/2 ? kp : 0), 0xFFFFFF, mode);
             r++;
         }
+        GlStateManager.popMatrix();
     }
 
     public static void drawOverlayString(String str, int x, int y, int color, S2Dtype mode) {drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str, x, y, color, mode);}

@@ -160,7 +160,7 @@ public class PositionsGui extends QGuiScreen {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0,0,2);
-        Esp.drawAllignedTextList(INSTRUCTION, 0, 0, false, res);
+        Esp.drawAllignedTextList(INSTRUCTION, 0, 0, false, res, S2Dtype.SHADOW);
         GlStateManager.popMatrix();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
