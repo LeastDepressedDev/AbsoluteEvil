@@ -12,6 +12,7 @@ import me.qigan.abse.fr.cbh.*;
 import me.qigan.abse.fr.dungons.*;
 import me.qigan.abse.fr.dungons.prios.M7Prios;
 import me.qigan.abse.fr.other.*;
+import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import net.minecraftforge.common.MinecraftForge;
 
 public class Holder {
@@ -56,6 +57,7 @@ public class Holder {
 		register(new AutoBridging());
 		register(new SaveBot());
 		register(new BowPracticeMod());
+		register(new ImportantChatOVR());
 	}
 	
 	public static void register(Module mod) {
