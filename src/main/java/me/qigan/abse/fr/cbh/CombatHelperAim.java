@@ -40,6 +40,8 @@ public class CombatHelperAim extends Module {
     private static int atkTick = 0;
     public static boolean OVERRIDE = false;
 
+    public static boolean BREAK_TOGGLE = false;
+
     public static Target prim;
 
     public static class Target {
@@ -108,7 +110,9 @@ public class CombatHelperAim extends Module {
 
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
-        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !MainWrapper.Keybinds.aimBreak.isKeyDown()) atkTick = Index.MAIN_CFG.getIntVal("cbh_atk");
+        if (Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") && MainWrapper.Keybinds.aimBreak.isPressed()) BREAK_TOGGLE=!BREAK_TOGGLE;
+        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() &&
+                !(Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ? BREAK_TOGGLE : MainWrapper.Keybinds.aimBreak.isKeyDown())) atkTick = Index.MAIN_CFG.getIntVal("cbh_atk");
         if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (skip == 0) {
             if (atkTick == 0 && !OVERRIDE) {

@@ -2,8 +2,10 @@ package me.qigan.abse.fr;
 
 import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
+import me.qigan.abse.crp.EnabledByDefault;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.crp.MainWrapper;
+import me.qigan.abse.fr.cbh.CombatHelperAim;
 import me.qigan.abse.fr.other.AutoBridging;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -17,6 +19,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@EnabledByDefault
 public class Hud extends Module{
     @Override
     public String id() {
@@ -45,12 +48,12 @@ public class Hud extends Module{
         }
 
         if (MainWrapper.Keybinds.unlimitedRange.isKeyDown()) lines.add("\u00A7cRender distance++");
-        if (Index.MAIN_CFG.getBoolVal("abrig_tog")) {
-            if (AutoBridging.toggle) lines.add("\u00A7cAuto bridging[toggle]");
-        } else {
-            if (MainWrapper.Keybinds.unlimitedRange.isKeyDown()) lines.add("\u00A7cAuto bridging[hold]");
-        }
-        if (MainWrapper.Keybinds.aimBreak.isKeyDown()) lines.add("\u00A7cAim break!");
+        if (MainWrapper.Keybinds.autoBridging.isKeyDown() && !Index.MAIN_CFG.getBoolVal("abrig_tog") ||
+                Index.MAIN_CFG.getBoolVal("abrig_tog") && AutoBridging.toggle)
+            lines.add("\u00A7cAuto bridging" + (Index.MAIN_CFG.getBoolVal("abrig_tog") ? "[toggle]" : "[hold]"));
+        if (MainWrapper.Keybinds.aimBreak.isKeyDown() && !Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ||
+                Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") && CombatHelperAim.BREAK_TOGGLE)
+            lines.add("\u00A7cAim break! " + (Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ? "[toggle]" : "[hold]"));
 
         Point point = Index.POS_CFG.calc("module_list");
         Esp.drawAllignedTextList(lines, point.x, point.y, true, e.resolution, S2Dtype.SHADOW);

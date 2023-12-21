@@ -20,6 +20,7 @@ public class CombatHelperAdvancedAimControls extends Module {
         list.add(new SetsData<>("cbh_aim_px", "Yaw limiter", ValType.DOUBLE_NUMBER, "0.5"));
         list.add(new SetsData<>("cbh_aim_py", "Pitch limiter", ValType.DOUBLE_NUMBER, "1.4"));
         list.add(new SetsData<>("cbh_aim_distbp", "Distance break point", ValType.DOUBLE_NUMBER, "1"));
+        list.add(new SetsData<>("cbh_aim_tbkm", "Toggle break key", ValType.BOOLEAN, "false"));
         return list;
     }
 
