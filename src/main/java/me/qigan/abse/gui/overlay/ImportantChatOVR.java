@@ -28,19 +28,17 @@ import java.util.Map;
 @EnabledByDefault
 public class ImportantChatOVR extends Module {
 
-    public static final double ALPHA_FADE_CONST = 0.34;
-
     public static List<String> list = new ArrayList<>();
     public static final int CONST_LINE_SIZE = 20;
 
-    private static double pulseA = 0;
-    private static int actualA = 255;
+    private static int pulseA = 0;
+    private static double actualA = 255;
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     void render(RenderGameOverlayEvent.Text e) {
         if (!isEnabled()) return;
         if (pulseA > 0) pulseA--;
-        if (actualA > Index.MAIN_CFG.getIntVal("imp_chat_a") && pulseA == 0) actualA-=ALPHA_FADE_CONST;
+        if (actualA > Index.MAIN_CFG.getIntVal("imp_chat_a") && pulseA == 0) actualA-=Index.MAIN_CFG.getDoubleVal("imp_chat_ptime");
         Point loc = Index.POS_CFG.calc("imp_chat");
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 1);
@@ -89,6 +87,7 @@ public class ImportantChatOVR extends Module {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("imp_chat_a", "Opacity[0-255]", ValType.NUMBER, "255"));
         list.add(new SetsData<>("imp_chat_pulse", "Pulse time[Render tick]", ValType.NUMBER, "200"));
+        list.add(new SetsData<>("imp_chat_ptime", "Pulse fade time(-[value]/tick)", ValType.DOUBLE_NUMBER, "1"));
         list.add(new SetsData<>("imp_chat_clear", "Clear", ValType.BUTTON, (Runnable) ImportantChatOVR::clear));
         list.add(new SetsData<>("imp_chat_ars", "Auto reset", ValType.BOOLEAN, "true"));
         return list;

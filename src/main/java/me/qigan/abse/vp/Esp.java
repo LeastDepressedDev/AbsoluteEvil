@@ -387,6 +387,7 @@ public class Esp {
             lines.sort((s, t1) -> (y < res.getScaledHeight()/2) ? Integer.compare(fnt.getStringWidth(t1), fnt.getStringWidth(s)) : Integer.compare(fnt.getStringWidth(s), fnt.getStringWidth(t1)));
         }
 
+        GlStateManager.pushMatrix();
         for (String str : lines) {
             int ln = fnt.getStringWidth(str);
             Esp.drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str,
@@ -394,6 +395,7 @@ public class Esp {
                     y + (r * 10) - (y > res.getScaledHeight()/2 ? kp : 0), color.getRGB(), mode, color.getAlpha());
             r++;
         }
+        GlStateManager.popMatrix();
     }
 
     public static void drawOverlayString(String str, int x, int y, int color, S2Dtype mode) {drawOverlayString(Minecraft.getMinecraft().fontRendererObj, str, x, y, color, mode);}

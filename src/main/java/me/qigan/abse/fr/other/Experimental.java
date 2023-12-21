@@ -3,7 +3,15 @@ package me.qigan.abse.fr.other;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.GhostUtils;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
+import me.qigan.abse.sync.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentStyle;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +19,13 @@ import java.util.List;
 public class Experimental extends Module {
 
     public static int ij = 0;
+
+    @SubscribeEvent
+    void onMsg(ClientChatReceivedEvent e) {
+        if (!isEnabled()) return;
+        String str = e.message.getFormattedText().replace('\u00A7', '&');
+        System.out.println(str);
+    }
 
     @Override
     public String id() {
