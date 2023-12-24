@@ -2,6 +2,7 @@ package me.qigan.abse.sync;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import javafx.geometry.Point3D;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.AddressedData;
 import net.minecraft.client.Minecraft;
@@ -41,7 +42,7 @@ public class Utils {
         return rand.nextBoolean() ? rand.nextInt()%up : down;
     }
 
-    public static float[] getRotationsNeeded(Entity entity1, Entity entity2) {
+    public static float[] getRotationsTo(Entity entity1, Entity entity2) {
         if (entity1 == null || entity2 == null) {
             return null;
         }
@@ -57,10 +58,23 @@ public class Utils {
             diffY = (entity2.getEntityBoundingBox().minY + entity2.getEntityBoundingBox().maxY) / 2.0D - (entity1.posY + entity1.getEyeHeight());
         }
 
+        return getRotationsTo(diffX, diffY, diffZ, new float[]{entity1.rotationYaw, entity1.rotationPitch});
+    }
+
+    public static float[] getRotationsTo(Point3D from, Point3D to, float[] angles) {
+        return getRotationsTo(
+                to.getX() - from.getX(),
+                to.getY() - from.getY(),
+                to.getZ() - from.getZ(),
+                angles
+        );
+    }
+
+    public static float[] getRotationsTo(final double diffX, final double diffY, final double diffZ, float[] angles) {
         final double dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
         final float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(diffY, dist) * 180.0D / Math.PI);
-        return new float[] { entity1.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - entity1.rotationYaw), entity1.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - entity1.rotationPitch) };
+        return new float[] { angles[0] + MathHelper.wrapAngleTo180_float(yaw - angles[0]), angles[1] + MathHelper.wrapAngleTo180_float(pitch - angles[1]) };
     }
 
     public static <K, V> List<AddressedData<K, V>> mapToAddressedDataList(Map<K, V> map) {

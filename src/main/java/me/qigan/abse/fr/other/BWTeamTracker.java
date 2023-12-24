@@ -89,7 +89,7 @@ public class BWTeamTracker extends Module {
     void chat(ClientChatReceivedEvent e) {
         String msg_s = Utils.cleanSB(e.message.getFormattedText());
         for (Map.Entry<EntityPlayer, Integer> mate : team.entrySet()) {
-            if (msg_s.startsWith(mate.getKey().getName() + " ")) {
+            if (msg_s.contains(mate.getKey().getName())) {
                 if (Holder.quickFind("imp_chat").isEnabled()) ImportantChatOVR.add(e.message.getFormattedText());
             }
 

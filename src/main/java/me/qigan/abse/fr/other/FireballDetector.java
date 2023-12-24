@@ -1,8 +1,11 @@
 package me.qigan.abse.fr.other;
 
 import me.qigan.abse.Index;
+import me.qigan.abse.config.SetsData;
+import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.overlay.GuiNotifier;
+import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;
@@ -76,9 +79,17 @@ public class FireballDetector extends Module {
 
                 Esp.drawTracer(ent.posX, ent.posY, ent.posZ, ent.posX + moveX * 100, ent.posY + moveY * 100, ent.posZ + moveZ * 100, new Color(0xFF0000), 1f);
             } else if (ent instanceof EntityPlayer) {
-                if (ent.getUniqueID() == Minecraft.getMinecraft().thePlayer.getUniqueID()) continue;
-                if (((EntityPlayer) ent).getHeldItem() != null && ((EntityPlayer) ent).getHeldItem().getItem() == Items.fire_charge)
-                    rendStr = true;
+                EntityPlayer cur = (EntityPlayer) ent;
+                if (ent.getUniqueID() == Minecraft.getMinecraft().thePlayer.getUniqueID() ||
+                     !Index.MAIN_CFG.getBoolVal("fbd_team_track") && BWTeamTracker.team.containsKey(cur)) continue;
+                if (cur.getHeldItem() != null && cur.getHeldItem().getItem() == Items.fire_charge) {
+                    if (Index.MAIN_CFG.getBoolVal("fbd_degree")) {
+                        float[] angles = Utils.getRotationsTo(cur, Minecraft.getMinecraft().thePlayer);
+                        if (Math.abs(angles[0] - cur.rotationYaw) < Index.MAIN_CFG.getDoubleVal("fbd_degree_yaw") &&
+                                Math.abs(angles[1] - cur.rotationPitch) < Index.MAIN_CFG.getDoubleVal("fbd_degree_pitch"))
+                            rendStr = true;
+                    } else rendStr = true;
+                }
             }
         }
         glRend = rendStr;
@@ -99,6 +110,16 @@ public class FireballDetector extends Module {
     @Override
     public String fname() {
         return "Fireball detector";
+    }
+
+    @Override
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("fbd_team_track", "Track tean", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("fbd_degree", "Apply angular check", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("fbd_degree_yaw", "Yaw interval", ValType.DOUBLE_NUMBER, "45"));
+        list.add(new SetsData<>("fbd_degree_pitch", "Pitch interval", ValType.DOUBLE_NUMBER, "20"));
+        return list;
     }
 
     @Override
