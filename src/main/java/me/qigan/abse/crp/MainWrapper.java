@@ -79,7 +79,7 @@ public class MainWrapper {
         if (!file.exists()) file.mkdirs();
 
         Holder.link();
-        //System.out.println("ABSE SOUND REG: " + SoundUtils.initialise() + " sounds registered.");
+        System.out.println("ABSE SOUND REG: " + SoundUtils.initialise() + " sounds registered.");
 
         Index.MAIN_CFG = new MuConfig();
         Index.POS_CFG = new PositionConfig();

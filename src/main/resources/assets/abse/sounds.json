@@ -30,5 +30,9 @@
   "aaaaaa": {
     "subtitle": "abse.subtitle.aaaaaaaaaaaa",
     "sounds": ["abse:aaaaaa"]
+  },
+  "anonc": {
+    "subtitle": "abse.subtitle.anonc",
+    "sounds": ["abse:anonc"]
   }
 }

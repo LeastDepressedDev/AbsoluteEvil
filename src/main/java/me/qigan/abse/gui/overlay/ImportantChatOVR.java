@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.EnabledByDefault;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -57,8 +58,9 @@ public class ImportantChatOVR extends Module {
         }
         list.add(str);
 
-        //TODO: Replace it with custom register sound when it finished
-        Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
+        if (Index.MAIN_CFG.getBoolVal("imp_chat_sound_ovr"))
+            Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
+        else SoundUtils.playSoundSwitch("anonc", "abse:anonc");
 
         pulse();
     }
@@ -90,6 +92,10 @@ public class ImportantChatOVR extends Module {
         list.add(new SetsData<>("imp_chat_ptime", "Pulse fade time(-[value]/tick)", ValType.DOUBLE_NUMBER, "1"));
         list.add(new SetsData<>("imp_chat_clear", "Clear", ValType.BUTTON, (Runnable) ImportantChatOVR::clear));
         list.add(new SetsData<>("imp_chat_ars", "Auto reset", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("imp_chat_sound_ovr", "Use vanilla announcement sound", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("imp_chat_sound_comment",
+                "To replace default announcement sound, put audio file named \"anonc.wav\" into abse/sound folder in config",
+                ValType.COMMENT, null));
         return list;
     }
 

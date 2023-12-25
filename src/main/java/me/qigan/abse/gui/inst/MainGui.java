@@ -134,13 +134,19 @@ public class MainGui extends QGuiScreen {
             //const move size = 100
             int sumSize = 100 + 2*sizeW;
             for (SetsData<?> ddr : mod.sets()) {
-                String call = ddr.guiName + ":";
+                String call = ddr.guiName + (ddr.dataType == ValType.COMMENT ? "" : ":");
                 int size = Minecraft.getMinecraft().fontRendererObj.getStringWidth(call);
                 int cumSize;
-                if (ddr.dataType == ValType.BUTTON) {
-                    cumSize = sizeW;
-                } else {
-                    cumSize = size + comMove + sizeW/2;
+                switch (ddr.dataType) {
+                    case BUTTON:
+                        cumSize = sizeW;
+                        break;
+                    case COMMENT:
+                        cumSize = size;
+                        break;
+                    default:
+                        cumSize = size + comMove + sizeW/2;
+                        break;
                 }
                 if (sumSize + cumSize > width) {i++; sumSize = 60;}
                 switch (ddr.dataType) {
@@ -217,6 +223,14 @@ public class MainGui extends QGuiScreen {
                         sch.put(button1.id, ddr.setId);
                         actButtons.put(button1.id, (Runnable) ddr.defVal);
                         buttonList.add(button1);
+                        Id++;
+                    }
+                    break;
+                    case COMMENT:
+                    {
+                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
+                        label1.func_175202_a(call);
+                        labelList.add(label1);
                         Id++;
                     }
                     break;
