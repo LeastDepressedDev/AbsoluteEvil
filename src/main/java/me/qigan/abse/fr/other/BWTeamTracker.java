@@ -90,7 +90,8 @@ public class BWTeamTracker extends Module {
         String msg_s = Utils.cleanSB(e.message.getFormattedText());
         for (Map.Entry<EntityPlayer, Integer> mate : team.entrySet()) {
             if (msg_s.contains(mate.getKey().getName())) {
-                if (Holder.quickFind("imp_chat").isEnabled()) ImportantChatOVR.add(e.message.getFormattedText());
+                if (Holder.quickFind("imp_chat").isEnabled())
+                    ImportantChatOVR.add(e.message.getFormattedText().replaceAll("\u00A7l", ""));
             }
 
             if (msg_s.startsWith(mate.getKey().getName() + " ") && !msg_s.contains("purchased")) {
