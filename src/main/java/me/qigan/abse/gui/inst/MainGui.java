@@ -14,11 +14,14 @@ import me.qigan.abse.gui.GuiDoubleNumberField;
 import me.qigan.abse.gui.GuiNumberField;
 import me.qigan.abse.gui.QGuiScreen;
 import me.qigan.abse.gui.TooltipBox;
+import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -223,8 +226,6 @@ public class MainGui extends QGuiScreen {
 
             i++;
         }
-
-
         super.initGui();
     }
 

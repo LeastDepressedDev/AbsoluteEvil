@@ -69,6 +69,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new MainWrapper());
         MinecraftForge.EVENT_BUS.register(new GuiNotifier());
         MinecraftForge.EVENT_BUS.register(new Sync());
+        MinecraftForge.EVENT_BUS.register(new Index());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 

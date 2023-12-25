@@ -1,5 +1,6 @@
 package me.qigan.abse.ant;
 
+import me.qigan.abse.Index;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -149,16 +150,7 @@ public class InputField extends JPanel {
                 addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Session session = new Session(uname.comp.getText(), pid.comp.getText(), token.comp.getText(), "mojang");
-                        Field sessionField = ReflectionHelper.findField(Minecraft.class, "session", "field_71449_j");
-                        ReflectionHelper.setPrivateValue(Field.class, sessionField, sessionField.getModifiers() & ~Modifier.FINAL, "modifiers");
-                        ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), session, "session", "field_71449_j");
-
-
-                        JOptionPane.showMessageDialog(null, "Logged as " + uname.comp.getText(), "ABSE", JOptionPane.INFORMATION_MESSAGE);
-                        uname.comp.setText("");
-                        pid.comp.setText("");
-                        token.comp.setText("");
+                        Index.relog(uname.comp.getText(), token.comp.getText(), pid.comp.getText());
                     }
                 });
             }

@@ -5,8 +5,8 @@ Add mouse drag option to position selector - Done
 Add "hide selector cursor" option to Combat aim helper - Done
 Add toggle mode to aim - Done
 Add custom sound register with .wav format - in progress
-Add team and degree option to FBD - in progress
-Improve fireball detector algorithm - in progress
+Add team and degree option to FBD - Done
+Improve fireball detector algorithm - waiting for solution
 Add external config system - not even started lol
 Add absolute fix button - Done
 Remove useless numbers in Box starred mobs - Done
