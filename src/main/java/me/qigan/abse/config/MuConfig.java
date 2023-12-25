@@ -31,7 +31,7 @@ public class MuConfig {
 				this.writer.set(mdl.id(), enb == null ? "false" : "true");
 			}
 			for (SetsData<?> dat : mdl.sets()) {
-				if (dat.dataType != ValType.BUTTON) {
+				if (dat.dataType != ValType.BUTTON && dat.dataType != ValType.COMMENT) {
 					if (!writer.contains(dat.setId)) {
 						this.writer.set(dat.setId, (String) dat.defVal);
 					}

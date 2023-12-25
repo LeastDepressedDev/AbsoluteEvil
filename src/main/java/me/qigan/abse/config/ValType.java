@@ -8,5 +8,6 @@ public enum ValType {
 
 
 
-	BUTTON
+	BUTTON,
+	COMMENT
 }
