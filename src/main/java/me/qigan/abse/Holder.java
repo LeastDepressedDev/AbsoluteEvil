@@ -31,6 +31,7 @@ public class Holder {
 		register(new BloodCamp());
 		register(new StarredMobs());
 		register(new Debug());
+		register(new PartyUtils());
 		register(new MelodyShit());
 		register(new GhostBlocks());
 		register(new PickaxePlus());
