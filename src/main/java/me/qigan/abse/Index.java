@@ -43,4 +43,8 @@ public class Index
 
         JOptionPane.showMessageDialog(null, "Logged as " + username, "Asolute Evil", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public static boolean isSafe() {
+        return Index.MAIN_CFG.getBoolVal("safe_mod");
+    }
 }
