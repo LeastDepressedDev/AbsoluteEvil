@@ -9,6 +9,6 @@ public class SafeMode extends Module{
 
     @Override
     public String description() {
-        return "If enabled - preserve you from the most of possible crashes(caused by mode), lower performance";
+        return "If enabled - preserve you from the most of possible crashes(caused by mode). Lower performance, can cause incorrect work of module";
     }
 }

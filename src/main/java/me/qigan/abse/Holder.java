@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.crp.SafeMode;
 import me.qigan.abse.fr.*;
 import me.qigan.abse.fr.other.AutoBridging;
 import me.qigan.abse.fr.cbh.*;
@@ -23,6 +24,7 @@ public class Holder {
 	
 	public static void link() {
 		register(new Experimental());
+		register(new SafeMode());
 		register(new M7Route());
 		register(new Hud());
 		register(new AutoHarp());
