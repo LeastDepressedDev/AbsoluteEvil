@@ -11,7 +11,7 @@ Add external config system - not even started lol
 Add absolute fix button - Done
 Add chat buttons to players, who joins your party - Done
 Add safe mode option - implementing
-Change 'tooltip' to 'hovering text' render in gui - in progress
+Change 'tooltip' to 'hovering text' render in gui - Done
 Remove useless numbers in Box starred mobs - Done
 Move logginer into gui - in progress
 Save bot - in progress

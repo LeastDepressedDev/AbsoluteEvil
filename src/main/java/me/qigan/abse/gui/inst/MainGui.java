@@ -10,10 +10,7 @@ import me.qigan.abse.fr.other.BWTeamTracker;
 import me.qigan.abse.fr.other.BowAimEsp;
 import me.qigan.abse.fr.other.BowPracticeMod;
 import me.qigan.abse.fr.other.FireballDetector;
-import me.qigan.abse.gui.GuiDoubleNumberField;
-import me.qigan.abse.gui.GuiNumberField;
-import me.qigan.abse.gui.QGuiScreen;
-import me.qigan.abse.gui.TooltipBox;
+import me.qigan.abse.gui.*;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -100,22 +97,13 @@ public class MainGui extends QGuiScreen {
         absoluteFix = new GuiButton(Id, 0, height-20, 100, 20, "Absolute fix");
         buttonList.add(absoluteFix);
         Id++;
-        { // Tooltip for absoluteFix
-            ItemStack stack = new ItemStack(Items.arrow);
-            stack.setStackDisplayName("\u00A7aIf somethings breaks, just press it!");
-            tooltipBoxList.add(new TooltipBox(0, height-20, 100, 20, stack));
-        }
+        textBoxList.add(new HoveringTextBox(0, height-20, 100, 20, "\u00A7aIf somethings breaks, just press it!"));
 
 
         int i = 0;
         for (int u = PAGE_SIZE * page; u < Holder.MRL.size() && u < PAGE_SIZE*(page+1); u++) {
             Module mod = Holder.MRL.get(u);
-            ItemStack stack = new ItemStack(Items.arrow);
-            stack.setStackDisplayName("\u00A7f" + mod.description());
-//            NBTTagList tagList = new NBTTagList();
-//            tagList.appendTag(new NBTTagString("Looool"));
-//            NBTTagCompound comp =  stack.serializeNBT();
-            tooltipBoxList.add(new TooltipBox(40, 60 + i*2*sizeH, sizeW, sizeH, stack));
+            textBoxList.add(new HoveringTextBox(40, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7f" + mod.description()));
             GuiLabel label = new GuiLabel(fontRendererObj, Id, 40, 60 + i*2*sizeH, sizeW, sizeH, 0xFFFFFF);
             label.func_175202_a(mod.fname() + ":");
             labelList.add(label);
@@ -123,9 +111,7 @@ public class MainGui extends QGuiScreen {
             GuiButton button = new GuiButton(Id, 60+sizeW, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7l" + (mod.isEnabled() ? "\u00A7a ON" : "\u00A7c OFF"));
             if (Debug.DISABLE_STATE.contains(mod.id())) {
                 button.enabled = false;
-                ItemStack stack1 = new ItemStack(Items.arrow);
-                stack1.setStackDisplayName("\u00A7f\u00A7cTemporary disabled!");
-                tooltipBoxList.add(new TooltipBox(60+sizeW, 60 + i*2*sizeH, sizeW, sizeH, stack1));
+                textBoxList.add(new HoveringTextBox(60+sizeW, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7f\u00A7cTemporary disabled!"));
             }
             sch.put(button.id, mod.id());
             buttonList.add(button);
@@ -160,9 +146,7 @@ public class MainGui extends QGuiScreen {
                                 "\u00A7l" + (Index.MAIN_CFG.getBoolVal(ddr.setId) ? "\u00A7a ON" : "\u00A7c OFF"));
                         if (Debug.DISABLE_STATE.contains(ddr.setId)) {
                             button1.enabled = false;
-                            ItemStack stack1 = new ItemStack(Items.arrow);
-                            stack1.setStackDisplayName("\u00A7f\u00A7cTemporary disabled!");
-                            tooltipBoxList.add(new TooltipBox(sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH, stack1));
+                            textBoxList.add(new HoveringTextBox(sumSize+size+comMove, 60 + i*2*sizeH, sizeW/2, sizeH, "\u00A7f\u00A7cTemporary disabled!"));
                         }
                         sch.put(button1.id, ddr.setId);
                         buttonList.add(button1);
@@ -216,9 +200,7 @@ public class MainGui extends QGuiScreen {
                         GuiButton button1 = new GuiButton(Id, sumSize, 60 + i*2*sizeH, sizeW, sizeH, ddr.guiName);
                         if (Debug.DISABLE_STATE.contains(ddr.setId)) {
                             button1.enabled = false;
-                            ItemStack stack1 = new ItemStack(Items.arrow);
-                            stack1.setStackDisplayName("\u00A7f\u00A7cTemporary disabled!");
-                            tooltipBoxList.add(new TooltipBox(sumSize, 60 + i*2*sizeH, sizeW, sizeH, stack1));
+                            textBoxList.add(new HoveringTextBox(sumSize, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7f\u00A7cTemporary disabled!"));
                         }
                         sch.put(button1.id, ddr.setId);
                         actButtons.put(button1.id, (Runnable) ddr.defVal);

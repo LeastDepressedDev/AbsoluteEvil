@@ -23,8 +23,9 @@ public class QGuiScreen extends GuiScreen {
 
     private final QGuiScreen prev;
 
-    public List<GuiTextField> textFieldList = new ArrayList<GuiTextField>();
-    public List<TooltipBox> tooltipBoxList = new ArrayList<TooltipBox>();
+    public List<HoveringTextBox> textBoxList = new ArrayList<>();
+    public List<GuiTextField> textFieldList = new ArrayList<>();
+    public List<TooltipBox> tooltipBoxList = new ArrayList<>();
 
     public QGuiScreen(QGuiScreen screen) {
         this.prev = screen;
@@ -58,6 +59,9 @@ public class QGuiScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        for (HoveringTextBox htb : textBoxList) {
+            if (htb.shouldRender(mouseX, mouseY)) drawHoveringText(htb.lines, mouseX, mouseY, Minecraft.getMinecraft().fontRendererObj);
+        }
         for (TooltipBox ttb : tooltipBoxList) {
             if (ttb.shouldRender(mouseX, mouseY)) renderToolTip(ttb.stack, mouseX, mouseY);
         }
