@@ -1,8 +1,11 @@
 package me.qigan.abse.sync;
 
-public class InvalidSoundFileException extends Throwable {
-    @Override
-    public String getMessage() {
-        return "InvalidSoundFileException";
+public class InvalidSoundFileException extends RuntimeException {
+    public InvalidSoundFileException() {
+        super();
+    }
+
+    public InvalidSoundFileException(String str) {
+        super(str);
     }
 }
