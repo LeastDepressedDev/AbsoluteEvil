@@ -81,27 +81,27 @@ public class PartyUtils extends Module {
                 Minecraft.getMinecraft().thePlayer.addChatMessage(message);
             }).start();
         } else if (msg.contains("Party Members")) {
-            party.clear();
             scanTick = Index.MAIN_CFG.getIntVal("patils_st")*2;
         }
 
         //if (ln.length() > 2) is a check of name reality (3+ symbols)
         if (scanTick > 0) {
+            int c = 0;
+            for (char chr : e.message.getFormattedText().toCharArray()) {
+                if (chr == '\u25CF') c++;
+            }
             if (msg.startsWith("Party Leader: ")) {
                 msg = msg.substring(14);
-                String[] s = format(msg).split(" ");
-                if (s.length <= 2) { if (msg.length() > 2) party.put(msg.replace(" ", ""), 3);}
-                else for (String ln : s) if (ln.length() > 2) party.put(ln, 3);
+                if (c == 1) party.put(format(msg).replace(" ", ""), 3);
+                else for (String ln : format(msg).split(" ")) if (ln.length() > 2) party.put(ln, 3);
             } else if (msg.startsWith("Party Moderators: ")) {
                 msg = msg.substring(18);
-                String[] s = format(msg).split(" ");
-                if (s.length <= 2) { if (msg.length() > 2) party.put(msg.replace(" ", ""), 2);}
-                else for (String ln : s) if (ln.length() > 2) party.put(ln, 2);
+                if (c == 1) party.put(format(msg).replace(" ", ""), 2);
+                else for (String ln : format(msg).split(" ")) if (ln.length() > 2) party.put(ln, 2);
             } else if (msg.startsWith("Party Members: ")) {
                 msg = msg.substring(15);
-                String[] s = format(msg).split(" ");
-                if (s.length <= 2) { if (msg.length() > 2) party.put(msg.replace(" ", ""), 1);}
-                else for (String ln : s) if (ln.length() > 2) party.put(ln, 1);
+                if (c == 1) party.put(format(msg).replace(" ", ""), 1);
+                else for (String ln : format(msg).split(" ")) if (ln.length() > 2) party.put(ln, 1);
             }
         }
     }
@@ -130,7 +130,7 @@ public class PartyUtils extends Module {
                 List<IChatComponent> seq = new ArrayList<>();
                 for (Map.Entry<String, Integer> mem : party.entrySet()) {
                     if (mem.getValue() == 3)
-                        seq.add(0, new ChatComponentText(mem.getKey() + "'s part: "));
+                        seq.add(0, new ChatComponentText("\u00A72" + mem.getKey() + "'s party: "));
                     ChatComponentText text = new ChatComponentText("\u00A7a[" + classReg.getOrDefault(mem.getKey(), 'U') + "] " + mem.getKey() + " ");
                     text.appendSibling(new ChatComponentText("\u00A72[View]").setChatStyle(
                             new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pv " + mem.getKey()))
@@ -166,6 +166,7 @@ public class PartyUtils extends Module {
                 }
                 else throw new CustomPLBuildFailedException();
             }
+            party.clear();
         }
         if (scanTick > 0) scanTick--;
     }
