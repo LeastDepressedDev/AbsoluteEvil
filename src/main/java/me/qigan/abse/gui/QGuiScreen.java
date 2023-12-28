@@ -3,8 +3,11 @@ package me.qigan.abse.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +46,12 @@ public class QGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
+        //POV: The dumbest solution ever
         if (prev != null) {
             new Thread(() -> {
                 try {
                     Thread.sleep(MS_WAIT_OPEN);
-                    Minecraft.getMinecraft().displayGuiScreen(prev);
+                    Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(prev));
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
