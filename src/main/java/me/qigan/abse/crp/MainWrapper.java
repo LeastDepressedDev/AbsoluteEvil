@@ -7,6 +7,7 @@ import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
@@ -111,6 +112,15 @@ public class MainWrapper {
                 }
             });
             MainGui.queue = false;
+        }
+        if (NewMainMenu.queue) {
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    Minecraft.getMinecraft().displayGuiScreen(new NewMainMenu(null));
+                }
+            });
+            NewMainMenu.queue = false;
         }
     }
 }

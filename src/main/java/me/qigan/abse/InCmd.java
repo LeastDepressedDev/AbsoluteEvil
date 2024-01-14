@@ -6,6 +6,7 @@ import me.qigan.abse.fr.GhostBlocks;
 import me.qigan.abse.fr.GhostUtils;
 import me.qigan.abse.fr.dungons.M7Route;
 import me.qigan.abse.fr.mapping.Mapping;
+import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.sync.Utils;
@@ -121,6 +122,8 @@ public class InCmd extends CommandBase{
 				} else {
 					sender.addChatMessage(new ChatComponentText("\u00A7c Ghost blocks shit"));
 				}
+			} else if (args[0].equalsIgnoreCase("new")) {
+				NewMainMenu.queue = true;
 			} else {
 				for (Module mdl: Holder.MRL) {
 					if (args[0].equalsIgnoreCase(mdl.id())) {
