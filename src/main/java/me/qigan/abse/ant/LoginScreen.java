@@ -5,7 +5,7 @@ import javax.swing.*;
 public class LoginScreen extends JFrame {
     public LoginScreen() {
         super();
-        setTitle("Enter Some Shit");
+        setTitle("Enter login data");
         setSize(700, 400);
         setResizable(false);
 

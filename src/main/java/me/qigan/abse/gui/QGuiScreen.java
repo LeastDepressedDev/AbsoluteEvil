@@ -34,6 +34,10 @@ public class QGuiScreen extends GuiScreen {
         this.prev = screen;
     }
 
+    public QGuiScreen(GuiScreen guiScreen) {
+        this.prev = null;
+    }
+
     @Override
     public void initGui() {
         super.initGui();

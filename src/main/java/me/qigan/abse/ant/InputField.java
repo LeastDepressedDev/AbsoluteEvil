@@ -1,6 +1,7 @@
 package me.qigan.abse.ant;
 
 import me.qigan.abse.Index;
+import me.qigan.abse.crp.MainWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -151,6 +152,7 @@ public class InputField extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Index.relog(uname.comp.getText(), token.comp.getText(), pid.comp.getText());
+                        MainWrapper.ls.setVisible(false);
                     }
                 });
             }

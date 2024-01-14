@@ -6,6 +6,7 @@ import me.qigan.abse.Index;
 import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
+import me.qigan.abse.crp.ovr.MCMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
@@ -70,6 +71,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new GuiNotifier());
         MinecraftForge.EVENT_BUS.register(new Sync());
         MinecraftForge.EVENT_BUS.register(new Index());
+        MinecraftForge.EVENT_BUS.register(new MCMainMenu());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 
@@ -91,8 +93,6 @@ public class MainWrapper {
 //        if (QGuiScreen.register(MainGui.class, new MainGui(0, null))) x0++;
 //        if (QGuiScreen.register(PositionsGui.class, new PositionsGui(MainGui.class))) x0++;
 //        System.out.println("QGuiScreen: Registered " + x0 + " screens.");
-
-        ls.setVisible(true);
     }
 
     @SubscribeEvent

@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.Session;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -26,7 +27,7 @@ public class Index
     public static PositionConfig POS_CFG;
 
     public static final String MODID = "abse";
-    public static final String VERSION = "1.6";
+    public static final String VERSION = "1.7";
     
     @EventHandler
     public void init(FMLInitializationEvent event)

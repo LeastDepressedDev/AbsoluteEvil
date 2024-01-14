@@ -1,18 +1,6 @@
 AbsoluteEvil manager - stopped
-Add option to controll attack ticks - Done
-Add important chat option - Done
-Add mouse drag option to position selector - Done
-Add "hide selector cursor" option to Combat aim helper - Done
-Add toggle mode to aim - Done
-Add custom sound register with .wav format - Done
-Add team and degree option to FBD - Done
 Improve fireball detector algorithm - waiting for solution
-Add external config system - not even started lol
-Add absolute fix button - Done
-Add chat buttons to players, who joins your party - Done
 Add safe mode option - implementing
-Change 'tooltip' to 'hovering text' render in gui - Done
-Remove useless numbers in Box starred mobs - Done
-Fix cursor disappearing on gui close - Done
+Finally implement freakin mixins - CUMMING SOON
 Move logginer into gui - in progress
 Save bot - in progress
