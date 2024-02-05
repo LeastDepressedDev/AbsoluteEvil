@@ -67,14 +67,19 @@ public class PositionConfig {
      * Reg format - if (!poses.containsKey("xxx")) this.poses.put("xxx", new Loc2d(nx, ny, aligner));
      */
     public final PositionConfig defts(boolean startup) {
-        if (!poses.containsKey("gbmg") || !startup) this.poses.put("gbmg", new Loc2d(30, 70, new AlignRelativePercent(120, 20, 0)));
-        if (!poses.containsKey("module_list") || !startup) this.poses.put("module_list", new Loc2d(100, 0, new AlignRelativePercent(100, 100, 0)));
-        if (!poses.containsKey("ghost_utils") || !startup) this.poses.put("ghost_utils", new Loc2d(0, 40, new AlignRelativePercent(100, 80, 0)));
-        if (!poses.containsKey("bwa_display") || !startup) this.poses.put("bwa_display", new Loc2d(0, 100, new AlignBWA()));
-        if (!poses.containsKey("bwt_display") || !startup) this.poses.put("bwt_display", new Loc2d(20, 30, new AlignRelativePercent(70, 100, 0)));
-        if (!poses.containsKey("fbd_display") || !startup) this.poses.put("fbd_display", new Loc2d(10, 0, new AlignMidRelative(70, 20, 0)));
-        if (!poses.containsKey("imp_chat") || !startup) this.poses.put("imp_chat", new Loc2d(100, 100, new AlignRelativePercent(400, 100, 0)));
+        register("gbmg", new Loc2d(30, 70, new AlignRelativePercent(120, 20, 0)), startup);
+        register("module_list", new Loc2d(100, 0, new AlignRelativePercent(100, 100, 0)), startup);
+        register("ghost_utils", new Loc2d(0, 40, new AlignRelativePercent(100, 80, 0)), startup);
+        register("bwa_display", new Loc2d(0, 100, new AlignBWA()), startup);
+        register("bwt_display", new Loc2d(20, 30, new AlignRelativePercent(70, 100, 0)), startup);
+        register("fbd_display", new Loc2d(10, 0, new AlignMidRelative(70, 20, 0)), startup);
+        register("imp_chat", new Loc2d(100, 100, new AlignRelativePercent(400, 100, 0)), startup);
+        register("ingui_disp", new Loc2d(50, 100, new AlignRelativePercent(100, 200, 1)), startup);
         return this;
+    }
+
+    private void register(String key, Loc2d lc, boolean spt) {
+        if (!this.poses.containsKey(key) || !spt) this.poses.put(key, lc);
     }
 
     public final void update() {
