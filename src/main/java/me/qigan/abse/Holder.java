@@ -62,6 +62,7 @@ public class Holder {
 		register(new BowPracticeMod());
 		register(new ImportantChatOVR());
 		register(new InguiDisplay());
+		register(new AutoBedBreaker());
 	}
 	
 	public static void register(Module mod) {

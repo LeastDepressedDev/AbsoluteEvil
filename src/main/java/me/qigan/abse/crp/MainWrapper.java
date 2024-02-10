@@ -42,6 +42,7 @@ public class MainWrapper {
         public static KeyBinding ghostChest;
         public static KeyBinding autoBridging;
         public static KeyBinding aimBreak;
+        public static KeyBinding blockBreaker;
     }
 
     public static LoginScreen ls = new LoginScreen();
@@ -64,6 +65,8 @@ public class MainWrapper {
         ClientRegistry.registerKeyBinding(Keybinds.autoBridging);
         Keybinds.aimBreak = new KeyBinding("Aim break button", Keyboard.KEY_NONE, "key.abse");
         ClientRegistry.registerKeyBinding(Keybinds.aimBreak);
+        Keybinds.blockBreaker = new KeyBinding("Block breaker", Keyboard.KEY_NONE, "key.abse");
+        ClientRegistry.registerKeyBinding(Keybinds.blockBreaker);
     }
 
     public static void initialise(FMLInitializationEvent e) {
