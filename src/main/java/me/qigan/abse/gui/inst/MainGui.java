@@ -4,6 +4,7 @@ import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
+import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import me.qigan.abse.fr.other.BWTeamTracker;
@@ -108,6 +109,12 @@ public class MainGui extends QGuiScreen {
             label.func_175202_a(mod.fname() + ":");
             labelList.add(label);
             Id++;
+            if (mod instanceof DangerousModule) {
+                GuiLabel dang = new GuiLabel(fontRendererObj, Id, 0, 60 + i*2*sizeH, sizeW, sizeH, 0xFF0000);
+                dang.func_175202_a("Dangerous!");
+                labelList.add(dang);
+                Id++;
+            }
             GuiButton button = new GuiButton(Id, 60+sizeW, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7l" + (mod.isEnabled() ? "\u00A7a ON" : "\u00A7c OFF"));
             if (Debug.DISABLE_STATE.contains(mod.id())) {
                 button.enabled = false;
