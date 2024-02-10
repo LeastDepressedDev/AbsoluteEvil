@@ -14,6 +14,7 @@ public abstract class Module {
 	public String fname() {
 		return this.id();
 	}
+	public String renderName() {return this.fname();}
 	public abstract String description();
 	public boolean isEnabled() {
 		return Index.MAIN_CFG.getBoolVal(id());

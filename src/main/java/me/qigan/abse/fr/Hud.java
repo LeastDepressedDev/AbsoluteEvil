@@ -43,7 +43,8 @@ public class Hud extends Module{
         List<String> lines = new ArrayList<>();
         for (Module mdl : Holder.MRL) {
             if (mdl.isEnabled()) {
-                lines.add("\u00A7a" + mdl.fname());
+                if (mdl.fname().equalsIgnoreCase(mdl.renderName())) lines.add("\u00A7a" + mdl.fname());
+                else lines.add(mdl.renderName());
             }
         }
 
