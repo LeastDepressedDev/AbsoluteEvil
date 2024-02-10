@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -38,6 +39,12 @@ public class FireballDetector extends Module {
                 scan.add((EntityFireball) e.entity);
             }
         }
+    }
+
+    @SubscribeEvent
+    void death(LivingDeathEvent e) {
+        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null) return;
+        if (e.entity.getUniqueID() == Minecraft.getMinecraft().thePlayer.getUniqueID()) scan.clear();
     }
 
     @SubscribeEvent
