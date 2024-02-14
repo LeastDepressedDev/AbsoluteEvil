@@ -17,6 +17,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -107,6 +108,12 @@ public class FireballDetector extends Module {
         if(!isEnabled() || !glRend) return;
         Point loc = Index.POS_CFG.calc("fbd_display");
         Esp.drawOverlayString("Fireball warning!", loc.x, loc.y, 0xFF0000, S2Dtype.CORNERED);
+    }
+
+    @SubscribeEvent
+    void worldLoad(WorldEvent.Load e) {
+        if (!isEnabled()) return;
+        scan.clear();
     }
 
     @Override
