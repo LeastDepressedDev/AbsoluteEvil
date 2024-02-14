@@ -14,6 +14,7 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 
@@ -22,6 +23,39 @@ import java.util.*;
 import java.util.List;
 
 public class Utils {
+
+    public static boolean posInDim(BlockPos pos, BlockPos[] dim, boolean in) {
+        if (in) {
+            return (pos.getX() >= dim[0].getX() && pos.getX() <= dim[1].getX()) &&
+                    (pos.getY() >= dim[0].getY() && pos.getY() <= dim[1].getY()) &&
+                    (pos.getZ() >= dim[0].getZ() && pos.getZ() <= dim[1].getZ());
+        } else {
+            return (pos.getX() > dim[0].getX() && pos.getX() < dim[1].getX()) &&
+                    (pos.getY() > dim[0].getY() && pos.getY() < dim[1].getY()) &&
+                    (pos.getZ() > dim[0].getZ() && pos.getZ() < dim[1].getZ());
+        }
+    }
+
+    public static boolean posInDim(BlockPos pos, BlockPos[] dim) {
+        return posInDim(pos, dim, true);
+    }
+
+    public static BlockPos[] rfPos2E(BlockPos pos1, BlockPos pos2) {
+        return new BlockPos[]{lowerPos(pos1, pos2), higherPos(pos1, pos2)};
+    }
+
+    public static BlockPos lowerPos(BlockPos pos1, BlockPos pos2) {
+        return new BlockPos(Math.min(pos1.getX(), pos2.getX()),
+                Math.min(pos1.getY(), pos2.getY()),
+                Math.min(pos1.getZ(), pos2.getZ()));
+    }
+
+    public static BlockPos higherPos(BlockPos pos1, BlockPos pos2) {
+        return new BlockPos(Math.max(pos1.getX(), pos2.getX()),
+                Math.max(pos1.getY(), pos2.getY()),
+                Math.max(pos1.getZ(), pos2.getZ()));
+    }
+
     public static boolean pointInDim(Point pt, Dimension dim) {
         return pt.x <= dim.width && pt.y <= dim.height;
     }

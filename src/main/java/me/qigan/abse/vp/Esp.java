@@ -339,6 +339,19 @@ public class Esp {
         drawBox3D(xPos, yPos, zPos, ent.width, ent.height, color, lineW, esp);
     }
 
+    public static void autoBox3D(BlockPos pos, Color color, float lineW, boolean esp) {
+        double renderPosX = Minecraft.getMinecraft().getRenderManager().viewerPosX;
+        double renderPosY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
+        double renderPosZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+
+        double xPos = pos.getX() - renderPosX;
+        double yPos = pos.getY() - renderPosY;
+        double zPos = pos.getZ() - renderPosZ;
+
+
+        drawBox3D(xPos, yPos, zPos, 1, 1, color, lineW, esp);
+    }
+
     /**
      * Taken from NotEnoughUpdates under Creative Commons Attribution-NonCommercial 3.0
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE
