@@ -1,6 +1,6 @@
-AbsoluteEvil manager - stopped
-Improve fireball detector algorithm - waiting for solution
-Add safe mode option - implementing
-Finally implement freakin mixins - CUMMING SOON
-Move logginer into gui - in progress
-Save bot - in progress
+Improve fireball detector algorithm - Done
+Add safe mode option - Done
+Move logginer into gui - Semi-Done
+Save bot - Paused
+Restricted cfg - in progress
+Device issue work CONTINUED WOOOOOOOOOW - in progress
