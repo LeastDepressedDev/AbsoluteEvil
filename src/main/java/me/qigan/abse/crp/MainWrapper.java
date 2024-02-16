@@ -7,6 +7,7 @@ import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.fr.SmoothAimControl;
 import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
@@ -76,6 +77,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new Sync());
         MinecraftForge.EVENT_BUS.register(new Index());
         MinecraftForge.EVENT_BUS.register(new MCMainMenu());
+        MinecraftForge.EVENT_BUS.register(new SmoothAimControl());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 

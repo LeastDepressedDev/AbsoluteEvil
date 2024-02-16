@@ -7,6 +7,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
+import me.qigan.abse.fr.SmoothAimControl;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -38,7 +39,6 @@ import java.util.Random;
 public class CombatHelperAim extends Module {
     private static int skip = 0;
     private static int atkTick = 0;
-    public static boolean OVERRIDE = false;
 
     public static boolean BREAK_TOGGLE = false;
 
@@ -110,12 +110,14 @@ public class CombatHelperAim extends Module {
 
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
-        if (Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") && MainWrapper.Keybinds.aimBreak.isPressed()) BREAK_TOGGLE=!BREAK_TOGGLE;
+        if (Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") &&
+                MainWrapper.Keybinds.aimBreak.isPressed()) BREAK_TOGGLE=!BREAK_TOGGLE;
         if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() &&
                 !(Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ? BREAK_TOGGLE : MainWrapper.Keybinds.aimBreak.isKeyDown())) atkTick = Index.MAIN_CFG.getIntVal("cbh_atk");
-        if (!isEnabled() || Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
+        if (SmoothAimControl.OVERRIDE || !isEnabled()) return;
         if (skip == 0) {
-            if (atkTick == 0 && !OVERRIDE) {
+            if (atkTick == 0) {
                 prim = null;
                 return;
             }
@@ -135,7 +137,7 @@ public class CombatHelperAim extends Module {
 
             double distLim = Index.MAIN_CFG.getDoubleVal("cbh_dist");
             double s = Index.MAIN_CFG.getDoubleVal("cbh_speed");
-            if (!OVERRIDE) {
+
                 for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                     if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
                     if (ent instanceof EntityPlayer || Debug.GENERAL) {
@@ -158,7 +160,6 @@ public class CombatHelperAim extends Module {
                 }
 
                 prim = primary;
-            }
 
             if (prim != null) {
                 double d = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(prim.ref);
