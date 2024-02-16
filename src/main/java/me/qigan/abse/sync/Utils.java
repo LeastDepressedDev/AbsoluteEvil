@@ -2,7 +2,6 @@ package me.qigan.abse.sync;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import javafx.geometry.Point3D;
 import me.qigan.abse.config.AddressedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -104,7 +103,7 @@ public class Utils {
     }
 
     
-    public static float[] getRotationsTo(Point3D from, Point3D to, float[] angles) {
+    public static float[] getRotationsTo(BlockPos from, BlockPos to, float[] angles) {
         return getRotationsTo(
                 to.getX() - from.getX(),
                 to.getY() - from.getY(),
