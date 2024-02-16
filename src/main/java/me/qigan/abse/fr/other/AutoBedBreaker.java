@@ -71,7 +71,7 @@ public class AutoBedBreaker extends Module {
 
     @Override
     public String fname() {
-        return "Auto be d breaker";
+        return "Auto bed breaker";
     }
 
     @Override
