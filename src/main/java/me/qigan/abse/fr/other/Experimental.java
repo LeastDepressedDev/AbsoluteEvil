@@ -5,17 +5,22 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.EDLogic;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.GhostUtils;
+import me.qigan.abse.fr.SmoothAimControl;
 import me.qigan.abse.fr.cbh.CombatHelperAim;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
+import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +36,7 @@ public class Experimental extends Module implements EDLogic {
             BlockPos pos = new BlockPos(0, 90, 0);
             BlockPos from = new BlockPos(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
             float[] angeles = Utils.getRotationsTo(from, pos, new float[]{Minecraft.getMinecraft().thePlayer.rotationYaw, Minecraft.getMinecraft().thePlayer.rotationPitch});
-            CombatHelperAim.prim = new CombatHelperAim.Target(null, angeles[0], angeles[1]);
+            SmoothAimControl.set(angeles, 30);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -69,11 +74,11 @@ public class Experimental extends Module implements EDLogic {
 
     @Override
     public void onEnable() {
-        CombatHelperAim.OVERRIDE = true;
+        SmoothAimControl.OVERRIDE = true;
     }
 
     @Override
     public void onDisable() {
-        CombatHelperAim.OVERRIDE = false;
+        SmoothAimControl.OVERRIDE = false;
     }
 }
