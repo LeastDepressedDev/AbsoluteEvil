@@ -44,6 +44,7 @@ public class MainWrapper {
         public static KeyBinding autoBridging;
         public static KeyBinding aimBreak;
         public static KeyBinding blockBreaker;
+        public static KeyBinding debuffKey;
     }
 
     public static LoginScreen ls = new LoginScreen();
@@ -68,6 +69,8 @@ public class MainWrapper {
         ClientRegistry.registerKeyBinding(Keybinds.aimBreak);
         Keybinds.blockBreaker = new KeyBinding("Block breaker", Keyboard.KEY_NONE, "key.abse");
         ClientRegistry.registerKeyBinding(Keybinds.blockBreaker);
+        Keybinds.debuffKey = new KeyBinding("Debuff key", Keyboard.KEY_NONE, "key.abse");
+        ClientRegistry.registerKeyBinding(Keybinds.debuffKey);
     }
 
     public static void initialise(FMLInitializationEvent e) {

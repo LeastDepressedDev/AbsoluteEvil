@@ -40,6 +40,7 @@ public class Holder {
 		register(new SprayCheck());
 		register(new SFUtils());
 		register(new GhostUtils());
+		register(new AutoDebuff());
 		register(new TemporaryGb());
 		register(new DragonPoint());
 		register(new DeviceIssue());
