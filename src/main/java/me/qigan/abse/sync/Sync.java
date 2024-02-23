@@ -4,6 +4,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -16,6 +17,10 @@ public class Sync {
     public static boolean inDungeon = false;
     public static final int tickr = 40;
     public static int tick = 0;
+
+    public static BlockPos playerPosAsBlockPos() {
+        return new BlockPos(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
+    }
 
     public static void ovrDungeon() {
         for (String str : Utils.getScoreboard()) {

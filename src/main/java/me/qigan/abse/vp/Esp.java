@@ -349,7 +349,7 @@ public class Esp {
         double zPos = pos.getZ() - renderPosZ;
 
 
-        drawBox3D(xPos, yPos, zPos, 1, 1, color, lineW, esp);
+        drawBox3D(xPos+0.5, yPos+1, zPos+0.5, 1, 1, color, lineW, esp);
     }
 
     /**

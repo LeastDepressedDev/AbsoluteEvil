@@ -23,6 +23,12 @@ import java.util.List;
 
 public class Utils {
 
+    public static boolean compare(BlockPos pos1, BlockPos pos2) {
+        return pos1.getX() == pos2.getX() &&
+                pos1.getY() == pos2.getY() &&
+                pos1.getZ() == pos2.getZ();
+    }
+
     public static boolean posInDim(BlockPos pos, BlockPos[] dim, boolean in) {
         if (in) {
             return (pos.getX() >= dim[0].getX() && pos.getX() <= dim[1].getX()) &&
