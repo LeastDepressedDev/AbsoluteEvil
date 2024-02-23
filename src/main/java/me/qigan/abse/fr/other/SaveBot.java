@@ -31,13 +31,11 @@ public class SaveBot extends Module {
         new Thread(() -> {
             try {
                 SAVING = true;
-                CombatHelperAim.OVERRIDE = true;
                 CombatHelperAim.prim = new CombatHelperAim.Target(null, 0, 90).unlockTheta();
                 KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), true);
                 Thread.sleep(DEL_Q);
                 KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), false);
                 CombatHelperAim.prim = null;
-                CombatHelperAim.OVERRIDE = false;
                 SAVING = false;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
