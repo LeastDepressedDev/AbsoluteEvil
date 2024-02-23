@@ -4,3 +4,6 @@ Move logginer into gui - Semi-Done
 Save bot - Paused
 Restricted cfg - in progress
 Device issue work CONTINUED WOOOOOOOOOW - in progress
+Auto p4 - Not started
+Add render sprayed mobs in spray checker - Not started
+Add auto debuff - in progress
