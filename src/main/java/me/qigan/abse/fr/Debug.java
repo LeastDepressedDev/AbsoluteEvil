@@ -25,7 +25,7 @@ public class Debug extends Module {
     public static boolean GENERAL = false;
 
     public static final List<String> DISABLE_STATE = new ArrayList<String>(Arrays.asList(
-            "bc", "harp", "m7prios", "sbot"
+            "bc", "harp", "sbot"
     ));
 
     public static final Color debugCol = new Color(255, 100, 0, 255);

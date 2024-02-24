@@ -11,7 +11,6 @@ import me.qigan.abse.fr.*;
 import me.qigan.abse.fr.other.AutoBridging;
 import me.qigan.abse.fr.cbh.*;
 import me.qigan.abse.fr.dungons.*;
-import me.qigan.abse.fr.dungons.prios.M7Prios;
 import me.qigan.abse.fr.other.*;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,7 +45,6 @@ public class Holder {
 		register(new DeviceIssue());
 		register(new SoundOverride());
 		register(new DungeonRngSound());
-		register(new M7Prios());
 		register(new Swastika());
 		register(new BWEsp());
 		register(new BowAimEsp());
