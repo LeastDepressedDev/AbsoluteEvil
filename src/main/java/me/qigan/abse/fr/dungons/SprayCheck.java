@@ -10,6 +10,7 @@ import me.qigan.abse.crp.Module;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -70,8 +71,9 @@ public class SprayCheck extends Module {
                         for (Entity xEnt : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                             if (xEnt instanceof EntityPlayer || xEnt instanceof EntityArmorStand || xEnt instanceof EntityItem
                             || xEnt instanceof EntityItemFrame || xEnt instanceof EntityEnderCrystal || xEnt instanceof EntityEnderPearl
-                            || xEnt instanceof EntityEnderEye || xEnt instanceof EntityExpBottle || xEnt instanceof EntityArrow) continue;
-                            if (ent.getDistanceToEntity(xEnt) < 5) {
+                            || xEnt instanceof EntityEnderEye || xEnt instanceof EntityExpBottle || xEnt instanceof EntityArrow
+                            || xEnt instanceof EntityXPOrb) continue;
+                            if (ent.getDistanceToEntity(xEnt) < 5 || (xEnt instanceof EntityDragon && ent.getDistanceToEntity(xEnt) < 15)) {
                                 attracted.add(new AddressedData<>(xEnt, SPRAY_TICKS_CONST));
                             }
                         }
