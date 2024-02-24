@@ -24,6 +24,7 @@ import java.util.List;
 public class Utils {
 
     public static boolean compare(BlockPos pos1, BlockPos pos2) {
+        if (pos1 == null || pos2 == null) return false;
         return pos1.getX() == pos2.getX() &&
                 pos1.getY() == pos2.getY() &&
                 pos1.getZ() == pos2.getZ();

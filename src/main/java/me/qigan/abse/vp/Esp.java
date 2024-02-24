@@ -357,11 +357,7 @@ public class Esp {
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE
      * @author Moulberry
      */
-    public static void renderTextInWorld(String str, double x, double y, double z, int col, float partialTicks) {
-        GlStateManager.alphaFunc(516, 0.1F);
-
-        GlStateManager.pushMatrix();
-
+    public static void renderTextInWorld(String str, double x, double y, double z, int col, double size, float partialTicks) {
         Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
         double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks;
         double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks;
@@ -378,14 +374,22 @@ public class Esp {
             y1 *= 12/dist;
             z1 *= 12/dist;
         }
+
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.pushMatrix();
+
         GlStateManager.translate(x1, y1, z1);
         GlStateManager.translate(0, viewer.getEyeHeight(), 0);
 
-        drawNametag(str, col, false);
+        drawNametag(str, col, false, size);
 
         GlStateManager.popMatrix();
 
         GlStateManager.disableLighting();
+    }
+
+    public static void renderTextInWorld(String str, double x, double y, double z, int col, float partialTicks) {
+        renderTextInWorld(str, x, y, z, col, 1d, partialTicks);
     }
 
     public static void  drawAllignedTextList(List<String> lines, int x, int y, boolean sortVertical, ScaledResolution res, S2Dtype mode) {
@@ -511,7 +515,7 @@ public class Esp {
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE
      * @author Moulberry
      */
-    public static void drawNametag(String str, int color, boolean drawBg) {
+    public static void drawNametag(String str, int color, boolean drawBg, double size) {
         FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
         float f = 1.6F;
         float f1 = 0.016666668F * f;
@@ -519,7 +523,7 @@ public class Esp {
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-        GlStateManager.scale(-f1, -f1, f1);
+        GlStateManager.scale(-f1*size, -f1*size, f1*size);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
         GlStateManager.disableDepth();
