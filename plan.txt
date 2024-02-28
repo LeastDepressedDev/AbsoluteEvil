@@ -8,4 +8,4 @@ Auto p4 - Not started
 Add render sprayed mobs in spray checker - Done
 Add auto debuff - Done
 Add auto blaze sword swapper - Not started
-Add ESP on wither - Not started
+M7 visuals - in progress

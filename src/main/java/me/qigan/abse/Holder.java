@@ -37,6 +37,7 @@ public class Holder {
 		register(new GhostBlocks());
 		register(new PickaxePlus());
 		register(new SprayCheck());
+		register(new M7Visuals());
 		register(new SFUtils());
 		register(new GhostUtils());
 		register(new AutoDebuff());
