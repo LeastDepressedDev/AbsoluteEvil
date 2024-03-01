@@ -45,6 +45,7 @@ public class Holder {
 		register(new TemporaryGb());
 		register(new DragonPoint());
 		register(new DeviceIssue());
+		register(new AutoLevers());
 		register(new SoundOverride());
 		register(new DungeonRngSound());
 		register(new Swastika());

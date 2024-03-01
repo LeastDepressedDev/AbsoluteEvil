@@ -7,6 +7,7 @@ import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
@@ -79,6 +80,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new Index());
         MinecraftForge.EVENT_BUS.register(new MCMainMenu());
         MinecraftForge.EVENT_BUS.register(new SmoothAimControl());
+        MinecraftForge.EVENT_BUS.register(new ClickSimTick());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 

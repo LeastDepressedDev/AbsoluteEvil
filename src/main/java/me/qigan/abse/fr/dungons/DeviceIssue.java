@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.GhostBlocks;
+import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
@@ -63,8 +64,20 @@ public class DeviceIssue extends Module {
         clickedSS = 0;
         iterSS = 0;
         stepSS = 1;
+        sneakClick = 0;
+        sneakRef = false;
         //phaseShift = false;
     }
+
+    private static void shift() {
+        iterSS = 0;
+        stepSS++;
+        seqBp.clear();
+        seqLst.clear();
+    }
+
+    private static int sneakClick = 0;
+    private static boolean sneakRef = true;
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
@@ -78,6 +91,12 @@ public class DeviceIssue extends Module {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     void onClick(PlayerInteractEvent e) {
         if (!isEnabled() || e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
+        if (done && Minecraft.getMinecraft().thePlayer.isSneaking() && sneakRef) sneakClick++;
+        if (sneakClick == 2 && sneakRef) {
+            sneakRef = false;
+            shift();
+        }
+        if (Utils.compare(e.pos, CENTER_BUTTON_SS_CONST)) resetSS();
         if (iterSS >= seqLst.size()) return;
         if (Utils.compare(e.pos, seqBp.get(iterSS))) {
             clickedSS++;
@@ -112,7 +131,8 @@ public class DeviceIssue extends Module {
             ready = false;
             if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
                 started = true;
-                stepSS = 2;
+                stepSS+=2;
+                clickedSS++;
             }
             else done = true;
         }
@@ -123,21 +143,20 @@ public class DeviceIssue extends Module {
         if (!isEnabled() || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null || e.phase == TickEvent.Phase.END) return;
 
         //SS fixer
-        if (seqLst.size() < stepSS) {
-            for (int dx = 0; dx < 4; dx++) {
-                for (int dy = 0; dy < 4; dy++) {
-                    if (Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern
-                            && !seqLst.contains(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx))) {
-                        seqLst.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
-                        seqBp.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
+        if (stepSS >= Index.MAIN_CFG.getIntVal("auto_ss_step")) {
+            if (seqLst.size() < stepSS) {
+                for (int dx = 0; dx < 4; dx++) {
+                    for (int dy = 0; dy < 4; dy++) {
+                        if (Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern
+                                && !seqLst.contains(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx))) {
+                            seqLst.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
+                            seqBp.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
+                        }
                     }
                 }
+            } else if (iterSS == stepSS) {
+                shift();
             }
-        } else if (iterSS == stepSS) {
-            iterSS = 0;
-            stepSS++;
-            seqBp.clear();
-            seqLst.clear();
         }
 
         //SS Auto skip
@@ -148,19 +167,7 @@ public class DeviceIssue extends Module {
                 if (time == 0) {
                     time = Index.MAIN_CFG.getIntVal("ss_del");
                     iter++;
-                    //CLICK!
-                    new Thread(() -> {
-                        try {
-                            int hold = Index.MAIN_CFG.getIntVal("ss_hold");
-                            KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), true);
-                            Thread.sleep(hold);
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7aClick!"));
-                            KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), false);
-                        } catch (InterruptedException ex) {
-                            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A74Something bad happen when skipping ss."));
-                            throw new RuntimeException(ex);
-                        }
-                    }).start();
+                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
                 } else {
                     time--;
                 }
@@ -191,7 +198,7 @@ public class DeviceIssue extends Module {
                 if (seqLst.size() == stepSS) {
                     for (int i = iterSS; i < stepSS; i++) {
                         BlockPos pos = seqBp.get(i);
-                        Esp.autoBox3D(pos, i == iterSS ? Color.green : (i + 1 == iterSS) ? Color.yellow : Color.red, 4f, true);
+                        Esp.autoBox3D(pos, i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red), 4f, true);
                     }
                 }
             }
@@ -215,7 +222,7 @@ public class DeviceIssue extends Module {
         list.add(new SetsData<>("devices_auto_ss", "Auto skip SS", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("ss_count", "Clicks amount", ValType.NUMBER, "3"));
         list.add(new SetsData<>("ss_del", "Delay ticks", ValType.NUMBER, "3"));
-        list.add(new SetsData<>("ss_hold", "Hold time[milliseconds]", ValType.NUMBER, "5"));
+        list.add(new SetsData<>("ss_hold", "Hold time[tick]", ValType.NUMBER, "1"));
         list.add(new SetsData<>("auto_ss_click", "Auto SS clicks", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_ss_step", "Step after click", ValType.NUMBER, "1"));
         list.add(new SetsData<>("render_ss_step", "Render clicks on SS", ValType.BOOLEAN, "true"));
