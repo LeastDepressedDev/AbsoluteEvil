@@ -7,10 +7,12 @@ import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.GhostUtils;
 import me.qigan.abse.fr.SmoothAimControl;
 import me.qigan.abse.fr.cbh.CombatHelperAim;
+import me.qigan.abse.fr.dungons.DeviceIssue;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentStyle;
@@ -26,21 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Experimental extends Module implements EDLogic {
-
-    public static int ij = 0;
-
-    @SubscribeEvent
-    void tick(TickEvent.ClientTickEvent e) {
-        if (!isEnabled() || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) return;
-        try {
-            BlockPos pos = new BlockPos(0, 90, 0);
-            BlockPos from = new BlockPos(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
-            float[] angeles = Utils.getRotationsTo(from, pos, new float[]{Minecraft.getMinecraft().thePlayer.rotationYaw, Minecraft.getMinecraft().thePlayer.rotationPitch});
-            SmoothAimControl.set(angeles, 30);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     @Override
     public String id() {
@@ -61,8 +48,13 @@ public class Experimental extends Module implements EDLogic {
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("exp_button_1", "Test", ValType.BUTTON, (Runnable) () -> {
-            ImportantChatOVR.add("Test " + ij);
-            ij++;
+            for (int dx = 0; dx < 4; dx++) {
+                for (int dy = 0; dy < 4; dy++) {
+                    if (Minecraft.getMinecraft().theWorld.getBlockState(DeviceIssue.BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern) {
+                        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7cTRUE LOL"));
+                    }
+                }
+            }
         }));
         return list;
     }

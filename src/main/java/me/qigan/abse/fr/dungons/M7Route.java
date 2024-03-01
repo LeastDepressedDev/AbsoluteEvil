@@ -62,9 +62,12 @@ public class M7Route extends Module {
             new BBox(75, 221, 38, 76, 221, 38, Blocks.ender_chest),
             new BBox(51, 114, 112, 51, 114, 112, Blocks.ender_chest),
             new BBox(100, 167, 47, 100, 165, 46, Blocks.air),
-            new BBox(100, 169, 46, 100, 169, 46, Blocks.ender_chest)
+            new BBox(100, 169, 46, 100, 169, 46, Blocks.ender_chest),
+            new BBox(52, 114, 111, 52, 114, 111, Blocks.ender_chest),
+            new BBox(72, 106,142, 63, 106, 123, Blocks.rail)
             ));
 
+    //TODO: FIX THIS FUCKING SHIT
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onMsg(EntityJoinWorldEvent e) {
         if (!isEnabled()) return;
@@ -97,7 +100,7 @@ public class M7Route extends Module {
 
     @Override
     public String fname() {
-        return "M7 auto rout";
+        return "M7 auto route";
     }
 
     @Override
