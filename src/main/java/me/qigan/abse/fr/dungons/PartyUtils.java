@@ -1,12 +1,10 @@
 package me.qigan.abse.fr.dungons;
 
-import javafx.util.Pair;
 import me.qigan.abse.Index;
-import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
-import me.qigan.abse.fr.dungons.exc.CustomPLBuildFailedException;
+import me.qigan.abse.fr.exc.CustomPLBuildFailedException;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
@@ -15,12 +13,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.CommandEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.apache.logging.log4j.core.impl.Log4jLogEvent;
-import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.dungons.exc;
+package me.qigan.abse.fr.exc;
 
 public class CustomPLBuildFailedException extends RuntimeException {
     public CustomPLBuildFailedException() {

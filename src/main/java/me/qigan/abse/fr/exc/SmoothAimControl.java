@@ -1,4 +1,4 @@
-package me.qigan.abse.fr;
+package me.qigan.abse.fr.exc;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.fr.cbh.CombatHelperAimRandomize;
