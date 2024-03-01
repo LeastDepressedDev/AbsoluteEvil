@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.other;
+package me.qigan.abse.crp;
 
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
