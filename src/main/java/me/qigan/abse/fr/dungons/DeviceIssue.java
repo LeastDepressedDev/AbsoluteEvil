@@ -63,8 +63,6 @@ public class DeviceIssue extends Module {
         seqBp.clear();
         clickedSS = 0;
         iterSS = 0;
-        phase = true;
-        prePhase = true;
         //phaseShift = false;
     }
 
@@ -127,7 +125,6 @@ public class DeviceIssue extends Module {
             if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
                 started = true;
                 clickedSS++;
-                shift();
             }
             else done = true;
         }
@@ -139,20 +136,20 @@ public class DeviceIssue extends Module {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     void tick(TickEvent.ClientTickEvent e) {
         if (!isEnabled() || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null || e.phase == TickEvent.Phase.END) return;
-        if (Sync.inDungeon) return;
+        if (!Sync.inDungeon || !Utils.posInDim(Sync.playerPosAsBlockPos(), BOUNDING_SS_CONST)) return;
 
         phase = scanButSS();
 
         if (phase != prePhase) {
-            if (!phase) shift();
+            if (phase) {
+
+            } else {
+                shift();
+            }
             prePhase = phase;
         }
 
-
-        //SS fixer
-        if (phase) {
-            //TODO: ADD AUTO
-        } else {
+        if (!phase) {
             for (int dx = 0; dx < 4; dx++) {
                 for (int dy = 0; dy < 4; dy++) {
                     if (Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern
@@ -202,7 +199,9 @@ public class DeviceIssue extends Module {
             if (Index.MAIN_CFG.getBoolVal("render_ss_step")) {
                 for (int i = iterSS; i < seqBp.size(); i++) {
                     BlockPos pos = seqBp.get(i);
-                    Esp.autoBox3D(pos, i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red), 4f, true);
+                    Color col = i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red);
+                    Esp.autoBox3D(pos, col, 4f, true);
+                    Esp.renderTextInWorld(Integer.toString(i), pos.add(0.5d, 0.5d, 0.5d), col.getRGB(), 0.8d, e.partialTicks);
                 }
             }
         }
