@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.qigan.abse.Holder;
+import me.qigan.abse.crp.AutoDisable;
 import me.qigan.abse.crp.EDLogic;
 import me.qigan.abse.crp.EnabledByDefault;
 import me.qigan.abse.crp.Module;
@@ -30,6 +31,8 @@ public class MuConfig {
 				EnabledByDefault enb = mdl.getClass().getAnnotation(EnabledByDefault.class);
 				this.writer.set(mdl.id(), enb == null ? "false" : "true");
 			}
+			AutoDisable annot = mdl.getClass().getAnnotation(AutoDisable.class);
+			if (annot != null) this.writer.set(mdl.id(), "false");
 			for (SetsData<?> dat : mdl.sets()) {
 				if (dat.dataType != ValType.BUTTON && dat.dataType != ValType.COMMENT) {
 					if (!writer.contains(dat.setId)) {
