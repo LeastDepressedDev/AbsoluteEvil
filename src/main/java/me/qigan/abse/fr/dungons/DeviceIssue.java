@@ -55,29 +55,29 @@ public class DeviceIssue extends Module {
 
     //private static boolean phaseShift = false;
     public static int clickedSS = 0;
+    public static int stepIter = 1;
     private static int iterSS = 0;
-    private static int stepSS = 1;
 
     private static void resetSS() {
         seqLst.clear();
         seqBp.clear();
         clickedSS = 0;
         iterSS = 0;
-        stepSS = 1;
-        sneakClick = 0;
-        sneakRef = false;
+        phase = true;
+        prePhase = true;
         //phaseShift = false;
+    }
+
+    private static boolean scanButSS() {
+        return Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(-1, 0, 0)).getBlock() == Blocks.stone_button;
     }
 
     private static void shift() {
         iterSS = 0;
-        stepSS++;
+        stepIter++;
         seqBp.clear();
         seqLst.clear();
     }
-
-    private static int sneakClick = 0;
-    private static boolean sneakRef = true;
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
@@ -91,11 +91,6 @@ public class DeviceIssue extends Module {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     void onClick(PlayerInteractEvent e) {
         if (!isEnabled() || e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
-        if (done && Minecraft.getMinecraft().thePlayer.isSneaking() && sneakRef) sneakClick++;
-        if (sneakClick == 2 && sneakRef) {
-            sneakRef = false;
-            shift();
-        }
         if (Utils.compare(e.pos, CENTER_BUTTON_SS_CONST)) resetSS();
         if (iterSS >= seqLst.size()) return;
         if (Utils.compare(e.pos, seqBp.get(iterSS))) {
@@ -131,31 +126,41 @@ public class DeviceIssue extends Module {
             ready = false;
             if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
                 started = true;
-                stepSS+=2;
                 clickedSS++;
+                shift();
             }
             else done = true;
         }
     }
 
+    private static boolean prePhase = true;
+    private static boolean phase = true;
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     void tick(TickEvent.ClientTickEvent e) {
         if (!isEnabled() || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null || e.phase == TickEvent.Phase.END) return;
+        if (Sync.inDungeon) return;
+
+        phase = scanButSS();
+
+        if (phase != prePhase) {
+            if (!phase) shift();
+            prePhase = phase;
+        }
+
 
         //SS fixer
-        if (stepSS >= Index.MAIN_CFG.getIntVal("auto_ss_step")) {
-            if (seqLst.size() < stepSS) {
-                for (int dx = 0; dx < 4; dx++) {
-                    for (int dy = 0; dy < 4; dy++) {
-                        if (Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern
-                                && !seqLst.contains(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx))) {
-                            seqLst.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
-                            seqBp.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
-                        }
+        if (phase) {
+            //TODO: ADD AUTO
+        } else {
+            for (int dx = 0; dx < 4; dx++) {
+                for (int dy = 0; dy < 4; dy++) {
+                    if (Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern
+                            && !seqLst.contains(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx))) {
+                        seqLst.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
+                        seqBp.add(BLOCK_SPAWN_SS_CONST[0].add(-1, dy, dx));
                     }
                 }
-            } else if (iterSS == stepSS) {
-                shift();
             }
         }
 
@@ -195,11 +200,9 @@ public class DeviceIssue extends Module {
             }
 
             if (Index.MAIN_CFG.getBoolVal("render_ss_step")) {
-                if (seqLst.size() == stepSS) {
-                    for (int i = iterSS; i < stepSS; i++) {
-                        BlockPos pos = seqBp.get(i);
-                        Esp.autoBox3D(pos, i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red), 4f, true);
-                    }
+                for (int i = iterSS; i < seqBp.size(); i++) {
+                    BlockPos pos = seqBp.get(i);
+                    Esp.autoBox3D(pos, i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red), 4f, true);
                 }
             }
         }

@@ -7,7 +7,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
-import me.qigan.abse.fr.SmoothAimControl;
+import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -16,25 +16,18 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CombatHelperAim extends Module {
     private static int skip = 0;
