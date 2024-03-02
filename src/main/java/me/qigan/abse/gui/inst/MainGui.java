@@ -111,7 +111,7 @@ public class MainGui extends QGuiScreen {
             Id++;
             DangerousModule annot = mod.getClass().getAnnotation(DangerousModule.class);
             if (annot != null) {
-                GuiLabel dang = new GuiLabel(fontRendererObj, Id, 0, 60 + i*2*sizeH, sizeW, sizeH, 0xFF0000);
+                GuiLabel dang = new GuiLabel(fontRendererObj, Id, 0, 60 + i*2*sizeH + sizeH, sizeW, sizeH, 0xFF0000);
                 dang.func_175202_a("Dangerous!");
                 labelList.add(dang);
                 Id++;

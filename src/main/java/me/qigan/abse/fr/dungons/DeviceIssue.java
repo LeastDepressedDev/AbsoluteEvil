@@ -124,7 +124,7 @@ public class DeviceIssue extends Module {
             ready = false;
             if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
                 started = true;
-                clickedSS++;
+                clickedSS+=3;
             }
             else done = true;
         }
@@ -201,7 +201,7 @@ public class DeviceIssue extends Module {
                     BlockPos pos = seqBp.get(i);
                     Color col = i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red);
                     Esp.autoBox3D(pos, col, 4f, true);
-                    Esp.renderTextInWorld(Integer.toString(i), pos.add(0.5d, 0.5d, 0.5d), col.getRGB(), 0.8d, e.partialTicks);
+                    Esp.renderTextInWorld(Integer.toString(i+1), pos.add(0.05d, 0.5d, 0.5d), col.getRGB(), 0.8d, e.partialTicks);
                 }
             }
         }
@@ -221,12 +221,11 @@ public class DeviceIssue extends Module {
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("ss_reset_word", "Reset word", ValType.STRING, "res"));
+        list.add(new SetsData<>("ss_hold", "Hold time[tick]", ValType.NUMBER, "1"));
         list.add(new SetsData<>("devices_auto_ss", "Auto skip SS", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("ss_count", "Clicks amount", ValType.NUMBER, "3"));
         list.add(new SetsData<>("ss_del", "Delay ticks", ValType.NUMBER, "3"));
-        list.add(new SetsData<>("ss_hold", "Hold time[tick]", ValType.NUMBER, "1"));
         list.add(new SetsData<>("auto_ss_click", "Auto SS clicks", ValType.BOOLEAN, "false"));
-        list.add(new SetsData<>("auto_ss_step", "Step after click", ValType.NUMBER, "1"));
         list.add(new SetsData<>("render_ss_step", "Render clicks on SS", ValType.BOOLEAN, "true"));
         return list;
     }

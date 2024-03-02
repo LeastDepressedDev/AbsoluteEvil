@@ -352,6 +352,10 @@ public class Esp {
         drawBox3D(xPos+0.5, yPos+1, zPos+0.5, 1, 1, color, lineW, esp);
     }
 
+    public static void renderTextInWorld(String str, BlockPos pos, int col, double size, float partialTicks) {
+        renderTextInWorld(str, pos.getX(), pos.getY(), pos.getZ(), col, size, partialTicks);
+    }
+
     /**
      * Taken from NotEnoughUpdates under Creative Commons Attribution-NonCommercial 3.0
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE
