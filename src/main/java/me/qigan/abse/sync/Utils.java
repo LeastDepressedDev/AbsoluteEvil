@@ -23,6 +23,11 @@ import java.util.List;
 
 public class Utils {
 
+    public static double precision(double val, int digits) {
+        double dd = Math.pow(10, digits);
+        return Math.floor(val * dd) / dd;
+    }
+
     public static boolean compare(BlockPos pos1, BlockPos pos2) {
         if (pos1 == null || pos2 == null) return false;
         return pos1.getX() == pos2.getX() &&

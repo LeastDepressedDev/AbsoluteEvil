@@ -3,10 +3,11 @@ Add safe mode option - Done
 Move logginer into gui - Semi-Done
 Save bot - Paused
 Restricted cfg - in progress
-Device issue work CONTINUED WOOOOOOOOOW - In progress
+Device issue work CONTINUED WOOOOOOOOOW - Done
 Auto p4 - Not started
 Add render sprayed mobs in spray checker - Done
 Add auto debuff - Done
 Add auto blaze sword swapper - Not started
-M7 visuals - Done
-AutoLevers - Done
+Add M7 visuals - Done
+Add AutoLevers - Done
+Add Lag tracker - Done
