@@ -111,7 +111,6 @@ public class DeviceIssue extends Module {
             ready = false;
             if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
                 started = true;
-                clickedSS+=3;
             }
             else done = true;
         }

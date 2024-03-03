@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.EnabledByDefault;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.LagTracker;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
@@ -44,6 +45,7 @@ public class M7Visuals extends Module {
                 + (local_dist == 25555 ? "\u00A7cNone" : local_dist + "m"));
         lines.add("\u00A7dSimon says: \u00A7e" + DeviceIssue.stepIter+ " " + (Index.MAIN_CFG.getBoolVal("devices") ? " \u00A77(\u00A7a" + DeviceIssue.clickedSS
                         + "\u00A72/\u00A7a" + DeviceIssue.SS_CLICK_LIM + "\u00A77)" : "\u00A7cEnable DeviceIssue"));
+        lines.add("\u00A76Rate: \u00A7a" + Utils.precision(LagTracker.AVERAGE, 4) + "(" + LagTracker.ticks_since + ")");
         Esp.drawAllignedTextList(lines, pos.x, pos.y, false, e.resolution, S2Dtype.CORNERED);
     }
 

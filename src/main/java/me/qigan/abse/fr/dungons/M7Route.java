@@ -1,7 +1,7 @@
 package me.qigan.abse.fr.dungons;
 
 import me.qigan.abse.crp.Module;
-import me.qigan.abse.fr.GhostBlocks;
+import me.qigan.abse.fr.qol.GhostBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -64,7 +64,10 @@ public class M7Route extends Module {
             new BBox(100, 167, 47, 100, 165, 46, Blocks.air),
             new BBox(100, 169, 46, 100, 169, 46, Blocks.ender_chest),
             new BBox(52, 114, 111, 52, 114, 111, Blocks.ender_chest),
-            new BBox(72, 106,142, 63, 106, 123, Blocks.rail)
+            new BBox(72, 106,142, 63, 106, 123, Blocks.rail),
+            new BBox(57, 106, 132, 52, 106, 136, Blocks.rail),
+            new BBox(20, 130, 135, 15, 128, 137, Blocks.air),
+            new BBox(20, 130, 135, 18, 132, 135, Blocks.oak_fence)
             ));
 
     //TODO: FIX THIS FUCKING SHIT
