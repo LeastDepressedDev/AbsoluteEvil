@@ -45,6 +45,7 @@ public class Holder {
 		register(new GhostUtils());
 		register(new AutoDebuff());
 		register(new TemporaryGb());
+		register(new AutoBlaze());
 		register(new DragonPoint());
 		register(new DeviceIssue());
 		register(new AutoLevers());
