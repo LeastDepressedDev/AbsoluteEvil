@@ -20,7 +20,7 @@ public class SmoothAimControl {
     @SubscribeEvent
     void move(TickEvent.ClientTickEvent e) {
         if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
-        if (e.phase == TickEvent.Phase.START) {
+        if (e.phase == TickEvent.Phase.END) {
             if (aimTime > 0) {
                 if (aimPoint.length > 1) {
                     double s = speed + CombatHelperAimRandomize.createRandomDouble();

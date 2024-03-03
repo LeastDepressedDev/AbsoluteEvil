@@ -3,9 +3,11 @@ package me.qigan.abse.fr.dungons;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
+import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.GhostBlocks;
 import me.qigan.abse.fr.exc.ClickSimTick;
+import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
@@ -141,15 +143,29 @@ public class DeviceIssue extends Module {
         phase = scanButSS();
 
         if (phase != prePhase) {
-            if (phase) {
-
-            } else {
+            if (!phase) {
                 shift();
             }
             prePhase = phase;
         }
 
-        if (!phase) {
+        if (phase) {
+            if (MainWrapper.Keybinds.ssKey.isKeyDown() && Index.MAIN_CFG.getBoolVal("auto_ss_click") && iterSS < seqBp.size()) {
+                BlockPos pos = seqBp.get(iterSS);
+                double dx = pos.getX() + 0.9d - Minecraft.getMinecraft().thePlayer.posX;
+                double dy = pos.getY() - Minecraft.getMinecraft().thePlayer.posY - 1.1d;
+                double dz = pos.getZ() + 0.5d - Minecraft.getMinecraft().thePlayer.posZ;
+                float[] vecs = Utils.getRotationsTo(dx, dy, dz, new float[]{
+                        Minecraft.getMinecraft().thePlayer.rotationYaw,
+                        Minecraft.getMinecraft().thePlayer.rotationPitch
+                });
+                SmoothAimControl.set(vecs, 2, 23, Index.MAIN_CFG.getDoubleVal("auto_ss_speed"));
+                BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
+                if (Utils.compare(seqBp.get(iterSS), bp)) {
+                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
+                }
+            }
+        } else {
             for (int dx = 0; dx < 4; dx++) {
                 for (int dy = 0; dy < 4; dy++) {
                     if (Minecraft.getMinecraft().theWorld.getBlockState(BLOCK_SPAWN_SS_CONST[0].add(0, dy, dx)).getBlock() == Blocks.sea_lantern
@@ -201,7 +217,10 @@ public class DeviceIssue extends Module {
                     BlockPos pos = seqBp.get(i);
                     Color col = i == iterSS ? Color.green : ((i == iterSS + 1) ? Color.yellow : Color.red);
                     Esp.autoBox3D(pos, col, 4f, true);
-                    Esp.renderTextInWorld(Integer.toString(i+1), pos.add(0.05d, 0.5d, 0.5d), col.getRGB(), 0.8d, e.partialTicks);
+                    double x = pos.getX()+0.95d;
+                    double y = pos.getY()+0.5d;
+                    double z = pos.getZ()+0.5d;
+                    Esp.renderTextInWorld(Integer.toString(i+1), x, y, z, col.getRGB(), 1d, e.partialTicks);
                 }
             }
         }
@@ -226,6 +245,7 @@ public class DeviceIssue extends Module {
         list.add(new SetsData<>("ss_count", "Clicks amount", ValType.NUMBER, "3"));
         list.add(new SetsData<>("ss_del", "Delay ticks", ValType.NUMBER, "3"));
         list.add(new SetsData<>("auto_ss_click", "Auto SS clicks", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("auto_ss_speed", "Auto SS speed", ValType.DOUBLE_NUMBER, "7.5"));
         list.add(new SetsData<>("render_ss_step", "Render clicks on SS", ValType.BOOLEAN, "true"));
         return list;
     }
