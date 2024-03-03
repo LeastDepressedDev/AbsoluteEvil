@@ -2,8 +2,8 @@ package me.qigan.abse;
 
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
-import me.qigan.abse.fr.GhostBlocks;
-import me.qigan.abse.fr.GhostUtils;
+import me.qigan.abse.fr.qol.GhostBlocks;
+import me.qigan.abse.fr.qol.GhostUtils;
 import me.qigan.abse.fr.dungons.M7Route;
 import me.qigan.abse.fr.mapping.Mapping;
 import me.qigan.abse.gui.inst.NewMainMenu;

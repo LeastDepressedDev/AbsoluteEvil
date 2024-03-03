@@ -13,6 +13,7 @@ import me.qigan.abse.fr.other.AutoBridging;
 import me.qigan.abse.fr.cbh.*;
 import me.qigan.abse.fr.dungons.*;
 import me.qigan.abse.fr.other.*;
+import me.qigan.abse.fr.qol.*;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import net.minecraftforge.common.MinecraftForge;
 

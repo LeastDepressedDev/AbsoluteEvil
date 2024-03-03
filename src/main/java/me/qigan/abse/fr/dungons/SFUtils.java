@@ -1,4 +1,4 @@
-package me.qigan.abse.fr;
+package me.qigan.abse.fr.dungons;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.sync.Utils;

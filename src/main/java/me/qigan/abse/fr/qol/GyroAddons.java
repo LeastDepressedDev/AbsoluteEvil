@@ -1,4 +1,4 @@
-package me.qigan.abse.fr;
+package me.qigan.abse.fr.qol;
 
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.crp.Module;

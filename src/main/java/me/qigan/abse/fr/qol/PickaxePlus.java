@@ -1,22 +1,14 @@
-package me.qigan.abse.fr;
+package me.qigan.abse.fr.qol;
 
-import me.qigan.abse.config.SetsData;
-import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.packets.PacketEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PickaxePlus extends Module {
 

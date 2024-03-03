@@ -1,4 +1,4 @@
-package me.qigan.abse.fr;
+package me.qigan.abse.fr.qol;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
