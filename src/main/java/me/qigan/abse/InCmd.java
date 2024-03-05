@@ -2,6 +2,7 @@ package me.qigan.abse;
 
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
+import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.fr.qol.GhostUtils;
 import me.qigan.abse.fr.dungons.M7Route;
@@ -56,6 +57,8 @@ public class InCmd extends CommandBase{
 					b.run();
 				}
 				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7a[ABSE] Healer route set!"));
+			} else if (args[0].equalsIgnoreCase("freeze")) {
+				PacketBreak.stun();
 			} else if (args[0].equalsIgnoreCase("crash")) {
 				Minecraft.getMinecraft().crashed(null);
 			} else if (args[0].equalsIgnoreCase("dbg")) {

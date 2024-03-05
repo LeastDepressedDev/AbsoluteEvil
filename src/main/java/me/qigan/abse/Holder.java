@@ -9,6 +9,7 @@ import me.qigan.abse.crp.Experimental;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.crp.SafeMode;
 import me.qigan.abse.fr.*;
+import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.other.AutoBridging;
 import me.qigan.abse.fr.cbh.*;
 import me.qigan.abse.fr.dungons.*;
@@ -31,6 +32,7 @@ public class Holder {
 		register(new Hud());
 		register(new AutoHarp());
 		register(new NFBA());
+		register(new PacketBreak());
 		register(new GyroAddons());
 		register(new BloodCamp());
 		register(new StarredMobs());
