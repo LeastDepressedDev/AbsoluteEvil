@@ -2,6 +2,7 @@ Improve fireball detector algorithm - Done
 Add safe mode option - Done
 Move logginer into gui - Semi-Done
 Save bot - Paused
+Update healer route - Done
 Restricted cfg - in progress
 Device issue work CONTINUED WOOOOOOOOOW - Done
 Auto p4 - Not started

@@ -70,9 +70,7 @@ public class PacketBreak extends Module implements EDLogic {
         Index.MAIN_CFG.set("packet_bk", "false");
         long start = System.nanoTime();
         int sec_time = Index.MAIN_CFG.getIntVal("packet_bk_time");
-        while ((double) (System.nanoTime() - start) / 1000000000d < sec_time) {
-
-        }
+        while ((double) (System.nanoTime() - start) / 1000000000d < sec_time) {}
         Minecraft.getMinecraft().displayGuiScreen(null);
     }
 
