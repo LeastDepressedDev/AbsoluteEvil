@@ -36,7 +36,7 @@ public class PacketBreak extends Module implements EDLogic {
     void onSpawn(EntityJoinWorldEvent e) {
         if (!Index.MAIN_CFG.getBoolVal("packet_bk_m7")) return;
         if (ready && Sync.inDungeon && e.entity instanceof EntityWither) {
-            if (Minecraft.getMinecraft().thePlayer.getDistance(54, 65, 76) > 10 || e.entity.getDistance(54, 65, 76) > 10) return;
+            if (Minecraft.getMinecraft().thePlayer.getDistance(54, 65, 76) > 16 || e.entity.getDistance(54, 65, 76) > 16) return;
             stun();
             ready = false;
         }

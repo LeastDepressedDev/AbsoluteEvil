@@ -5,6 +5,9 @@ Save bot - Paused
 Update healer route - Done
 Restricted cfg - in progress
 Device issue work CONTINUED WOOOOOOOOOW - Done
+Fix party utils not detecting classes correctly - Not started
+Add dungeon dry tracker - Not started
+Add M7 drag skip list - in progress
 Auto p4 - Not started
 Add supply auto pearl - Not started
 Add auto insta mid(Packet stopper(blink)) - Done
