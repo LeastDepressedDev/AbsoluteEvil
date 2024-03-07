@@ -15,6 +15,7 @@ public class Sync {
 //The Catacombs
 
     public static boolean inDungeon = false;
+    public static boolean inKuudra = false;
     public static final int tickr = 40;
     public static int tick = 0;
 
@@ -22,14 +23,18 @@ public class Sync {
         return new BlockPos(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
     }
 
-    public static void ovrDungeon() {
+    public static void ovrCheck() {
         for (String str : Utils.getScoreboard()) {
             if (str.contains("The Catacombs")) {
                 inDungeon = true;
                 return;
+            } else if (str.contains("Kuudra's Hollow")) {
+                inKuudra = true;
+                return;
             }
         }
         inDungeon = false;
+        inKuudra = false;
     }
 
     /**
@@ -116,7 +121,7 @@ public class Sync {
     void tick(TickEvent.ClientTickEvent e) {
         if (tick >= tickr) {
             tick = 0;
-            ovrDungeon();
+            ovrCheck();
         }
         else tick++;
     }
