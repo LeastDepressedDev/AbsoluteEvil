@@ -43,12 +43,12 @@ public class Holder {
 		register(new PickaxePlus());
 		register(new SprayCheck());
 		register(new M7Visuals());
+		register(new M7Dragons());
 		register(new SFUtils());
 		register(new GhostUtils());
 		register(new AutoDebuff());
 		register(new TemporaryGb());
 		register(new AutoBlaze());
-		register(new DragonPoint());
 		register(new DeviceIssue());
 		register(new AutoLevers());
 		register(new SoundOverride());

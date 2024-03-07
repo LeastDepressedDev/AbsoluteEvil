@@ -15,6 +15,7 @@ import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.packets.PacketHandler;
 import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Sync;
+import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -76,6 +77,9 @@ public class MainWrapper {
     }
 
     public static void initialise(FMLInitializationEvent e) {
+        Utils.setupRoman();
+
+
         //ClientSync.active();
         MinecraftForge.EVENT_BUS.register(new MainWrapper());
         MinecraftForge.EVENT_BUS.register(new GuiNotifier());

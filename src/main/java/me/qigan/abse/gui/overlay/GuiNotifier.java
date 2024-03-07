@@ -22,6 +22,7 @@ public class GuiNotifier {
 
     @SubscribeEvent
     void tickl(TickEvent.ClientTickEvent e) {
+        if (e.phase == TickEvent.Phase.END) return;
         if (tick > 0) tick--;
     }
 

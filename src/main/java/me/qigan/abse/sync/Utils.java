@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import me.qigan.abse.config.AddressedData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,8 +15,10 @@ import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.awt.*;
 import java.util.*;
@@ -23,10 +26,32 @@ import java.util.List;
 
 public class Utils {
 
+    public static Dictionary<Character, Integer> romanHash = new Hashtable<>();
+    public static void setupRoman() {
+        romanHash.put('I', 1);
+        romanHash.put('V', 5);
+        romanHash.put('X', 10);
+    }
+
     public static double precision(double val, int digits) {
         double dd = Math.pow(10, digits);
         return Math.floor(val * dd) / dd;
     }
+
+    public static int romanToInt(String s) {
+        char[] arr = s.toCharArray();
+        int accumulator = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (arr[i] == 'I' && (arr[i + 1] == 'V' || arr[i + 1] == 'X')) {
+                accumulator += romanHash.get(arr[i + 1]) - romanHash.get(arr[i]);
+                i++;
+            } else {
+                accumulator += romanHash.get(arr[i]);
+            }
+        }
+        return accumulator;
+    }
+
 
     public static boolean compare(BlockPos pos1, BlockPos pos2) {
         if (pos1 == null || pos2 == null) return false;
@@ -188,6 +213,10 @@ public class Utils {
             result.add(strm);
         }
         return result;
+    }
+
+    public static IChatComponent getTabInfo() {
+        return ReflectionHelper.getPrivateValue(GuiPlayerTabOverlay.class, Minecraft.getMinecraft().ingameGUI.getTabList(), "footer");
     }
 
     public static List<String> getScoreboard() {
