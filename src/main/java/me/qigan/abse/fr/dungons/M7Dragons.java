@@ -128,7 +128,7 @@ public class M7Dragons extends Module {
             drags.add(ele.getKey());
         }
         //if (p >= Index.MAIN_CFG.getDoubleVal("m7drags_epower")) {
-            int in = 0/*p >= Index.MAIN_CFG.getDoubleVal("m7drags_power") ? 0 : 1*/;
+            int in = 1/*p >= Index.MAIN_CFG.getDoubleVal("m7drags_power") ? 0 : 1*/;
             char c = Sync.getPlayerDungeonClass();
             Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7aClass: " + c));
             drags.sort(Comparator.comparingInt(o -> o.prio[in]));
@@ -140,12 +140,12 @@ public class M7Dragons extends Module {
                 case 'H':
                 case 'B':
                 case 'M':
-                    anonc(drags.get(1));
+                    anonc(drags.get(0));
                     break;
                 case 'A':
                 case 'T':
                 case 'U':
-                    anonc(drags.get(0));
+                    anonc(drags.get(1));
                     break;
             }
 //        } else {
