@@ -5,11 +5,13 @@ import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.fr.exc.SmoothAimControl;
+import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
+import net.minecraft.network.play.server.S29PacketSoundEffect;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEffectEvent;
@@ -30,19 +32,24 @@ public class Experimental extends Module implements EDLogic {
     public static Map<BlockPos, String> draw = new HashMap<>();
 
     @SubscribeEvent
-    void hear(PlaySoundEvent e) {
+    void hear(PacketEvent.ReceiveEvent e) {
         if (!isEnabled()) return;
-        draw.put(new BlockPos(e.sound.getXPosF(), e.sound.getYPosF(), e.sound.getZPosF()), e.name);
+        if (e.packet instanceof S29PacketSoundEffect) {
+            S29PacketSoundEffect sp = (S29PacketSoundEffect) e.packet;
+            draw.put(new BlockPos(sp.getX(), sp.getY(), sp.getZ()), sp.getSoundName());
+        }
     }
 
     @SubscribeEvent
     void rend(RenderWorldLastEvent e) {
         if (!isEnabled() || Minecraft.getMinecraft().theWorld == null) return;
-        for (Map.Entry<BlockPos, String> ele : draw.entrySet()) {
-            BlockPos pos = ele.getKey();
-            Esp.autoBox3D(pos, Color.cyan, 2f, false);
-            Esp.renderTextInWorld(ele.getValue(), pos.getX(), pos.getY(), pos.getZ(), Color.cyan.getRGB(), e.partialTicks);
-        }
+        try {
+            for (Map.Entry<BlockPos, String> ele : draw.entrySet()) {
+                BlockPos pos = ele.getKey();
+                Esp.autoBox3D(pos, Color.cyan, 2f, false);
+                Esp.renderTextInWorld(ele.getValue(), pos.getX(), pos.getY(), pos.getZ(), Color.cyan.getRGB(), e.partialTicks);
+            }
+        } catch (Exception ex) {}
     }
 
     @Override
