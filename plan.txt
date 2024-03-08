@@ -1,17 +1,17 @@
 Improve fireball detector algorithm - Done
 Add safe mode option - Done
 Move logginer into gui - Semi-Done
-Save bot - Paused
+Save bot - Cancelled
 Update healer route - Done
-Restricted cfg - in progress
 Device issue work CONTINUED WOOOOOOOOOW - Done
 Fix party utils not detecting classes correctly - Not started
 Add dungeon dry tracker - Not started
-Add M7 drag skip list - Done
+Add M7 drag prio reader - Done
 Auto p4 - Not started
 Add supply auto pearl - Done
 Add auto leap through pearl - Done
 Add auto refill pearls - Done
+Add leap shortcut - Done
 Add auto insta mid(Packet stopper(blink)) - Done
 Add render sprayed mobs in spray checker - Done
 Add auto debuff - Done

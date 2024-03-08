@@ -50,6 +50,7 @@ public class Holder {
 		register(new GhostUtils());
 		register(new AutoDebuff());
 		register(new TemporaryGb());
+		register(new LeapShortcut());
 		register(new AutoBlaze());
 		register(new DeviceIssue());
 		register(new AutoLevers());
@@ -70,7 +71,6 @@ public class Holder {
 		register(new CombatHelperSR());
 		register(new FireballDetector());
 		register(new AutoBridging());
-		register(new SaveBot());
 		register(new BowPracticeMod());
 		register(new ImportantChatOVR());
 		register(new InguiDisplay());
