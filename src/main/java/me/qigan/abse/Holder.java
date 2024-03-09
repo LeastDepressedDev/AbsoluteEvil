@@ -45,6 +45,7 @@ public class Holder {
 		register(new GhostBlocks());
 		register(new PickaxePlus());
 		register(new SprayCheck());
+		register(new BonzoCorrector());
 		register(new M7Visuals());
 		register(new M7Dragons());
 		register(new SFUtils());
