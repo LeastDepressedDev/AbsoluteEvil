@@ -80,7 +80,7 @@ public class InCmd extends CommandBase{
 					sender.addChatMessage(new ChatComponentText("\u00A7a/abse dbg <items/sound/al>"));
 				}
 			} else if (args[0].equalsIgnoreCase("test")) {
-				GuiNotifier.call("Test", 100, true);
+				GuiNotifier.call("Test", 100, true, 0xFFFFFF);
 			} else if (args[0].equalsIgnoreCase("cfg")) {
 				if (args.length > 1) {
 					if (args[1].equalsIgnoreCase("set")) {

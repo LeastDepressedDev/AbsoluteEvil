@@ -66,7 +66,7 @@ public class PacketBreak extends Module implements EDLogic {
     }
 
     public static void stun() {
-        GuiNotifier.call("\u00A7cSTUNNED", 5, true);
+        GuiNotifier.call("\u00A7cSTUNNED", 5, true, 0xFFFFFF);
         Index.MAIN_CFG.set("packet_bk", "false");
         long start = System.nanoTime();
         int sec_time = Index.MAIN_CFG.getIntVal("packet_bk_time");

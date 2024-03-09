@@ -155,7 +155,7 @@ public class M7Dragons extends Module {
     }
 
     private void anonc(DRAGON dragon) {
-        GuiNotifier.call(dragon.name, 40, true);
+        GuiNotifier.call(dragon.name, 40, true, 0xFFFFFF);
     }
 
     DRAGON check(BlockPos pos) {

@@ -52,6 +52,7 @@ public class Holder {
 		register(new TemporaryGb());
 		register(new LeapShortcut());
 		register(new AutoBlaze());
+		register(new InvTracker());
 		register(new DeviceIssue());
 		register(new AutoLevers());
 		register(new AutoLeapDungeon());

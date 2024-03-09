@@ -66,7 +66,7 @@ public class SprayCheck extends Module {
                     //if (ent instanceof EntityItem) {
                     if (ent.getName().equalsIgnoreCase("item.tile.ice") && tick > 0) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7b Sprayed!"));
-                        GuiNotifier.call("\u00A7bSprayed", 60, false);
+                        GuiNotifier.call("\u00A7bSprayed", 60, false, 0xFFFFFF);
                         Minecraft.getMinecraft().thePlayer.playSound("random.orb", 2f, 1f);
                         for (Entity xEnt : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                             if (xEnt instanceof EntityPlayer || xEnt instanceof EntityArmorStand || xEnt instanceof EntityItem

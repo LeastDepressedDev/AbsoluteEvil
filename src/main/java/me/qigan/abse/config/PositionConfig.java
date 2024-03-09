@@ -76,6 +76,7 @@ public class PositionConfig {
         register("imp_chat", new Loc2d(100, 100, new AlignRelativePercent(400, 100, 0)), startup);
         register("ingui_disp", new Loc2d(50, 100, new AlignRelativePercent(100, 200, 1)), startup);
         register("m7visz", new Loc2d(30, 40, new AlignRelativePercent(100, 120, 0)), startup);
+        register("invtracker", new Loc2d(20, 60, new AlignRelativePercent(100, 120, 0)), startup);
         return this;
     }
 

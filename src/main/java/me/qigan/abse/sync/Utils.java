@@ -33,6 +33,10 @@ public class Utils {
         romanHash.put('X', 10);
     }
 
+    public static int colorLimit(int amt) {
+        return Math.min(Math.max(amt, 0), 255);
+    }
+
     public static double precision(double val, int digits) {
         double dd = Math.pow(10, digits);
         return Math.floor(val * dd) / dd;

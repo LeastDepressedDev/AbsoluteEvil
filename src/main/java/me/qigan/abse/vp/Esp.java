@@ -514,6 +514,29 @@ public class Esp {
         GlStateManager.popMatrix();
     }
 
+    public static void renderSubNotification(String text, boolean renderCorner, int color) {
+        int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+
+        float scale = 4;
+        if (stringWidth * scale > (res.getScaledWidth() * 0.9F)) {
+            scale = (res.getScaledWidth() * 0.9F) / (float) stringWidth;
+        }
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) (res.getScaledWidth() / 2), (float) (res.getScaledHeight() / 4) * 3, 0.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scale, scale, scale); // TODO Check if changing this scale breaks anything...
+
+        if (renderCorner) drawOverlayString(text, (int) (-Minecraft.getMinecraft().fontRendererObj.getStringWidth(text) / 2), (int) -20.0F, color, S2Dtype.CORNERED);
+        else drawOverlayString(text, (int) (-Minecraft.getMinecraft().fontRendererObj.getStringWidth(text) / 2), (int) -20.0F, color, S2Dtype.DEFAULT);
+
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
+    }
+
     /**
      * Taken from NotEnoughUpdates under Creative Commons Attribution-NonCommercial 3.0
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE

@@ -13,11 +13,13 @@ public class GuiNotifier {
     public static String displ;
     public static int tick;
     public static boolean cornered;
+    public static int col;
 
-    public static void call(String str, int ticks, boolean drawCorner) {
+    public static void call(String str, int ticks, boolean drawCorner, int color) {
         tick = ticks;
         displ = str;
         cornered = drawCorner;
+        col = color;
     }
 
     @SubscribeEvent
@@ -28,8 +30,6 @@ public class GuiNotifier {
 
     @SubscribeEvent
     void render(RenderGameOverlayEvent.Text e) {
-        if (tick > 0) {
-            Esp.renderNotification(displ, cornered, 0xFFFFFF);
-        }
+        if (tick > 0) Esp.renderNotification(displ, cornered, col);
     }
 }

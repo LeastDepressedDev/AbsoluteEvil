@@ -64,7 +64,7 @@ public class FireballDetector extends Module {
             for (int i = 0; i <= 100; i++) {
                 if (Minecraft.getMinecraft().thePlayer.getDistance(ent.posX + moveX * i, ent.posY + moveY * i, ent.posZ + moveZ * i) < 7) {
                     if (tickCd == 0) {
-                        GuiNotifier.call("\u00A7cFireball incoming", 30, true);
+                        GuiNotifier.call("\u00A7cFireball incoming", 30, true, 0xFFFFFF);
                         Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
                         tickCd = 7;
                     } else {
