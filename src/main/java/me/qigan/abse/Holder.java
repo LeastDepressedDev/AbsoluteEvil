@@ -29,6 +29,7 @@ public class Holder {
 	public static void link() {
 		register(new Experimental());
 		register(new SafeMode());
+		register(new FunnyAddons());
 		register(new LagTracker());
 		register(new M7Route());
 		register(new Hud());
