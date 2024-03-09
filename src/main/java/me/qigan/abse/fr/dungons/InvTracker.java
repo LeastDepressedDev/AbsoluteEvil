@@ -63,7 +63,7 @@ public class InvTracker extends Module {
         }
 
         if (System.currentTimeMillis() - CURRENT < TIME_LIM) {
-            int d = (int) ((System.currentTimeMillis() - CURRENT)/1000d*255d);
+            int d = (int) ((System.currentTimeMillis() - CURRENT)/(double) TIME_LIM*255d);
             Esp.renderSubNotification(Long.toString(TIME_LIM - (System.currentTimeMillis() - CURRENT)) + "ms", false,
                     new Color(Utils.colorLimit(d), Utils.colorLimit(255 - d),0).getRGB());
         }
