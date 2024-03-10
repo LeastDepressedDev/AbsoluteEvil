@@ -6,7 +6,7 @@ import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.fr.qol.GhostUtils;
 import me.qigan.abse.fr.dungons.M7Route;
-import me.qigan.abse.fr.mapping.Mapping;
+import me.qigan.abse.mapping.Mapping;
 import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
@@ -71,8 +71,6 @@ public class InCmd extends CommandBase{
 						} else {
 							sender.addChatMessage(new ChatComponentText("\u00A7cPlease select sound!"));
 						}
-					} else if (args[1].equalsIgnoreCase("al")) {
-						Mapping.DEBUG=!Mapping.DEBUG;
 					} else if (args[1].equalsIgnoreCase("general") || args[1].equalsIgnoreCase("gen")) {
 						Debug.GENERAL=!Debug.GENERAL;
 					}

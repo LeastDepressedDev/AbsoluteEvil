@@ -33,6 +33,10 @@ public class Utils {
         romanHash.put('X', 10);
     }
 
+    public static BlockPos unify(BlockPos pos) {
+        return new BlockPos(pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public static int colorLimit(int amt) {
         return Math.min(Math.max(amt, 0), 255);
     }

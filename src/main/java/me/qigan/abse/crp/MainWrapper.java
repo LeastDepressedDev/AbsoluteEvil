@@ -12,6 +12,7 @@ import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
+import me.qigan.abse.mapping.Mapping;
 import me.qigan.abse.packets.PacketHandler;
 import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Sync;
@@ -81,7 +82,7 @@ public class MainWrapper {
 
     public static void initialise(FMLInitializationEvent e) {
         Utils.setupRoman();
-
+        Mapping.setup();
 
         //ClientSync.active();
         MinecraftForge.EVENT_BUS.register(new MainWrapper());
