@@ -49,6 +49,7 @@ public class DeviceIssue extends Module {
         seqLst.clear();
         seqBp.clear();
         clickedSS = 0;
+        stepIter = 0;
         iterSS = 0;
         //phaseShift = false;
     }
