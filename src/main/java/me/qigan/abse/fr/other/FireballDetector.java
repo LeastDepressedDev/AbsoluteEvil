@@ -92,7 +92,7 @@ public class FireballDetector extends Module {
                      !Index.MAIN_CFG.getBoolVal("fbd_team_track") && BWTeamTracker.team.containsKey(cur)) continue;
                 if (cur.getHeldItem() != null && cur.getHeldItem().getItem() == Items.fire_charge) {
                     if (Index.MAIN_CFG.getBoolVal("fbd_degree")) {
-                        float[] angles = Utils.getRotationsTo(cur, Minecraft.getMinecraft().thePlayer);
+                        Float[] angles = Utils.getRotationsTo(cur, Minecraft.getMinecraft().thePlayer);
                         if (Math.abs(angles[0] - cur.rotationYaw) < Index.MAIN_CFG.getDoubleVal("fbd_degree_yaw") &&
                                 Math.abs(angles[1] - cur.rotationPitch) < Index.MAIN_CFG.getDoubleVal("fbd_degree_pitch"))
                             rendStr = true;

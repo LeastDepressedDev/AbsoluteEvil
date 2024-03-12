@@ -146,7 +146,7 @@ public class CombatHelperAim extends Module {
                         double f = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent);
 
                         if (!ent.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && f < distLim && (primary == null || (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(ent) && f < primary.ref.getDistanceToEntity(Minecraft.getMinecraft().thePlayer)))) {
-                            final float[] rotations = Utils.getRotationsTo(Minecraft.getMinecraft().thePlayer, ent);
+                            final Float[] rotations = Utils.getRotationsTo(Minecraft.getMinecraft().thePlayer, ent);
                             primary = new Target(ent, rotations[0], rotations[1]);
                         }
                     }

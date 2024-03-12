@@ -1,7 +1,5 @@
 package me.qigan.abse.mapping;
 
-import me.qigan.abse.config.AddressedData;
-import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
@@ -10,7 +8,10 @@ import java.util.*;
 
 public class Path{
 
+    private final int limit;
+
     private final Set<BlockPos> usedGeneric = new HashSet<>();
+    private final Float pitchOverride = null;
 
     private final Map<BlockPos, Integer> map = new HashMap<>();
 
@@ -23,6 +24,13 @@ public class Path{
     public Path(BlockPos from, BlockPos to) {
         this.from = Utils.unify(from);
         this.to = Utils.unify(to);
+        this.limit = 140;
+    }
+
+    public Path(BlockPos from, BlockPos to, int lim) {
+        this.from = Utils.unify(from);
+        this.to = Utils.unify(to);
+        this.limit = lim;
     }
 
 
@@ -31,7 +39,7 @@ public class Path{
         if (Utils.compare(from, to)) return this;
         Set<BlockPos> wave = new HashSet<>();
         wave.add(from);
-        for (int i = 0; i < 140; i++) {
+        for (int i = 0; i < limit; i++) {
             wave = createWaveStep(wave, i);
             if (wave.contains(to)) {
                 failed = false;
@@ -50,9 +58,9 @@ public class Path{
                     for (int z = -1; z <= 1; z++) {
                         BlockPos subPos = pos.add(x, y, z);
                         if (usedGeneric.contains(subPos) || poses.contains(subPos)) continue;
-                        if (!Mapping.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos.add(0, -1, 0)).getBlock())
-                                && Mapping.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos.add(0, 1, 0)).getBlock())
-                                && Mapping.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos).getBlock())) {
+                        if (!MappingConstants.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos.add(0, -1, 0)).getBlock())
+                                && MappingConstants.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos.add(0, 1, 0)).getBlock())
+                                && MappingConstants.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos).getBlock())) {
                             wave.add(subPos);
                             map.put(subPos, val);
                             usedGeneric.add(subPos);

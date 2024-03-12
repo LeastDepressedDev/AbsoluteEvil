@@ -6,7 +6,6 @@ import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.fr.qol.GhostUtils;
 import me.qigan.abse.fr.dungons.M7Route;
-import me.qigan.abse.mapping.Mapping;
 import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;

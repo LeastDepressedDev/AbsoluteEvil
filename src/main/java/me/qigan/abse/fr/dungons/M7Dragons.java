@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.overlay.GuiNotifier;
+import me.qigan.abse.mapping.Path;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
@@ -19,6 +20,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.vecmath.Point3d;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -37,11 +39,16 @@ public class M7Dragons extends Module {
 }*/
 
     public static enum DRAGON {
-        RED(new BlockPos(23, 20, 59), "\u00A7cRed", 1,3, false, new BlockPos(26, 20, 59)),
-        ORANGE(new BlockPos(89, 21, 56), "\u00A76Orange", 2, 1, true, new BlockPos(85, 21, 56)),
-        BLUE(new BlockPos(88, 21, 94), "\u00A7bBlue", 3, 4, false, new BlockPos(84, 21, 94)),
-        PURPLE(new BlockPos(56, 20, 129), "\u00A7dPurple", 4, 5, true, new BlockPos(56, 20, 125)),
-        GREEN(new BlockPos(23, 21, 94), "\u00A7aGreen", 5, 2, true, new BlockPos(26, 21, 94))
+        RED(new BlockPos(23, 20, 59), "\u00A7cRed", 1,3, false, new BlockPos(26, 20, 59),
+                new BlockPos(27, 6, 53), new float[]{-139, -90}, null, null),
+        ORANGE(new BlockPos(89, 21, 56), "\u00A76Orange", 2, 1, true, new BlockPos(85, 21, 56),
+                new BlockPos(85, 6, 59), new float[]{-13, -90}, null, null),
+        BLUE(new BlockPos(88, 21, 94), "\u00A7bBlue", 3, 4, false, new BlockPos(84, 21, 94),
+                new BlockPos(84, 6, 97), new float[]{29.6f, -90}, null, null),
+        PURPLE(new BlockPos(56, 20, 129), "\u00A7dPurple", 4, 5, true, new BlockPos(56, 20, 125),
+                new BlockPos(60, 8, 124), new float[]{81.7f, -62}, null, null),
+        GREEN(new BlockPos(23, 21, 94), "\u00A7aGreen", 5, 2, true, new BlockPos(26, 21, 94),
+                new BlockPos(26, 6, 94), new float[]{-180, -90}, null, null)
 
         ;
 
@@ -50,12 +57,21 @@ public class M7Dragons extends Module {
         public final int[] prio;
         public final boolean isEasy;
         public final BlockPos timerLocation;
+        public final BlockPos debuffPos;
+        public final float[] debuffAngles;
+        public final BlockPos stackPos;
+        public final float[] stackAngles;
 
 
-        DRAGON(BlockPos pos, String name, int normalPrio, int easyPrio, boolean isEasy, BlockPos timerLoc) {
+        DRAGON(BlockPos pos, String name, int normalPrio, int easyPrio, boolean isEasy, BlockPos timerLoc,
+               BlockPos debuffPos, float[] debuffAngles, BlockPos stackPos, float[] stackAngles) {
             this.pos = pos;
             this.name = name;
             this.isEasy = isEasy;
+            this.debuffPos = debuffPos;
+            this.debuffAngles = debuffAngles;
+            this.stackPos = stackPos;
+            this.stackAngles = stackAngles;
             this.prio = new int[]{normalPrio, easyPrio};
             this.timerLocation = timerLoc;
         }
@@ -68,18 +84,28 @@ public class M7Dragons extends Module {
         }
     }
 
+    public static DRAGON locked_dragon = null;
+
     public static Set<DRAGON> done = new HashSet<>();
     public static Map<DRAGON, Long> spawning = new HashMap<>();
 
     public static boolean started = false;
     public static boolean first = true;
 
+    public static Path currentPath = null;
+
     @SubscribeEvent
     void load(WorldEvent.Load e) {
-        done.clear();
         first = true;
         started = false;
+    }
+
+    @SubscribeEvent
+    void unload(WorldEvent.Unload e) {
+        locked_dragon = null;
+        currentPath = null;
         spawning.clear();
+        done.clear();
     }
 
     @SubscribeEvent
@@ -155,6 +181,20 @@ public class M7Dragons extends Module {
     }
 
     private void anonc(DRAGON dragon) {
+        if (Index.MAIN_CFG.getBoolVal("m7drags_pathing")) {
+            BlockPos to = null;
+            switch (Sync.getPlayerDungeonClass()) {
+                case 'H':
+                case 'T':
+                case 'M':
+                    to = dragon.debuffPos;
+                    break;
+                case 'A':
+                case 'B':
+                    to = dragon.stackPos;
+            }
+            if (to != null) currentPath = new Path(Sync.playerPosAsBlockPos(), to).build();
+        }
         GuiNotifier.call(dragon.name, 40, true, 0xFFFFFF);
     }
 
@@ -180,9 +220,18 @@ public class M7Dragons extends Module {
         Map<DRAGON, Long> map = new HashMap<>(spawning);
         for (Map.Entry<DRAGON, Long> ele : map.entrySet()) {
             long dif = timeRN-ele.getValue();
-            if (dif >= 5000) spawning.remove(ele.getKey());
-            Esp.renderTextInWorld(Long.toString(dif), ele.getKey().timerLocation,
+            if (dif >= 8000) spawning.remove(ele.getKey());
+            if (dif <= 5000) Esp.renderTextInWorld(Long.toString(5000-dif), ele.getKey().timerLocation,
                     Color.green.getRGB(), 4, e.partialTicks);
+        }
+        if (Index.MAIN_CFG.getBoolVal("m7drags_pathing") && currentPath != null) {
+            Esp.autoBox3D(currentPath.from, Color.green, 2f, false);
+            Esp.autoBox3D(currentPath.to, Color.green, 2f, false);
+            List<Point3d> points = new ArrayList<>();
+            for (BlockPos pos : currentPath.getPosPath()) {
+                points.add(new Point3d(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5));
+            }
+            Esp.drawAsSingleLine(points, Color.cyan, 4f, false);
         }
     }
 
@@ -199,7 +248,7 @@ public class M7Dragons extends Module {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
-        //list.add(new SetsData<>("m7drags_power", "Power", ValType.DOUBLE_NUMBER, "19"));
+        list.add(new SetsData<>("m7drags_pathing", "Pathing", ValType.BOOLEAN, "false"));
         //list.add(new SetsData<>("m7drags_epower", "Easy power", ValType.DOUBLE_NUMBER, "17"));
         return list;
     }

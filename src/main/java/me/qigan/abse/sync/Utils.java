@@ -128,7 +128,7 @@ public class Utils {
         return rand.nextBoolean() ? rand.nextInt()%up : down;
     }
     
-    public static float[] getRotationsTo(Entity entity1, Entity entity2) {
+    public static Float[] getRotationsTo(Entity entity1, Entity entity2) {
         if (entity1 == null || entity2 == null) {
             return null;
         }
@@ -148,7 +148,7 @@ public class Utils {
     }
 
     
-    public static float[] getRotationsTo(BlockPos from, BlockPos to, float[] angles) {
+    public static Float[] getRotationsTo(BlockPos from, BlockPos to, float[] angles) {
         return getRotationsTo(
                 to.getX() - from.getX(),
                 to.getY() - from.getY(),
@@ -158,11 +158,11 @@ public class Utils {
     }
 
     
-    public static float[] getRotationsTo(final double diffX, final double diffY, final double diffZ, float[] angles) {
+    public static Float[] getRotationsTo(final double diffX, final double diffY, final double diffZ, float[] angles) {
         final double dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
         final float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
         final float pitch = (float) -(Math.atan2(diffY, dist) * 180.0D / Math.PI);
-        return new float[] { angles[0] + MathHelper.wrapAngleTo180_float(yaw - angles[0]), angles[1] + MathHelper.wrapAngleTo180_float(pitch - angles[1]) };
+        return new Float[] {angles[0] + MathHelper.wrapAngleTo180_float(yaw - angles[0]), angles[1] + MathHelper.wrapAngleTo180_float(pitch - angles[1]) };
     }
 
     public static <K, V> List<AddressedData<K, V>> mapToAddressedDataList(Map<K, V> map) {

@@ -140,7 +140,7 @@ public class DeviceIssue extends Module {
                 double dx = pos.getX() + 0.9d - Minecraft.getMinecraft().thePlayer.posX;
                 double dy = pos.getY() - Minecraft.getMinecraft().thePlayer.posY - 1.1d;
                 double dz = pos.getZ() + 0.5d - Minecraft.getMinecraft().thePlayer.posZ;
-                float[] vecs = Utils.getRotationsTo(dx, dy, dz, new float[]{
+                Float[] vecs = Utils.getRotationsTo(dx, dy, dz, new float[]{
                         Minecraft.getMinecraft().thePlayer.rotationYaw,
                         Minecraft.getMinecraft().thePlayer.rotationPitch
                 });
