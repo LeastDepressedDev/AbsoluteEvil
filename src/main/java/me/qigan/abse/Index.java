@@ -3,6 +3,7 @@ package me.qigan.abse;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.MainWrapper;
+import me.qigan.abse.mapping.auto.MovementController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +19,7 @@ import java.lang.reflect.Modifier;
 public class Index
 {
     public static MuConfig MAIN_CFG;
+    public static MovementController MOVEMENT_CONTROLLER;
     public static PositionConfig POS_CFG;
 
     public static final String MODID = "abse";

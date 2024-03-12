@@ -220,7 +220,7 @@ public class M7Dragons extends Module {
         Map<DRAGON, Long> map = new HashMap<>(spawning);
         for (Map.Entry<DRAGON, Long> ele : map.entrySet()) {
             long dif = timeRN-ele.getValue();
-            if (dif >= 8000) spawning.remove(ele.getKey());
+            if (dif >= 5500) spawning.remove(ele.getKey());
             if (dif <= 5000) Esp.renderTextInWorld(Long.toString(5000-dif), ele.getKey().timerLocation,
                     Color.green.getRGB(), 4, e.partialTicks);
         }

@@ -13,6 +13,7 @@ import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.mapping.MappingConstants;
+import me.qigan.abse.mapping.auto.MovementController;
 import me.qigan.abse.packets.PacketHandler;
 import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Sync;
@@ -106,6 +107,8 @@ public class MainWrapper {
         Index.MAIN_CFG = new MuConfig();
         Index.POS_CFG = new PositionConfig();
         Index.POS_CFG.load().defts(true).update();
+        Index.MOVEMENT_CONTROLLER = new MovementController();
+        MinecraftForge.EVENT_BUS.register(Index.MOVEMENT_CONTROLLER);
 
         keyBinds();
 
