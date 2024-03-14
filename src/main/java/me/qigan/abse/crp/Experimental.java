@@ -8,8 +8,10 @@ import me.qigan.abse.mapping.Path;
 import me.qigan.abse.sync.Sync;
 
 import me.qigan.abse.vp.Esp;
+import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -20,6 +22,8 @@ import java.util.List;
 @AutoDisable
 @DangerousModule
 public class Experimental extends Module implements EDLogic {
+
+    public static int[][] map = null;
 
     @Override
     public String id() {
@@ -45,6 +49,19 @@ public class Experimental extends Module implements EDLogic {
         }
     }
 
+    @SubscribeEvent
+    void ovr(RenderGameOverlayEvent.Text e) {
+        if (!isEnabled() || map == null) return;
+        Point pt = new Point(300, 300);
+        int[] k = Mapping.realToCell(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posZ);
+        Esp.drawOverlayString(k[0] + ":" + k[1], pt.x, pt.y-30, Color.cyan, S2Dtype.DEFAULT);
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                Esp.drawCenteredString((k[0] == i && k[1] == j ? "\u00A7a" : "\u00A7c") + map[i][j], pt.x+20*i, pt.y+20*j, 0xFFFFFF, S2Dtype.DEFAULT);
+            }
+        }
+    }
+
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
@@ -54,7 +71,7 @@ public class Experimental extends Module implements EDLogic {
         list.add(new SetsData<>("exptl_but2", "Mapping", ValType.BUTTON, (Runnable) () -> {
             if (isEnabled()) {
                 Mapping.debug.clear();
-                int[][] map = Mapping.scanFull();
+                map = map == null ? Mapping.scanFull() : Mapping.sync(map);
                 //RIGHT READING SEQUENCE
                 String str = "\n";
                 for (int i = 0; i < 6; i++) {
@@ -82,5 +99,6 @@ public class Experimental extends Module implements EDLogic {
     @Override
     public void onDisable() {
         Index.MOVEMENT_CONTROLLER.stop();
+        map = null;
     }
 }

@@ -20,8 +20,17 @@ public class Mapping {
     }
 
     public static int[] cellToReal(int i, int j) {
-        return new int[]{MappingConstants.MAP_BOUNDS[0].getX()+((MappingConstants.ROOM_SIZE+2)*i),
-                MappingConstants.MAP_BOUNDS[0].getZ()+((MappingConstants.ROOM_SIZE+2)*j)};
+        return new int[]{
+                MappingConstants.MAP_BOUNDS[0].getX()+((MappingConstants.ROOM_SIZE+2)*i),
+                MappingConstants.MAP_BOUNDS[0].getZ()+((MappingConstants.ROOM_SIZE+2)*j)
+        };
+    }
+
+    public static int[] realToCell(double x, double z) {
+        return new int[]{
+                (int) Math.floor((x-MappingConstants.MAP_BOUNDS[0].getX())/(double) (MappingConstants.ROOM_SIZE+2)),
+                (int) Math.floor((z-MappingConstants.MAP_BOUNDS[0].getZ())/(double) (MappingConstants.ROOM_SIZE+2))
+        };
     }
 
     private static int[][] req(int iter, int[][] re, int i, int j, WorldClient world) {
@@ -60,8 +69,7 @@ public class Mapping {
         return re;
     }
 
-    public static int[][] scanFull() {
-        int iter = 1;
+    public static int[][] genMap() {
         int[][] map = new int[6][6];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
@@ -71,12 +79,59 @@ public class Mapping {
                 map[i][j] = subY == 0 ? -1 : 0;
             }
         }
+        return map;
+    }
+
+    public static int findHighestIter(int[][] map) {
+        int mx = 0;
+        for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 6; j++)
+                if (map[i][j] > mx) mx = map[i][j];
+        return mx;
+    }
+
+    public static int[][] scanFull() {
+        int iter = 1;
+        int[][] map = genMap();
         for(int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (map[i][j] == 0) {
                     map[i][j] = iter;
                     map = req(iter, map, i, j, Minecraft.getMinecraft().theWorld);
                     iter++;
+                }
+            }
+        }
+        return map;
+    }
+
+    public static int[][] sync(int[][] map) {
+        int[][] newMap = genMap();
+        int[] playerCell = realToCell(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posZ);
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (map[i][j] == -1 && newMap[i][j] != -1) {
+                    int dx = playerCell[0] - i;
+                    int dz = playerCell[1] - j;
+                    if (dx*dx + dz*dz > 8.3d) continue;
+                    map[i][j] = 0;
+                    System.out.println(i + ":" + j + " - " + map[i][j] + ":" + newMap[i][j]);
+                    if (i+1 < 6 && map[i+1][j] != -1) {
+                        map = req(map[i+1][j], map, i+1, j, Minecraft.getMinecraft().theWorld);
+                    }
+                    if (j+1 < 6 && map[i][j+1] != -1) {
+                        map = req(map[i][j+1], map, i, j+1, Minecraft.getMinecraft().theWorld);
+                    }
+                    if (i-1 > 0 && map[i-1][j] != -1) {
+                        map = req(map[i-1][j], map, i-1, j, Minecraft.getMinecraft().theWorld);
+                    }
+                    if (j-1 > 0 && map[i][j-1] != -1) {
+                        map = req(map[i][j-1], map, i, j-1, Minecraft.getMinecraft().theWorld);
+                    }
+                    if (map[i][j] == 0) {
+                        map[i][j] = findHighestIter(map)+1;
+                    }
+                    return sync(map);
                 }
             }
         }
