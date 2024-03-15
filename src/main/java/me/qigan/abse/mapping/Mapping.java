@@ -114,24 +114,32 @@ public class Mapping {
                     int dz = playerCell[1] - j;
                     if (dx*dx + dz*dz > 8.3d) continue;
                     map[i][j] = 0;
+                    boolean called = false;
                     System.out.println(i + ":" + j + " - " + map[i][j] + ":" + newMap[i][j]);
                     if (i+1 < 6 && map[i+1][j] != -1) {
                         map = req(map[i+1][j], map, i+1, j, Minecraft.getMinecraft().theWorld);
+                        called = true;
                     }
                     if (j+1 < 6 && map[i][j+1] != -1) {
                         map = req(map[i][j+1], map, i, j+1, Minecraft.getMinecraft().theWorld);
+                        called = true;
                     }
                     if (i-1 >= 0 && map[i-1][j] != -1) {
                         map = req(map[i-1][j], map, i-1, j, Minecraft.getMinecraft().theWorld);
+                        called = true;
                     }
                     if (j-1 >= 0 && map[i][j-1] != -1) {
                         map = req(map[i][j-1], map, i, j-1, Minecraft.getMinecraft().theWorld);
+                        called = true;
                     }
-                    if (map[i][j] == 0) {
-                        map[i][j] = findHighestIter(map)+1;
-                        map = req(map[i][j], map, i, j, Minecraft.getMinecraft().theWorld);
+                    if (called) {
+                        if (map[i][j] == 0) {
+                            map[i][j] = findHighestIter(map) + 1;
+                            map = req(map[i][j], map, i, j, Minecraft.getMinecraft().theWorld);
+
+                        }
+                        return sync(map);
                     }
-                    return sync(map);
                 }
             }
         }

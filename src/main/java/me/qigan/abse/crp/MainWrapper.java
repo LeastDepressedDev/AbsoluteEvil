@@ -85,6 +85,7 @@ public class MainWrapper {
     public static void initialise(FMLInitializationEvent e) {
         Utils.setupRoman();
         MappingConstants.setup();
+        TagConstants.init();
 
         //ClientSync.active();
         MinecraftForge.EVENT_BUS.register(new MainWrapper());
