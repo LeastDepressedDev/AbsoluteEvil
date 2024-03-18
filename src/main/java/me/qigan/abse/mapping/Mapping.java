@@ -31,6 +31,13 @@ public class Mapping {
         };
     }
 
+    public static boolean isFullyLoaded(int i, int j) {
+        int[] coord = cellToReal(i, j);
+        WorldClient client = Minecraft.getMinecraft().theWorld;
+        return rayDown(coord[0], coord[1], client) != 0 && rayDown(coord[0]+MappingConstants.ROOM_SIZE, coord[1], client) != 0 &&
+                rayDown(coord[0], coord[1]+MappingConstants.ROOM_SIZE, client) != 0 && rayDown(coord[0]+MappingConstants.ROOM_SIZE, coord[1]+MappingConstants.ROOM_SIZE, client) != 0;
+    }
+
     private static int[][] req(int iter, int[][] re, int i, int j, WorldClient world) {
         int[] coord = cellToReal(i, j);
         //int subZ = coord[1];
@@ -110,36 +117,26 @@ public class Mapping {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (map[i][j] == -1 && newMap[i][j] != -1) {
-                    int dx = playerCell[0] - i;
-                    int dz = playerCell[1] - j;
-                    if (dx*dx + dz*dz > 8.3d) continue;
+                    if (!isFullyLoaded(i, j)) continue;
                     map[i][j] = 0;
-                    boolean called = false;
                     System.out.println(i + ":" + j + " - " + map[i][j] + ":" + newMap[i][j]);
                     if (i+1 < 6 && map[i+1][j] != -1) {
                         map = req(map[i+1][j], map, i+1, j, Minecraft.getMinecraft().theWorld);
-                        called = true;
                     }
                     if (j+1 < 6 && map[i][j+1] != -1) {
                         map = req(map[i][j+1], map, i, j+1, Minecraft.getMinecraft().theWorld);
-                        called = true;
                     }
                     if (i-1 >= 0 && map[i-1][j] != -1) {
                         map = req(map[i-1][j], map, i-1, j, Minecraft.getMinecraft().theWorld);
-                        called = true;
                     }
                     if (j-1 >= 0 && map[i][j-1] != -1) {
                         map = req(map[i][j-1], map, i, j-1, Minecraft.getMinecraft().theWorld);
-                        called = true;
                     }
-                    if (called) {
-                        if (map[i][j] == 0) {
-                            map[i][j] = findHighestIter(map) + 1;
-                            map = req(map[i][j], map, i, j, Minecraft.getMinecraft().theWorld);
-
-                        }
-                        return sync(map);
+                    if (map[i][j] == 0) {
+                        map[i][j] = findHighestIter(map) + 1;
+                        map = req(map[i][j], map, i, j, Minecraft.getMinecraft().theWorld);
                     }
+                    return sync(map);
                 }
             }
         }

@@ -1,24 +1,4 @@
-Improve fireball detector algorithm - Done
-Add safe mode option - Done
 Move logginer into gui - Semi-Done
-Save bot - Cancelled
-Update healer route - Done
-Device issue work CONTINUED WOOOOOOOOOW - Done
 Fix party utils not detecting classes correctly - Not started
 Add dungeon dry tracker - Not started
-Add M7 drag prio reader - Done
-Add Auto p4 - Not started
-Add Funny addons - Done
-Add supply auto pearl - Done
-Add auto leap through pearl - Done
-Add auto refill pearls - Done
-Add leap shortcut - Done
-Add invulnerability items cd tracker - Done
-Add bonzo corrector - Done
-Add auto insta mid(Packet stopper(blink)) - Done
-Add render sprayed mobs in spray checker - Done
-Add auto debuff - Done
-Add auto blaze sword swapper - Done
-Add M7 visuals - Done
-Add AutoLevers - Done
-Add Lag tracker - Done
+Dynamic route concept

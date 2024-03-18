@@ -7,6 +7,7 @@ import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.fr.dungons.M7Route;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.gui.inst.NewMainMenu;
@@ -86,6 +87,7 @@ public class MainWrapper {
         Utils.setupRoman();
         MappingConstants.setup();
         TagConstants.init();
+        M7Route.setup();
 
         //ClientSync.active();
         MinecraftForge.EVENT_BUS.register(new MainWrapper());
