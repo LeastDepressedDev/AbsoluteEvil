@@ -12,6 +12,7 @@ public class MappingConstants {
     public static final int ROOM_SIZE = 30;
 
     public static final Set<Block> NOT_COLLIDABLE = new HashSet<>();
+    public static final Set<Block> AIRABLE = new HashSet<>();
 
     public static void setup() {
         NOT_COLLIDABLE.add(Blocks.air);
@@ -28,5 +29,11 @@ public class MappingConstants {
         NOT_COLLIDABLE.add(Blocks.wooden_slab);
         NOT_COLLIDABLE.add(Blocks.vine);
         NOT_COLLIDABLE.add(Blocks.tallgrass);
+
+
+
+        AIRABLE.add(Blocks.air);
+        AIRABLE.add(Blocks.emerald_block);
+        AIRABLE.add(Blocks.melon_block);
     }
 }

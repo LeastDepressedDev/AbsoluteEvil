@@ -18,7 +18,7 @@ public class MappingController {
     /**
      * RIGHT READING SEQUENCE
      *                 String str = "\n";
-     *                 for (int i = 0; i < 6; i++) {
+     *                 for (int i w= 0; i < 6; i++) {
      *                     for (int j = 0; j < 6; j++) {
      *                         str += map[j][i] + " ";
      *                     }

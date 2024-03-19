@@ -1,20 +1,48 @@
 package me.qigan.abse.mapping;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Mapping {
 
-    private static int rayDown(int x, int z, WorldClient world) {
+    /**
+     *
+     * @param angle (IN DEGREES)
+     */
+    public static int[] transp(int x, int y, float angle) {
+        angle = (float) Math.toRadians(angle);
+        return new int[]{
+                (int) ((float) x * Math.cos(angle) - (float) y * Math.sin(angle)),
+                (int) ((float) x * Math.sin(angle) - (float) y * Math.cos(angle))
+        };
+    }
+
+    public static int[] transp(int[] coord, float angle) {
+        return transp(coord[0], coord[1], angle);
+    }
+
+    public static int rayDown(int x, int z, WorldClient world) {
         for (int y = 255; y >= 0; y--) {
-            if (world.getBlockState(new BlockPos(x, y, z)).getBlock() != Blocks.air) return y;
+            if (!MappingConstants.AIRABLE.contains(world.getBlockState(new BlockPos(x, y, z)).getBlock())) return y;
         }
         return 0;
+    }
+
+    public static int rayDown(int[] coord, WorldClient world) {
+        return rayDown(coord[0], coord[1], world);
+    }
+
+    public static int[] cellToReal(int[] coord) {
+        return cellToReal(coord[0], coord[1]);
     }
 
     public static int[] cellToReal(int i, int j) {
