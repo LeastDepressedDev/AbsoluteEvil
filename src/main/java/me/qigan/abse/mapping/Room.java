@@ -1,6 +1,7 @@
 package me.qigan.abse.mapping;
 
 import me.qigan.abse.config.AddressedData;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.init.Blocks;
@@ -70,10 +71,10 @@ public class Room {
             for (int j = 0; j < 6; j++) {
                 if (map[i][j] == iter) {
                     int s = 0;
-                    if (map[i-1][j] == iter) s++;
-                    if (map[i+1][j] == iter) s++;
-                    if (map[i][j-1] == iter) s++;
-                    if (map[i][j+1] == iter) s++;
+                    if (i - 1 >= 0 && map[i-1][j] == iter) s++;
+                    if (i + 1 < 6 && map[i+1][j] == iter) s++;
+                    if (j - 1 >= 0 && map[i][j-1] == iter) s++;
+                    if (j + 1 < 6 && map[i][j+1] == iter) s++;
                     AddressedData<int[], Integer> e = new AddressedData<>(new int[]{i, j}, s);
                     elements.add(e);
                     tgr.put(e.getNamespace(), e.getObject());
@@ -82,7 +83,7 @@ public class Room {
         }
 
         if (elements.size() == 0) return this;
-        this.height =  Mapping.rayDown(elements.get(0).getNamespace(), world);
+        this.height = Mapping.rayDown(Mapping.cellToReal(elements.get(0).getNamespace()), world);
 
         switch (tgr.size()) {
             default:
@@ -161,7 +162,14 @@ public class Room {
 
     private void defineRoomType() {
         if (shape != Shape.r1X1) return;
-
+        BlockPos pos = new BlockPos(0, height, 21);
+        for (int i = 0; i < 5; i++) {
+            Block block = Minecraft.getMinecraft().theWorld.getBlockState(this.transformInnerCoordinate(pos.add(i, 0, 0))).getBlock();
+            if (block == Blocks.redstone_block) this.type = Type.BLOOD;
+            else if (block == Blocks.emerald_ore) this.type = Type.PUZZLE;
+            else if (block == Blocks.netherrack) this.type = Type.BOSS;
+            else if (block == Blocks.tnt) this.type = Type.TRAP;
+        }
     }
 
     private static Shape r3(final Map<int[], Integer> tgr) {

@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MappingController {
 
@@ -30,6 +32,7 @@ public class MappingController {
     public static final boolean DO_DEBUG_RENDER = true;
 
     public int[][] map = null;
+    public Map<Integer, Room> roomMap = new HashMap<>();
     public int[] playerCell;
 
     public void update() {
@@ -67,6 +70,18 @@ public class MappingController {
         if (newPos[0] != playerCell[0] || newPos[1] != playerCell[1]) {
             playerCell = newPos;
             update();
+
+            //TODO: FIX THIS VERY TEMPORARY SOLUTION
+            if (map == null) return;
+            if (playerCell[0] >= 0 && playerCell[0] < 6 && playerCell[1] >= 0 && playerCell[1] < 6) {
+                int iter = map[playerCell[0]][playerCell[1]];
+                if (!roomMap.containsKey(iter)) roomMap.put(iter, new Room(iter).define(map));
+
+                //DEBUG
+                Room rm = roomMap.get(iter);
+                System.out.println(rm.iter + ":   " + rm.center[0] + "-" + rm.center[1] + "\n"
+                        + rm.getShape() + "||" + rm.getType() + "||" + rm.getRotation() + "||" + rm.getHeight());
+            }
         }
     }
 

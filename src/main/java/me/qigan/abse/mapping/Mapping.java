@@ -145,7 +145,7 @@ public class Mapping {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (map[i][j] == -1 && newMap[i][j] != -1) {
-                    if (!isFullyLoaded(i, j)) continue;
+                    //if (!isFullyLoaded(i, j)) continue;
                     map[i][j] = 0;
                     System.out.println(i + ":" + j + " - " + map[i][j] + ":" + newMap[i][j]);
                     if (i+1 < 6 && map[i+1][j] != -1) {
