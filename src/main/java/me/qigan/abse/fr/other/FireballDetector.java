@@ -129,7 +129,7 @@ public class FireballDetector extends Module {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
-        list.add(new SetsData<>("fbd_team_track", "Track tean", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("fbd_team_track", "Track team", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("fbd_degree", "Apply angular check", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("fbd_degree_yaw", "Yaw interval", ValType.DOUBLE_NUMBER, "45"));
         list.add(new SetsData<>("fbd_degree_pitch", "Pitch interval", ValType.DOUBLE_NUMBER, "20"));
