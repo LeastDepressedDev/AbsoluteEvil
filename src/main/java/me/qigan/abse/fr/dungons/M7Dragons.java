@@ -98,10 +98,6 @@ public class M7Dragons extends Module {
     void load(WorldEvent.Load e) {
         first = true;
         started = false;
-    }
-
-    @SubscribeEvent
-    void unload(WorldEvent.Unload e) {
         locked_dragon = null;
         currentPath = null;
         spawning.clear();
