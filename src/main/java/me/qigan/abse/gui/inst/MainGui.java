@@ -38,8 +38,9 @@ public class MainGui extends QGuiScreen {
 
     private GuiButton pageUp;
     private GuiButton pageDown;
-    private GuiButton colorPicker;
+    private GuiButton posPicker;
     private GuiButton absoluteFix;
+    private GuiButton mappingSettings;
 
     public final int page;
 
@@ -92,15 +93,19 @@ public class MainGui extends QGuiScreen {
         buttonList.add(pageUp);
         Id++;
         // Id = 3
-        colorPicker = new GuiButton(Id, width-100, height-20, 100, 20, "Position picker");
-        buttonList.add(colorPicker);
+        posPicker = new GuiButton(Id, width-100, height-20, 100, 20, "Position picker");
+        buttonList.add(posPicker);
         Id++;
         // Id = 4
         absoluteFix = new GuiButton(Id, 0, height-20, 100, 20, "Absolute fix");
         buttonList.add(absoluteFix);
         Id++;
         textBoxList.add(new HoveringTextBox(0, height-20, 100, 20, "\u00A7aIf somethings breaks, just press it!"));
-
+        // Id = 5
+        mappingSettings = new GuiButton(Id, 0, height-40, 100, 20, "Mapping settings");
+        mappingSettings.enabled = false;
+        buttonList.add(mappingSettings);
+        Id++;
 
         int i = 0;
         for (int u = PAGE_SIZE * page; u < Holder.MRL.size() && u < PAGE_SIZE*(page+1); u++) {
@@ -294,6 +299,9 @@ public class MainGui extends QGuiScreen {
                 FireballDetector.scan.clear();
                 BWTeamTracker.team.clear();
                 BowPracticeMod.tracking.clear();
+                break;
+            case 5:
+                Minecraft.getMinecraft().displayGuiScreen(new MappingSettings(this));
                 break;
             default:
                 if (actButtons.containsKey(button.id)) {

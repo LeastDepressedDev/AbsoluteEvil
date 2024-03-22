@@ -22,6 +22,8 @@ import me.qigan.abse.fr.dungons.*;
 import me.qigan.abse.fr.other.*;
 import me.qigan.abse.fr.qol.*;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
+import me.qigan.abse.mapping.mod.M7Route;
+import me.qigan.abse.mapping.mod.Remapping;
 import net.minecraftforge.common.MinecraftForge;
 
 public class Holder {
@@ -82,6 +84,7 @@ public class Holder {
 		register(new ImportantChatOVR());
 		register(new InguiDisplay());
 		register(new AutoBedBreaker());
+		register(new Remapping());
 	}
 	
 	public static void register(Module mod) {

@@ -5,7 +5,8 @@ import me.qigan.abse.fr.Debug;
 import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.fr.qol.GhostUtils;
-import me.qigan.abse.fr.dungons.M7Route;
+import me.qigan.abse.mapping.BBox;
+import me.qigan.abse.mapping.mod.M7Route;
 import me.qigan.abse.gui.inst.NewMainMenu;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
@@ -52,7 +53,7 @@ public class InCmd extends CommandBase{
 					sender.addChatMessage(new ChatComponentText("\u00A7a/abse ghosts reset - reset session ghost status."));
 				}
 			} else if (args[0].equalsIgnoreCase("m7")) {
-				for (M7Route.BBox b : M7Route.bounds) {
+				for (BBox b : M7Route.bounds) {
 					b.run();
 				}
 				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7a[ABSE] Healer route set!"));
