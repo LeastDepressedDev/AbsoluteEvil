@@ -4,7 +4,9 @@ import me.qigan.abse.sync.Sync;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -12,7 +14,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MappingController {
@@ -26,8 +30,12 @@ public class MappingController {
      *                     }
      *                     str += "\n";
      *                 }
-     *                 System.out.println(str);
+     *                 System.out.println(str);   this.transformInnerCoordinate(pos.add(i, 0, 0))
      */
+
+
+    public static List<BlockPos> debug = new ArrayList<>();
+
 
     public static final boolean DO_DEBUG_RENDER = true;
 
@@ -45,14 +53,9 @@ public class MappingController {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    void onUnload(WorldEvent.Unload e) {
+    void onLoad(WorldEvent.Load e) {
         map = null;
         playerCell = new int[]{-1, -1};
-    }
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    void onLoad(WorldEvent.Load e) {
         new Thread(() -> {
             try {
                 Thread.sleep(2000);
@@ -71,7 +74,7 @@ public class MappingController {
             playerCell = newPos;
             update();
 
-            //TODO: FIX THIS VERY TEMPORARY SOLUTION
+            //TODO: FIX THIS VERY TEMPORARY SOLUTIONd
             if (map == null) return;
             if (playerCell[0] >= 0 && playerCell[0] < 6 && playerCell[1] >= 0 && playerCell[1] < 6) {
                 int iter = map[playerCell[0]][playerCell[1]];
@@ -95,6 +98,14 @@ public class MappingController {
             for (int j = 0; j < 6; j++) {
                 Esp.drawCenteredString((k[0] == i && k[1] == j ? "\u00A7a" : "\u00A7c") + map[i][j], pt.x+15*i, pt.y+15*j, 0xFFFFFF, S2Dtype.DEFAULT);
             }
+        }
+    }
+
+    @SubscribeEvent
+    void rend(RenderWorldLastEvent e) {
+        if (!DO_DEBUG_RENDER || map == null || Minecraft.getMinecraft().theWorld == null) return;
+        for (BlockPos pos : debug) {
+            Esp.autoBox3D(pos, Color.red, 2f, true);
         }
     }
 }

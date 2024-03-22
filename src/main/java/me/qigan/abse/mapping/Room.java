@@ -25,9 +25,9 @@ public class Room {
 
     public enum Rotation {
         SOUTH(0f),
-        WEST(90f),
-        NORTH(180f),
-        EAST(270f);
+        WEST(-90f),
+        NORTH(-180f),
+        EAST(-270f);
 
         public final float angle;
 
@@ -191,9 +191,9 @@ public class Room {
     }
 
     public BlockPos transformInnerCoordinate(BlockPos pos) {
-        int[] coord = Mapping.transp(pos.getX() + 15, pos.getZ() + 15, this.rotation.angle);
+        int[] coord = Mapping.transp(pos.getX() - 15, pos.getZ() - 15, this.rotation.angle);
         int[] cellC = Mapping.cellToReal(this.center);
-        return new BlockPos(coord[0] + cellC[0], pos.getY(), coord[1] + cellC[1]);
+        return new BlockPos(coord[0] + cellC[0] + 15, pos.getY(), coord[1] + cellC[1] + 15);
     }
 
     private static boolean check(Map<int[], Integer> tgr, final int[] crd) {

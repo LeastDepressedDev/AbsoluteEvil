@@ -18,11 +18,12 @@ public class Mapping {
      *
      * @param angle (IN DEGREES)
      */
-    public static int[] transp(int x, int y, float angle) {
-        angle = (float) Math.toRadians(angle);
+    public static int[] transp(int x, int y, double angle) {
+        angle = Math.toRadians(angle);
+        //Math.
         return new int[]{
-                (int) ((float) x * Math.cos(angle) - (float) y * Math.sin(angle)),
-                (int) ((float) x * Math.sin(angle) - (float) y * Math.cos(angle))
+                (int) Math.round((double) x * Math.sin(angle) + (double) y * Math.cos(angle)),
+                (int) Math.round((double) x * Math.cos(angle) - (double) y * Math.sin(angle))
         };
     }
 
