@@ -24,8 +24,6 @@ import java.util.List;
 @DangerousModule
 public class Experimental extends Module implements EDLogic {
 
-    public static int[][] map = null;
-
     @Override
     public String id() {
         return "exptl";
@@ -60,16 +58,7 @@ public class Experimental extends Module implements EDLogic {
         }));
         list.add(new SetsData<>("exptl_but2", "Mapping", ValType.BUTTON, (Runnable) () -> {
             if (isEnabled()) {
-                map = map == null ? Mapping.scanFull(MappingController.calcPlayerCell()) : Mapping.sync(map);
-                //RIGHT READING SEQUENCE
-                String str = "\n";
-                for (int i = 0; i < 6; i++) {
-                    for (int j = 0; j < 6; j++) {
-                        str += map[j][i] + " ";
-                    }
-                    str += "\n";
-                }
-                System.out.println(str);
+                MappingController.debug.clear();
             }
         }));
         return list;
@@ -88,6 +77,5 @@ public class Experimental extends Module implements EDLogic {
     @Override
     public void onDisable() {
         Index.MOVEMENT_CONTROLLER.stop();
-        map = null;
     }
 }
