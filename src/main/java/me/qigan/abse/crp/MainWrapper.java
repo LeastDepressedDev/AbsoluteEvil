@@ -75,6 +75,8 @@ public class MainWrapper {
         ClientRegistry.registerKeyBinding(Keybinds.aimBreak);
         Keybinds.blockBreaker = new KeyBinding("Block breaker", Keyboard.KEY_NONE, "key.abse");
         ClientRegistry.registerKeyBinding(Keybinds.blockBreaker);
+
+        //Macro category TODO: MOVE
         Keybinds.debuffKey = new KeyBinding("Debuff key", Keyboard.KEY_NONE, "key.abse");
         ClientRegistry.registerKeyBinding(Keybinds.debuffKey);
         Keybinds.ssKey = new KeyBinding("Auto SS", Keyboard.KEY_NONE, "key.abse");

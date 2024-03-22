@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.kuudra;
+package me.qigan.abse.fr.macro;
 
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.ClickSimTick;
@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Macro
 public class SuplyPearl extends Module {
 
     private static int getPearlSlot() {

@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.dungons;
+package me.qigan.abse.fr.macro;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.crp.MainWrapper;
@@ -9,6 +9,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+@Macro
 public class AutoDebuff extends Module {
 
     private boolean use = false;

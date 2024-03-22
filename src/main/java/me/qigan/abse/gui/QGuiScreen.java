@@ -41,7 +41,6 @@ public class QGuiScreen extends GuiScreen {
     @Override
     public void initGui() {
         super.initGui();
-
         for (GuiTextField field : textFieldList) {
             field.setVisible(true);
             field.setEnabled(true);

@@ -7,6 +7,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
+import me.qigan.abse.fr.macro.Macro;
 import me.qigan.abse.fr.other.BWTeamTracker;
 import me.qigan.abse.fr.other.BowAimEsp;
 import me.qigan.abse.fr.other.BowPracticeMod;
@@ -106,7 +107,8 @@ public class MainGui extends QGuiScreen {
             Module mod = Holder.MRL.get(u);
             textBoxList.add(new HoveringTextBox(40, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7f" + mod.description()));
             GuiLabel label = new GuiLabel(fontRendererObj, Id, 40, 60 + i*2*sizeH, sizeW, sizeH, 0xFFFFFF);
-            label.func_175202_a(mod.fname() + ":");
+            Macro mac = mod.getClass().getAnnotation(Macro.class);
+            label.func_175202_a((mac != null) ? "\u00A7a" : "" + mod.fname() + ":");
             labelList.add(label);
             Id++;
             DangerousModule annot = mod.getClass().getAnnotation(DangerousModule.class);

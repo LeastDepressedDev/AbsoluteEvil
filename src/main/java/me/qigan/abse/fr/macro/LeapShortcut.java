@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.dungons;
+package me.qigan.abse.fr.macro;
 
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Macro
 public class LeapShortcut extends Module {
 
     private static int find() {

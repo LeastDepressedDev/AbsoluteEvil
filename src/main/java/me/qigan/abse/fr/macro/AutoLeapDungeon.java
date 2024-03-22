@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.dungons;
+package me.qigan.abse.fr.macro;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+@Macro
 public class AutoLeapDungeon extends Module {
 
     private int findTNT() {
