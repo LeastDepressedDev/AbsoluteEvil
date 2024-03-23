@@ -219,11 +219,6 @@ public class Room {
         this.id = Rooms.match(this);
     }
 
-    public void placeRoute() {
-        if (id == -1) return;
-
-    }
-
     public Shape getShape() {
         return shape;
     }

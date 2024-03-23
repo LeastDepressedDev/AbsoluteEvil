@@ -90,7 +90,9 @@ public class MappingController {
 
                 if (Index.MAIN_CFG.getBoolVal("remap")) {
                     Room rm = roomMap.get(iter);
-
+                    if (Rooms.routes.containsKey(rm.getId())) {
+                        Rooms.routes.get(rm.getId()).placeRoute(rm);
+                    }
                 }
             }
         }

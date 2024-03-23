@@ -1,6 +1,7 @@
-package me.qigan.abse.mapping;
+package me.qigan.abse.mapping.routing;
 
 import me.qigan.abse.fr.qol.GhostBlocks;
+import me.qigan.abse.mapping.Room;
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 
@@ -31,6 +32,17 @@ public class BBox {
                 for (int l = Math.min(z1, z2); l <= Math.max(z1, z2); l++) {
                     //Minecraft.getMinecraft().thePlayer.worldObj.setBlockToAir()
                     GhostBlocks.placeBlock(new BlockPos(i, j, l), this.block);
+                }
+            }
+        }
+    }
+
+    public void runRelative(Room room) {
+        for (int i = Math.min(x1, x2); i <= Math.max(x1, x2); i++) {
+            for (int j = Math.min(y1, y2); j <= Math.max(y1, y2); j++) {
+                for (int l = Math.min(z1, z2); l <= Math.max(z1, z2); l++) {
+                    //Minecraft.getMinecraft().thePlayer.worldObj.setBlockToAir()
+                    GhostBlocks.placeBlock(room.transformInnerCoordinate(new BlockPos(i, j, l)), this.block);
                 }
             }
         }

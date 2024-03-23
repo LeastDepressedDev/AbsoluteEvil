@@ -5,7 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.qol.GhostBlocks;
-import me.qigan.abse.mapping.BBox;
+import me.qigan.abse.mapping.routing.BBox;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

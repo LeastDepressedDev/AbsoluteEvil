@@ -83,22 +83,27 @@ public class Remapping extends Module {
             System.out.println(ln);
         }));
         list.add(new SetsData<>("remap_inf", "Room info", ValType.BUTTON, (Runnable) () -> Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(createRoomInfo()))));
+
+
+        //Routing
+        list.add(new SetsData<>("remap_text1", "Following settings are responsible for routing", ValType.COMMENT, null));
+        list.add(new SetsData<>("remap_blocks", "Replace Blocks", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("remap_path", "Render path", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("remap_targets", "Render targets", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("remap_comments", "Render comments", ValType.BOOLEAN, "false"));
         return list;
     }
 
     public static String createRoomInfo() {
-        try {
-            Room rm = Index.MAPPING_CONTROLLER.roomMap.get(Index.MAPPING_CONTROLLER.getCurrentCellIter());
-            return rm.iter + ":   " + rm.center[0] + "-" + rm.center[1] + "\n"
-                    + rm.getShape() + "||" + rm.getType() + "||" + rm.getRotation() + "||" + rm.getHeight() + "\n"
-                    + "id:" + rm.getId();
-        } catch (Exception e) {
-            return "";
-        }
+        Room rm = Index.MAPPING_CONTROLLER.roomMap.get(Index.MAPPING_CONTROLLER.getCurrentCellIter());
+        if (rm == null) return "";
+        return rm.iter + ":   " + rm.center[0] + "-" + rm.center[1] + "\n"
+                + rm.getShape() + "||" + rm.getType() + "||" + rm.getRotation() + "||" + rm.getHeight() + "\n"
+                + "id:" + rm.getId();
     }
 
     @Override
     public String description() {
-        return "Presets all the routes you need in room";
+        return "Fast clear = good run";
     }
 }

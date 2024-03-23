@@ -17,6 +17,7 @@ import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.mapping.MappingConstants;
 import me.qigan.abse.mapping.MappingController;
 import me.qigan.abse.mapping.auto.MovementController;
+import me.qigan.abse.mapping.routing.RouteUpdater;
 import me.qigan.abse.packets.PacketHandler;
 import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Sync;
@@ -101,6 +102,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new MCMainMenu());
         MinecraftForge.EVENT_BUS.register(new SmoothAimControl());
         MinecraftForge.EVENT_BUS.register(new ClickSimTick());
+        MinecraftForge.EVENT_BUS.register(new RouteUpdater());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 
