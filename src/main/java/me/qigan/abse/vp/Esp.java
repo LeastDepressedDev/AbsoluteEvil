@@ -353,7 +353,7 @@ public class Esp {
     }
 
     public static void renderTextInWorld(String str, BlockPos pos, int col, double size, float partialTicks) {
-        renderTextInWorld(str, pos.getX(), pos.getY(), pos.getZ(), col, size, partialTicks);
+        renderTextInWorld(str, pos.getX()+0.5d, pos.getY()+0.5d, pos.getZ()+0.5d, col, size, partialTicks);
     }
 
     /**

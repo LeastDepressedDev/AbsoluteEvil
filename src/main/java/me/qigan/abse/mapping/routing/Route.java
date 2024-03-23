@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Route {
     private List<BBox> pre = new ArrayList<>();
-    private List<AddressedData<BlockPos, Color>> path = new ArrayList<>();
+    private List<BlockPos> path = new ArrayList<>();
     private List<AddressedData<BlockPos, Color>> outlines = new ArrayList<>();
     private List<AddressedData<BlockPos, String>> comments = new ArrayList<>();
 
@@ -26,8 +26,7 @@ public class Route {
         return this;
     }
 
-    @SafeVarargs
-    public final Route path(AddressedData<BlockPos, Color>... points) {
+    public final Route path(BlockPos... points) {
         path = new ArrayList<>();
         path.addAll(Arrays.asList(points));
         return this;
@@ -60,7 +59,7 @@ public class Route {
         return pre;
     }
 
-    public List<AddressedData<BlockPos, Color>> getPath() {
+    public List<BlockPos> getPath() {
         return path;
     }
 
