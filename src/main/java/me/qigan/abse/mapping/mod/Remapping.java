@@ -66,7 +66,7 @@ public class Remapping extends Module {
         list.add(new SetsData<>("remap_track", "Track mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("remap_track_clear", "Clear track", ValType.BUTTON, (Runnable) () -> repos.clear()));
         list.add(new SetsData<>("remap_track_sum", "Summarize[In console]", ValType.BUTTON, (Runnable) () -> {
-            String ln = "\n";
+            String ln = "Detect format\n";
             Room rm = Index.MAPPING_CONTROLLER.roomMap.get(Index.MAPPING_CONTROLLER.getCurrentCellIter());
             BlockPos pos = rm.transformInnerCoordinate(new BlockPos(0, 69, 0));
             for (AddressedData<BlockPos, Block> ele : repos) {
@@ -79,6 +79,19 @@ public class Remapping extends Module {
                         (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dz : dx));
                 //MappingController.debug.add(rm.transformInnerCoordinate(fPos));
                 ln += "new AddressedData<>(new BlockPos(" + fPos.getX() + ", " + fPos.getY() + ", " + fPos.getZ() + "), Blocks." + ele.getObject().getRegistryName().substring(10) + "), \n";
+            }
+            System.out.println(ln);
+            ln = "Routing format\n";
+            for (AddressedData<BlockPos, Block> ele : repos) {
+                //int[] cc = Mapping.cellToReal(rm.center[0], rm.center[1]);
+                int dx = Math.abs(ele.getNamespace().getX() - pos.getX());
+                int dz = Math.abs(ele.getNamespace().getZ() - pos.getZ());
+                BlockPos fPos = new BlockPos(
+                        (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dx : dz),
+                        ele.getNamespace().getY(),
+                        (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dz : dx));
+                //MappingController.debug.add(rm.transformInnerCoordinate(fPos));
+                ln += "new BlockPos(" + fPos.getX() + ", " + (fPos.getY()+1d) + ", " + fPos.getZ() + "),\n";
             }
             System.out.println(ln);
         }));

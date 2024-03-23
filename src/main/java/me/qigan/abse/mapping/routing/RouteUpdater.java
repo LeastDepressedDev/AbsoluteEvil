@@ -57,7 +57,7 @@ public class RouteUpdater {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        VisualApi.setupLine((float) 5.0, Color.cyan);
+        VisualApi.setupLine((float) 5.0, Color.green);
         GlStateManager.translate(0, 0, 0);
         GL11.glBegin(1);
         for (int i = 0; i < vec.size()-1; i++) {
