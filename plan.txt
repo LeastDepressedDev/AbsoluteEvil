@@ -1,4 +1,7 @@
 Move logginer into gui - Semi-Done
 Fix party utils not detecting classes correctly - Not started
 Add dungeon dry tracker - Not started
-Dynamic route concept
+Dynamic route concept - Done
+Add remapping:
+- Add room detect - Done(Except: rL)
+- Add routing - Done

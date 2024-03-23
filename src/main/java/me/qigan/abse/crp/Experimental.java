@@ -3,20 +3,12 @@ package me.qigan.abse.crp;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
-import me.qigan.abse.mapping.Mapping;
 import me.qigan.abse.mapping.MappingController;
-import me.qigan.abse.mapping.Path;
+import me.qigan.abse.pathing.Path;
 import me.qigan.abse.sync.Sync;
 
-import me.qigan.abse.vp.Esp;
-import me.qigan.abse.vp.S2Dtype;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 

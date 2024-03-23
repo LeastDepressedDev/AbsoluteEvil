@@ -16,7 +16,7 @@ import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.gui.inst.MainGui;
 import me.qigan.abse.mapping.MappingConstants;
 import me.qigan.abse.mapping.MappingController;
-import me.qigan.abse.mapping.auto.MovementController;
+import me.qigan.abse.pathing.MovementController;
 import me.qigan.abse.mapping.routing.RouteUpdater;
 import me.qigan.abse.packets.PacketHandler;
 import me.qigan.abse.sync.SoundUtils;

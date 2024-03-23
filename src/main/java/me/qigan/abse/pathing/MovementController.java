@@ -1,14 +1,12 @@
-package me.qigan.abse.mapping.auto;
+package me.qigan.abse.pathing;
 
 import me.qigan.abse.fr.exc.SmoothAimControl;
-import me.qigan.abse.mapping.Path;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
