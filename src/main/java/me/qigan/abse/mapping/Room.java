@@ -155,16 +155,16 @@ public class Room {
                 break;
         }
 
-
+        defineRoomId();
 
         return this;
     }
 
     private void defineRoomType() {
         if (shape != Shape.r1X1) return;
-        BlockPos pos = new BlockPos(0, height, 21);
+        BlockPos pos = new BlockPos(21, height, 0);
         for (int i = 0; i < 5; i++) {
-            Block block = Minecraft.getMinecraft().theWorld.getBlockState(this.transformInnerCoordinate(pos.add(i, 0, 0))).getBlock();
+            Block block = Minecraft.getMinecraft().theWorld.getBlockState(this.transformInnerCoordinate(pos.add(0, 0, i))).getBlock();
             if (block == Blocks.redstone_block) this.type = Type.BLOOD;
             else if (block == Blocks.emerald_ore) this.type = Type.PUZZLE;
             else if (block == Blocks.netherrack) this.type = Type.BOSS;
@@ -191,7 +191,7 @@ public class Room {
     }
 
     public BlockPos transformInnerCoordinate(BlockPos pos) {
-        int[] coord = Mapping.transp(pos.getX() - 15, pos.getZ() - 15, this.rotation.angle);
+        int[] coord = Mapping.transp(pos.getZ() - 15, pos.getX() - 15, this.rotation.angle);
         int[] cellC = Mapping.cellToReal(this.center);
         return new BlockPos(coord[0] + cellC[0] + 15, pos.getY(), coord[1] + cellC[1] + 15);
     }
@@ -213,6 +213,15 @@ public class Room {
         c1[0]-=1;
         c2[1]-=1;
         return tgr.get(c1) != null && tgr.get(c2) != null;
+    }
+
+    public void defineRoomId() {
+        this.id = Rooms.match(this);
+    }
+
+    public void placeRoute() {
+        if (id == -1) return;
+
     }
 
     public Shape getShape() {

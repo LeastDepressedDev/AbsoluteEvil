@@ -1,5 +1,7 @@
 package me.qigan.abse.mapping;
 
+import me.qigan.abse.Index;
+import me.qigan.abse.mapping.mod.Remapping;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -51,11 +53,17 @@ public class MappingController {
         return Mapping.realToCell(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posZ);
     }
 
+    public int getCurrentCellIter() {
+        int[] coord = calcPlayerCell();
+        return map[coord[0]][coord[1]];
+    }
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     void onLoad(WorldEvent.Load e) {
         map = null;
         playerCell = new int[]{-1, -1};
+        roomMap.clear();
         new Thread(() -> {
             try {
                 Thread.sleep(2000);
@@ -80,10 +88,10 @@ public class MappingController {
                 int iter = map[playerCell[0]][playerCell[1]];
                 if (!roomMap.containsKey(iter)) roomMap.put(iter, new Room(iter).define(map));
 
-                //DEBUG
-                Room rm = roomMap.get(iter);
-                System.out.println(rm.iter + ":   " + rm.center[0] + "-" + rm.center[1] + "\n"
-                        + rm.getShape() + "||" + rm.getType() + "||" + rm.getRotation() + "||" + rm.getHeight());
+                if (Index.MAIN_CFG.getBoolVal("remap")) {
+                    Room rm = roomMap.get(iter);
+
+                }
             }
         }
     }
@@ -99,6 +107,7 @@ public class MappingController {
                 Esp.drawCenteredString((k[0] == i && k[1] == j ? "\u00A7a" : "\u00A7c") + map[i][j], pt.x+15*i, pt.y+15*j, 0xFFFFFF, S2Dtype.DEFAULT);
             }
         }
+        Esp.drawOverlayString(Remapping.createRoomInfo(), pt.x, pt.y+85, Color.cyan, S2Dtype.DEFAULT);
     }
 
     @SubscribeEvent
