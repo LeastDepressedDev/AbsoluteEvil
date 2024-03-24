@@ -71,27 +71,35 @@ public class Remapping extends Module {
             BlockPos pos = rm.transformInnerCoordinate(new BlockPos(0, 69, 0));
             for (AddressedData<BlockPos, Block> ele : repos) {
                 //int[] cc = Mapping.cellToReal(rm.center[0], rm.center[1]);
-                int dx = Math.abs(ele.getNamespace().getX() - pos.getX());
-                int dz = Math.abs(ele.getNamespace().getZ() - pos.getZ());
+                int dx = ele.getNamespace().getX() - pos.getX();
+                int dz = ele.getNamespace().getZ() - pos.getZ();
                 BlockPos fPos = new BlockPos(
-                        (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dx : dz),
+                        (rm.getRotation() == Room.Rotation.SOUTH ? dx :
+                                rm.getRotation() == Room.Rotation.WEST ? dz :
+                                        rm.getRotation() == Room.Rotation.NORTH ? -dx : -dz),
                         ele.getNamespace().getY(),
-                        (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dz : dx));
-                //MappingController.debug.add(rm.transformInnerCoordinate(fPos));
+                        (rm.getRotation() == Room.Rotation.SOUTH ? dz :
+                                rm.getRotation() == Room.Rotation.WEST ? -dx :
+                                        rm.getRotation() == Room.Rotation.NORTH ? -dz : dx));
+                MappingController.debug.add(rm.transformInnerCoordinate(fPos));
                 ln += "new AddressedData<>(new BlockPos(" + fPos.getX() + ", " + fPos.getY() + ", " + fPos.getZ() + "), Blocks." + ele.getObject().getRegistryName().substring(10) + "), \n";
             }
             System.out.println(ln);
             ln = "Routing format\n";
             for (AddressedData<BlockPos, Block> ele : repos) {
                 //int[] cc = Mapping.cellToReal(rm.center[0], rm.center[1]);
-                int dx = Math.abs(ele.getNamespace().getX() - pos.getX());
-                int dz = Math.abs(ele.getNamespace().getZ() - pos.getZ());
+                int dx = ele.getNamespace().getX() - pos.getX() ;
+                int dz = ele.getNamespace().getZ() - pos.getZ();
                 BlockPos fPos = new BlockPos(
-                        (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dx : dz),
+                        (rm.getRotation() == Room.Rotation.SOUTH ? dx :
+                                rm.getRotation() == Room.Rotation.WEST ? dz :
+                                        rm.getRotation() == Room.Rotation.NORTH ? -dx : -dz),
                         ele.getNamespace().getY(),
-                        (rm.getRotation() == Room.Rotation.SOUTH || rm.getRotation() == Room.Rotation.NORTH ? dz : dx));
-                //MappingController.debug.add(rm.transformInnerCoordinate(fPos));
-                ln += "new BlockPos(" + fPos.getX() + ", " + (fPos.getY()+1d) + ", " + fPos.getZ() + "),\n";
+                        (rm.getRotation() == Room.Rotation.SOUTH ? dz :
+                                rm.getRotation() == Room.Rotation.WEST ? -dx :
+                                        rm.getRotation() == Room.Rotation.NORTH ? -dz : dx));
+                MappingController.debug.add(rm.transformInnerCoordinate(fPos));
+                ln += "new BlockPos(" + fPos.getX() + ", " + (fPos.getY()+1) + ", " + fPos.getZ() + "),\n";
             }
             System.out.println(ln);
         }));

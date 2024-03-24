@@ -55,6 +55,7 @@ public class MappingController {
 
     public int getCurrentCellIter() {
         int[] coord = calcPlayerCell();
+        if (coord[0] < 0 || coord[0] >= 6 || coord[1] < 0 || coord[1] >= 6) return -1;
         return map[coord[0]][coord[1]];
     }
 

@@ -5,6 +5,8 @@ import me.qigan.abse.mapping.rooms.r1x1.RoomDueces;
 import me.qigan.abse.mapping.rooms.r1x1.RoomRacoon;
 import me.qigan.abse.mapping.rooms.r1x1.RoomScaffolding;
 import me.qigan.abse.mapping.rooms.r1x2.RoomBridges;
+import me.qigan.abse.mapping.rooms.r2x2.RoomMines;
+import me.qigan.abse.mapping.rooms.r2x2.RoomStairs;
 import me.qigan.abse.mapping.routing.BBox;
 import me.qigan.abse.mapping.routing.Route;
 import net.minecraft.block.Block;
@@ -35,7 +37,7 @@ public class Rooms {
      *
      *                                         ROOMS
      *
-     *                                   Current max id is 5
+     *                                   Current max id is 7
      *
      *
      *                                          ROUTING
@@ -58,6 +60,8 @@ public class Rooms {
         registerRoom(new RoomRacoon());
         registerRoom(new RoomDueces());
         registerRoom(new RoomBridges());
+        registerRoom(new RoomStairs());
+        registerRoom(new RoomMines());
     }
 
     public static void registerRoom(RoomTemplate temple) {
@@ -76,6 +80,7 @@ public class Rooms {
     private static boolean check(Collection<AddressedData<BlockPos, Block>> rms, Room rm) {
         for (AddressedData<BlockPos, Block> ele : rms) {
             BlockPos pos = rm.transformInnerCoordinate(ele.getNamespace());
+            //MappingController.debug.add(pos);
             if (Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock() != ele.getObject()) return false;
         }
         return true;
