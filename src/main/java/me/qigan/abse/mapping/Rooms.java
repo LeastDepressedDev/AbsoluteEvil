@@ -1,12 +1,16 @@
 package me.qigan.abse.mapping;
 
 import me.qigan.abse.config.AddressedData;
+import me.qigan.abse.mapping.rooms.r1x1.RoomChains;
 import me.qigan.abse.mapping.rooms.r1x1.RoomDueces;
 import me.qigan.abse.mapping.rooms.r1x1.RoomRacoon;
 import me.qigan.abse.mapping.rooms.r1x1.RoomScaffolding;
 import me.qigan.abse.mapping.rooms.r1x2.RoomBridges;
-import me.qigan.abse.mapping.rooms.r2x2.RoomMines;
-import me.qigan.abse.mapping.rooms.r2x2.RoomStairs;
+import me.qigan.abse.mapping.rooms.r1x2.RoomGrassRuins;
+import me.qigan.abse.mapping.rooms.r1x3.RoomGravel;
+import me.qigan.abse.mapping.rooms.r1x4.RoomMossy;
+import me.qigan.abse.mapping.rooms.r1x4.RoomWaterfall;
+import me.qigan.abse.mapping.rooms.r2x2.*;
 import me.qigan.abse.mapping.routing.BBox;
 import me.qigan.abse.mapping.routing.Route;
 import net.minecraft.block.Block;
@@ -37,7 +41,7 @@ public class Rooms {
      *
      *                                         ROOMS
      *
-     *                                   Current max id is 7
+     *                                   Current max id is 15
      *
      *
      *                                          ROUTING
@@ -46,6 +50,8 @@ public class Rooms {
      *              RED - click on it
      *              GREEN - secret
      *              CYAN - etherwarp in it
+     *              YELLOW - stonk here
+     *              PURPLE - pearl here
      *
      */
     public static void setup() {
@@ -62,6 +68,14 @@ public class Rooms {
         registerRoom(new RoomBridges());
         registerRoom(new RoomStairs());
         registerRoom(new RoomMines());
+        registerRoom(new RoomCathedral());
+        registerRoom(new RoomWaterfall());
+        registerRoom(new RoomFlags());
+        registerRoom(new RoomGravel());
+        registerRoom(new RoomMuseum());
+        registerRoom(new RoomChains());
+        registerRoom(new RoomGrassRuins());
+        registerRoom(new RoomMossy());
     }
 
     public static void registerRoom(RoomTemplate temple) {
