@@ -113,7 +113,7 @@ public class MainGui extends QGuiScreen {
             textBoxList.add(new HoveringTextBox(40, 60 + i*2*sizeH, sizeW, sizeH, "\u00A7f" + mod.description()));
             GuiLabel label = new GuiLabel(fontRendererObj, Id, 40, 60 + i*2*sizeH, sizeW, sizeH, 0xFFFFFF);
             Macro mac = mod.getClass().getAnnotation(Macro.class);
-            label.func_175202_a((mac != null) ? "\u00A7a" : "" + mod.fname() + ":");
+            label.func_175202_a(((mac != null) ? "\u00A7a" : "") + mod.fname() + ":");
             labelList.add(label);
             Id++;
             DangerousModule annot = mod.getClass().getAnnotation(DangerousModule.class);

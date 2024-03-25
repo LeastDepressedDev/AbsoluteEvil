@@ -72,7 +72,9 @@ public class M7Route extends Module {
             new BBox(72, 106,142, 63, 106, 123, Blocks.rail),
             new BBox(57, 106, 132, 52, 106, 136, Blocks.rail),
             new BBox(20, 130, 135, 15, 128, 137, Blocks.air),
-            new BBox(20, 130, 135, 18, 132, 135, Blocks.oak_fence)
+            new BBox(20, 130, 135, 18, 132, 135, Blocks.oak_fence),
+            new BBox(52, 132, 140, 39, 136, 140, Blocks.stained_glass),
+            new BBox(32, 133, 137, 52, 132, 137, Blocks.stained_glass)
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();

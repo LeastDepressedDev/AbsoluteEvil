@@ -5,3 +5,7 @@ Dynamic route concept - Done
 Add remapping:
 - Add room detect - Done(Except: rL)
 - Add routing - Done
+
+
+Fix supply pearl no throwing - Done
+Modify autoskip - Done

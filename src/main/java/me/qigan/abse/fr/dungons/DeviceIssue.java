@@ -44,6 +44,7 @@ public class DeviceIssue extends Module {
     public static int clickedSS = 0;
     public static int stepIter = 1;
     private static int iterSS = 0;
+    private static boolean delta = false;
 
     private static void resetSS() {
         seqLst.clear();
@@ -111,6 +112,7 @@ public class DeviceIssue extends Module {
         if (ready && e.entity.getDistanceSqToCenter(CENTER_BUTTON_SS_CONST) <= 7 && e.entity instanceof EntityArmorStand) {
             ready = false;
             if (Minecraft.getMinecraft().thePlayer.isSneaking()) {
+                delta = true;
                 started = true;
             }
             else done = true;
@@ -130,6 +132,9 @@ public class DeviceIssue extends Module {
         if (phase != prePhase) {
             if (!phase) {
                 shift();
+            } else {
+                if (delta) iterSS++;
+                delta = false;
             }
             prePhase = phase;
         }
@@ -146,7 +151,7 @@ public class DeviceIssue extends Module {
                 });
                 SmoothAimControl.set(vecs, 2, 23, Index.MAIN_CFG.getDoubleVal("auto_ss_speed"));
                 BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
-                if (Utils.compare(seqBp.get(iterSS), bp)) {
+                if (Utils.compare(seqBp.get(iterSS), bp) && !Index.MAIN_CFG.getBoolVal("auto_ss_adv")) {
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
                 }
             }
@@ -208,6 +213,13 @@ public class DeviceIssue extends Module {
                     Esp.renderTextInWorld(Integer.toString(i+1), x, y, z, col.getRGB(), 1d, e.partialTicks);
                 }
             }
+
+            if (phase && MainWrapper.Keybinds.ssKey.isKeyDown() && Index.MAIN_CFG.getBoolVal("auto_ss_click") && iterSS < seqBp.size()) {
+                BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
+                if (Utils.compare(seqBp.get(iterSS), bp) && Index.MAIN_CFG.getBoolVal("auto_ss_adv")) {
+                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
+                }
+            }
         }
     }
 
@@ -231,6 +243,7 @@ public class DeviceIssue extends Module {
         list.add(new SetsData<>("ss_del", "Delay ticks", ValType.NUMBER, "3"));
         list.add(new SetsData<>("auto_ss_click", "Auto SS clicks", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_ss_speed", "Auto SS speed", ValType.DOUBLE_NUMBER, "7.5"));
+        list.add(new SetsData<>("auto_ss_adv", "Use advanced detect alg", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("render_ss_step", "Render clicks on SS", ValType.BOOLEAN, "true"));
         return list;
     }
