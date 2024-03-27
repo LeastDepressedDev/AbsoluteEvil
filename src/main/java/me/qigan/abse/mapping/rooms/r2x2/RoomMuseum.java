@@ -65,8 +65,8 @@ public class RoomMuseum extends RoomTemplate {
                 new BBox(-27, 70, 30, -28, 70, 32, Blocks.air),
                 new BBox(22, 89, 29, 22, 88, 33, Blocks.air),
                 new BBox(17, 81, 35, 17, 81, 35, Blocks.air),
-                new BBox(22, 69, 38, 23, 69, 38, Blocks.stained_glass),
-                new BBox(23, 69, 39, 23, 69, 39, Blocks.stained_glass),
+                new BBox(22, 68, 38, 23, 68, 38, Blocks.stained_glass),
+                new BBox(23, 68, 39, 23, 68, 39, Blocks.stained_glass),
                 new BBox(22, 68, 39, 22, 65, 39, Blocks.air),
                 new BBox(22, 66, 39, 22, 65, 41, Blocks.air)
         );
