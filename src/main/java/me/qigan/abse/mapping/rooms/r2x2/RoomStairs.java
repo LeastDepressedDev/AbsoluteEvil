@@ -53,7 +53,7 @@ public class RoomStairs extends RoomTemplate {
                 new AddressedData<>(new BlockPos(8, 88, 31), Color.green),
                 new AddressedData<>(new BlockPos(7, 86, 37), Color.green)
         ).blocks(
-                new BBox(3, 86, 44, 2, 87, 44, Blocks.air)
+                new BBox(3, 86, 44, 2, 87, 44, Blocks.air.getDefaultState())
         );
     }
 }

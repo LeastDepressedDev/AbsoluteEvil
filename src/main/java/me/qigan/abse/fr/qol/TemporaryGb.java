@@ -6,6 +6,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.crp.MainWrapper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -19,10 +20,10 @@ public class TemporaryGb extends Module {
 
     public static class TempGb {
         public final BlockPos pos;
-        public final Block block;
+        public final IBlockState block;
         public int tick;
 
-        public TempGb(BlockPos pos, Block block, int tick) {
+        public TempGb(BlockPos pos, IBlockState block, int tick) {
             this.pos = pos;
             this.block = block;
             this.tick = tick;
@@ -50,12 +51,12 @@ public class TemporaryGb extends Module {
             if (MainWrapper.Keybinds.ghostChest.isPressed()) {
                 BlockPos np = pos.add(0, 1, 0);
                 if (Minecraft.getMinecraft().theWorld.getBlockState(np).getBlock() == Blocks.air) {
-                    if (!container.contains(np)) temps.add(new TempGb(np, Blocks.ender_chest, Index.MAIN_CFG.getIntVal("temp_gb_time")));
+                    if (!container.contains(np)) temps.add(new TempGb(np, Blocks.ender_chest.getDefaultState(), Index.MAIN_CFG.getIntVal("temp_gb_time")));
                 }
             }
             if (MainWrapper.Keybinds.tempGhostBlocks.isKeyDown()) {
                 if (block != Blocks.air && block != null) {
-                    if (!container.contains(pos)) temps.add(new TempGb(pos, Blocks.air, Index.MAIN_CFG.getIntVal("temp_gb_time")));
+                    if (!container.contains(pos)) temps.add(new TempGb(pos, Blocks.air.getDefaultState(), Index.MAIN_CFG.getIntVal("temp_gb_time")));
                 }
             }
             for (TempGb t : temps) {

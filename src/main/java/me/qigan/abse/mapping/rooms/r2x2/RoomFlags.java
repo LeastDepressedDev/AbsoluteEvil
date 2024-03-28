@@ -71,7 +71,7 @@ public class RoomFlags extends RoomTemplate {
                 new AddressedData<>(new BlockPos(-5, 77, 52), Color.green),
                 new AddressedData<>(new BlockPos(-11, 87, 59), Color.green)
         ).blocks(
-                new BBox(9, 70, 52, 8, 71, 52, Blocks.air)
+                new BBox(9, 70, 52, 8, 71, 52, Blocks.air.getDefaultState())
         );
     }
 }

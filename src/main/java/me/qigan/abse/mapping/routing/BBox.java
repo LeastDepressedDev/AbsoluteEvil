@@ -3,6 +3,7 @@ package me.qigan.abse.mapping.routing;
 import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.mapping.Room;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
 public class BBox {
@@ -13,10 +14,10 @@ public class BBox {
     public final int y2;
     public final int z2;
 
-    public Block block;
+    public IBlockState block;
 
 
-    public BBox(int x1, int y1, int z1, int x2, int y2, int z2, Block bts) {
+    public BBox(int x1, int y1, int z1, int x2, int y2, int z2, IBlockState bts) {
         this.x1 = x1;
         this.y1 = y1;
         this.z1 = z1;

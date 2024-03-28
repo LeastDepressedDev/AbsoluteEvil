@@ -74,8 +74,8 @@ public class RoomBridges extends RoomTemplate {
                         new AddressedData<>(new BlockPos(27, 93, 49), Color.green)
                 )
                 .blocks(
-                        new BBox(11, 59, 51, 15, 58, 51, Blocks.air),
-                        new BBox(15, 57, 51, 15, 57, 51, Blocks.air)
+                        new BBox(11, 59, 51, 15, 58, 51, Blocks.air.getDefaultState()),
+                        new BBox(15, 57, 51, 15, 57, 51, Blocks.air.getDefaultState())
                 );
     }
 }

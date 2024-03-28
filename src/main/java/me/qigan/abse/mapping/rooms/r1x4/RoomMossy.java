@@ -46,9 +46,9 @@ public class RoomMossy extends RoomTemplate {
                 new AddressedData<>(new BlockPos(15, 95, 63), Color.green),
                 new AddressedData<>(new BlockPos(26, 89, 47), Color.green)
         ).blocks(
-                new BBox(23, 90, 49, 24, 91, 47, Blocks.air),
-                new BBox(22, 70, 4, 25, 70, 5, Blocks.air),
-                new BBox(25, 69, 4, 25, 69, 4, Blocks.air)
+                new BBox(23, 90, 49, 24, 91, 47, Blocks.air.getDefaultState()),
+                new BBox(22, 70, 4, 25, 70, 5, Blocks.air.getDefaultState()),
+                new BBox(25, 69, 4, 25, 69, 4, Blocks.air.getDefaultState())
         );
     }
 }

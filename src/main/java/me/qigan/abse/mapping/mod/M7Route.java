@@ -8,6 +8,7 @@ import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.mapping.routing.BBox;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
@@ -46,8 +47,8 @@ public class M7Route extends Module {
         register(new DynamicRouteElement(new BlockPos(91, 132, 45), Blocks.redstone_block, Blocks.emerald_block) {
             @Override
             public void run() {
-                new BBox(90, 131, 44, 91, 132, 46, Blocks.air).run();
-                new BBox(88, 131, 46, 91, 132, 46, Blocks.air).run();
+                new BBox(90, 131, 44, 91, 132, 46, Blocks.air.getDefaultState()).run();
+                new BBox(88, 131, 46, 91, 132, 46, Blocks.air.getDefaultState()).run();
             }
         });
     }
@@ -57,24 +58,30 @@ public class M7Route extends Module {
     }
 
     public static List<BBox> bounds = new ArrayList<BBox>(Arrays.asList(
-            new BBox(85, 219, 61, 92, 213, 61, Blocks.air),
-            new BBox(91, 165, 41, 95, 167, 40, Blocks.air),
-            new BBox(54, 64, 80, 54, 63, 78, Blocks.air),
-            new BBox(57, 108, 123, 56, 111, 118, Blocks.air),
-            new BBox(88, 165, 41, 95, 166, 41, Blocks.oak_fence),
-            new BBox(75, 221, 38, 76, 221, 38, Blocks.ender_chest),
-            new BBox(75, 220, 38, 76, 220, 38, Blocks.air),
-            new BBox(51, 114, 112, 51, 114, 112, Blocks.ender_chest),
-            new BBox(100, 167, 47, 100, 165, 46, Blocks.air),
-            new BBox(100, 169, 46, 100, 169, 46, Blocks.ender_chest),
-            new BBox(52, 114, 111, 51, 114, 111, Blocks.ender_chest),
-            new BBox(52, 113, 111, 51, 113, 111, Blocks.air),
-            new BBox(72, 106,142, 63, 106, 123, Blocks.rail),
-            new BBox(57, 106, 132, 52, 106, 136, Blocks.rail),
-            new BBox(20, 130, 135, 15, 128, 137, Blocks.air),
-            new BBox(20, 130, 135, 18, 132, 135, Blocks.oak_fence),
-            new BBox(52, 132, 140, 39, 136, 140, Blocks.stained_glass),
-            new BBox(32, 133, 137, 52, 132, 137, Blocks.stained_glass)
+            new BBox(85, 219, 61, 92, 213, 61, Blocks.air.getDefaultState()),
+            new BBox(91, 165, 41, 95, 167, 40, Blocks.air.getDefaultState()),
+            new BBox(54, 64, 80, 54, 63, 78, Blocks.air.getDefaultState()),
+            new BBox(57, 108, 123, 56, 111, 118, Blocks.air.getDefaultState()),
+            new BBox(88, 165, 41, 95, 166, 41, Blocks.oak_fence.getDefaultState()),
+            new BBox(75, 221, 38, 76, 221, 38, Blocks.ender_chest.getDefaultState()),
+            new BBox(75, 220, 38, 76, 220, 38, Blocks.air.getDefaultState()),
+            new BBox(51, 114, 112, 51, 114, 112, Blocks.ender_chest.getDefaultState()),
+            new BBox(100, 167, 47, 100, 165, 46, Blocks.air.getDefaultState()),
+            new BBox(100, 169, 46, 100, 169, 46, Blocks.ender_chest.getDefaultState()),
+            new BBox(52, 114, 111, 51, 114, 111, Blocks.ender_chest.getDefaultState()),
+            new BBox(52, 113, 111, 51, 113, 111, Blocks.air.getDefaultState()),
+            new BBox(72, 106,142, 63, 106, 123, Blocks.rail.getDefaultState()),
+            new BBox(53, 106, 137, 55, 106, 139, Blocks.rail.getDefaultState()),
+//            new BBox(20, 130, 135, 15, 128, 137, Blocks.air.getDefaultState()),
+//            new BBox(20, 130, 135, 18, 132, 135, Blocks.oak_fence.getDefaultState()),
+            new BBox(17, 131, 136, 18, 128, 135, Blocks.air.getDefaultState()),
+            new BBox(18, 131, 135, 18, 131, 136,
+                    Blocks.wooden_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP)),
+            new BBox(19, 132, 135, 20, 129, 135, Blocks.oak_fence.getDefaultState()),
+            new BBox(52, 132, 140, 39, 136, 140, Blocks.stained_glass.getDefaultState()),
+            new BBox(32, 132, 137, 57, 136, 137, Blocks.stained_glass.getDefaultState()),
+            new BBox(52, 106, 137, 52, 129, 139, Blocks.stained_glass.getDefaultState()),
+            new BBox(85, 118, 35, 83, 106, 35, Blocks.stained_glass.getDefaultState())
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();
@@ -91,7 +98,7 @@ public class M7Route extends Module {
                     b.run();
                 }
                 for (Map.Entry<BlockPos, DynamicRouteElement> etr : dynamics.entrySet()) {
-                    GhostBlocks.placeBlock(etr.getKey(), etr.getValue().before);
+                    GhostBlocks.placeBlock(etr.getKey(), etr.getValue().before.getDefaultState());
                 }
                 Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7a[ABSE] Healer route set!"));
                 this.readyUp = false;
@@ -116,7 +123,7 @@ public class M7Route extends Module {
             BlockPos bp = Utils.unify(e.pos);
             DynamicRouteElement ele = dynamics.get(bp);
             if (ele != null && Minecraft.getMinecraft().theWorld.getBlockState(bp).getBlock() == ele.before) {
-                GhostBlocks.placeBlock(bp, ele.after);
+                GhostBlocks.placeBlock(bp, ele.after.getDefaultState());
                 ele.run();
                 e.setCanceled(true);
             }

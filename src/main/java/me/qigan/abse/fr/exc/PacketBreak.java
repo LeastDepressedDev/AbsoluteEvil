@@ -60,7 +60,7 @@ public class PacketBreak extends Module implements EDLogic {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
-        list.add(new SetsData<>("packet_bk_time", "Time[Seconds]", ValType.NUMBER, "10"));
+        list.add(new SetsData<>("packet_bk_time", "Time[Seconds]", ValType.DOUBLE_NUMBER, "10"));
         list.add(new SetsData<>("packet_bk_m7", "Auto freeze on m7", ValType.BOOLEAN, "false"));
         return list;
     }
@@ -69,7 +69,7 @@ public class PacketBreak extends Module implements EDLogic {
         GuiNotifier.call("\u00A7cSTUNNED", 5, true, 0xFFFFFF);
         Index.MAIN_CFG.set("packet_bk", "false");
         long start = System.nanoTime();
-        int sec_time = Index.MAIN_CFG.getIntVal("packet_bk_time");
+        double sec_time = Index.MAIN_CFG.getDoubleVal("packet_bk_time");
         while ((double) (System.nanoTime() - start) / 1000000000d < sec_time) {}
         Minecraft.getMinecraft().displayGuiScreen(null);
     }

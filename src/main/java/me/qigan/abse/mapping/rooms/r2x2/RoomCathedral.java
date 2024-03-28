@@ -80,9 +80,9 @@ public class RoomCathedral extends RoomTemplate {
                 new AddressedData<>(new BlockPos(26, 84, 59), Color.green),
                 new AddressedData<>(new BlockPos(7, 58, 49), Color.green)
         ).blocks(
-                new BBox(-3, 65, 41, -3, 64, 41, Blocks.air),
-                new BBox(-16, 87, 20, -15, 86, 20, Blocks.air),
-                new BBox(6, 83, 2, 6, 83, 2, Blocks.air)
+                new BBox(-3, 65, 41, -3, 64, 41, Blocks.air.getDefaultState()),
+                new BBox(-16, 87, 20, -15, 86, 20, Blocks.air.getDefaultState()),
+                new BBox(6, 83, 2, 6, 83, 2, Blocks.air.getDefaultState())
         );
     }
 }

@@ -151,7 +151,7 @@ public class DeviceIssue extends Module {
                 });
                 SmoothAimControl.set(vecs, 2, 23, Index.MAIN_CFG.getDoubleVal("auto_ss_speed"));
                 BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
-                if (Utils.compare(seqBp.get(iterSS), bp) && !Index.MAIN_CFG.getBoolVal("auto_ss_adv")) {
+                if (Utils.compare(seqBp.get(iterSS), bp) /*&& !Index.MAIN_CFG.getBoolVal("auto_ss_adv")*/) {
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
                 }
             }
@@ -214,12 +214,12 @@ public class DeviceIssue extends Module {
                 }
             }
 
-            if (phase && MainWrapper.Keybinds.ssKey.isKeyDown() && Index.MAIN_CFG.getBoolVal("auto_ss_click") && iterSS < seqBp.size()) {
-                BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
-                if (Utils.compare(seqBp.get(iterSS), bp) && Index.MAIN_CFG.getBoolVal("auto_ss_adv")) {
-                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
-                }
-            }
+//            if (phase && MainWrapper.Keybinds.ssKey.isKeyDown() && Index.MAIN_CFG.getBoolVal("auto_ss_click") && iterSS < seqBp.size()) {
+//                BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
+//                if (Utils.compare(seqBp.get(iterSS), bp) && Index.MAIN_CFG.getBoolVal("auto_ss_adv")) {
+//                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
+//                }
+//            }
         }
     }
 

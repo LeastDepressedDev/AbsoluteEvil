@@ -9,6 +9,8 @@ import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -38,11 +40,11 @@ public class GhostBlocks extends Module {
     /**
      * In addressed data: 1 is new block, 2 is old block
      */
-    public static Map<BlockPos, AddressedData<Block, Block>> blocks = new HashMap<>();
+    public static Map<BlockPos, AddressedData<IBlockState, IBlockState>> blocks = new HashMap<>();
 
-    public static boolean placeBlock(BlockPos pos, Block block) {
-        Block pb = Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock();
-        if (excepts.contains(pb) && !Index.MAIN_CFG.getBoolVal("ignore_except") || pb == Blocks.bed) return false;
+    public static boolean placeBlock(BlockPos pos, IBlockState block) {
+        IBlockState pb = Minecraft.getMinecraft().theWorld.getBlockState(pos);
+        if (excepts.contains(pb.getBlock()) && !Index.MAIN_CFG.getBoolVal("ignore_except") || pb.getBlock() == Blocks.bed) return false;
         blocks.put(pos, new AddressedData<>(block, pb));
         return true;
     }
@@ -50,7 +52,7 @@ public class GhostBlocks extends Module {
     public static boolean placeBlockLegacy(BlockPos pos, Block block) {
         if (excepts.contains(Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock())
                 && !Index.MAIN_CFG.getBoolVal("ignore_except")) return false;
-        Minecraft.getMinecraft().theWorld.setBlockState(pos, Blocks.air.getDefaultState());
+        Minecraft.getMinecraft().theWorld.setBlockState(pos, block.getDefaultState());
         return true;
     }
 
@@ -58,7 +60,7 @@ public class GhostBlocks extends Module {
     void renderWorldLast(RenderWorldLastEvent e) {
         if (Minecraft.getMinecraft().theWorld == null) return;
         if (!Index.MAIN_CFG.getBoolVal("render_gb_box")) return;
-        for (Map.Entry<BlockPos, AddressedData<Block, Block>> bp : blocks.entrySet()) {
+        for (Map.Entry<BlockPos, AddressedData<IBlockState, IBlockState>> bp : blocks.entrySet()) {
             if (bp.getKey() == null) continue;
             Esp.autoBox3D(bp.getKey().getX()+0.5, bp.getKey().getY()+1, bp.getKey().getZ()+0.5, 1, 1 , new Color(255, 0,0, 255), 2f, false);
         }
@@ -69,8 +71,8 @@ public class GhostBlocks extends Module {
         if (Minecraft.getMinecraft().theWorld == null) return;
         if (tick >= Integer.parseInt(Index.MAIN_CFG.getStrVal("tick_upt"))) {
             tick = 0;
-            for (Map.Entry<BlockPos, AddressedData<Block, Block>> bp : blocks.entrySet()) {
-                Minecraft.getMinecraft().theWorld.setBlockState(bp.getKey(), bp.getValue().getNamespace().getDefaultState());
+            for (Map.Entry<BlockPos, AddressedData<IBlockState, IBlockState>> bp : blocks.entrySet()) {
+                Minecraft.getMinecraft().theWorld.setBlockState(bp.getKey(), bp.getValue().getNamespace());
             }
         } else {
             tick++;
@@ -78,15 +80,15 @@ public class GhostBlocks extends Module {
     }
 
     public static void restore(BlockPos pos) {
-        Block gb = blocks.get(pos).getObject();
+        IBlockState gb = blocks.get(pos).getObject();
         blocks.remove(pos);
-        Minecraft.getMinecraft().theWorld.setBlockState(pos, gb.getDefaultState());
+        Minecraft.getMinecraft().theWorld.setBlockState(pos, gb);
     }
 
     public static void grestore() {
         TemporaryGb.grestore();
         while (blocks.size() > 0) {
-            AddressedData<BlockPos, AddressedData<Block, Block>> data = Utils.mapToAddressedDataList(blocks).get(0);
+            AddressedData<BlockPos, AddressedData<IBlockState, IBlockState>> data = Utils.mapToAddressedDataList(blocks).get(0);
             restore(data.getNamespace());
         }
     }
@@ -100,7 +102,7 @@ public class GhostBlocks extends Module {
             BlockPos pos = Minecraft.getMinecraft().thePlayer.rayTrace(5, 1).getBlockPos();
             Block block = Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock();
             if (MainWrapper.Keybinds.ghostBlocks.isKeyDown()) {
-                if (block != Blocks.air && block != null) placeBlock(pos, Blocks.air);
+                if (block != Blocks.air && block != null) placeBlock(pos, Blocks.air.getDefaultState());
             }
             if (MainWrapper.Keybinds.legGhostBlocks.isKeyDown()) {
                 placeBlockLegacy(pos, Blocks.air);

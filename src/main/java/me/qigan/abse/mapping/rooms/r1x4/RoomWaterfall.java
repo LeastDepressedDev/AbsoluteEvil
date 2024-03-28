@@ -81,7 +81,7 @@ public class RoomWaterfall extends RoomTemplate {
                 new AddressedData<>(new BlockPos(3, 44, 53), Color.green),
                 new AddressedData<>(new BlockPos(3, 46, 88), Color.green)
         ).blocks(
-                new BBox(7, 82, 40, 9, 85, 38, Blocks.air)
+                new BBox(7, 82, 40, 9, 85, 38, Blocks.air.getDefaultState())
         );
     }
 }

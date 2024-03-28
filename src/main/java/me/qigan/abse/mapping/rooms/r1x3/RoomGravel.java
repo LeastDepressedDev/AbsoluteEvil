@@ -60,8 +60,8 @@ public class RoomGravel extends RoomTemplate {
                 new AddressedData<>(new BlockPos(19, 69, 3), Color.green),
                 new AddressedData<>(new BlockPos(19, 91, 7), Color.green)
         ).blocks(
-                new BBox(5, 70, 30, 5, 69, 32, Blocks.air),
-                new BBox(22, 71, 3, 19, 70, 4, Blocks.air)
+                new BBox(5, 70, 30, 5, 69, 32, Blocks.air.getDefaultState()),
+                new BBox(22, 71, 3, 19, 70, 4, Blocks.air.getDefaultState())
         );
     }
 }

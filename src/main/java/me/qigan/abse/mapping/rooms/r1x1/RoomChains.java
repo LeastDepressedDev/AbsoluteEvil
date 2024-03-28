@@ -29,7 +29,7 @@ public class RoomChains extends RoomTemplate {
     @Override
     public Route route() {
         return super.route().blocks(
-            new BBox(19, 70, 24, 20, 69, 26, Blocks.air)
+            new BBox(19, 70, 24, 20, 69, 26, Blocks.air.getDefaultState())
         ).outlines(
                 new AddressedData<>(new BlockPos(15, 84, 13), Color.cyan)
         );

@@ -23,7 +23,7 @@ public class PickaxePlus extends Module {
                 if (Minecraft.getMinecraft().thePlayer.getHeldItem() == null) return;
                 if (TagConstants.PICKAXES.contains(Minecraft.getMinecraft().thePlayer.getHeldItem().getItem())) {
                     C07PacketPlayerDigging ev = (C07PacketPlayerDigging) e.packet;
-                    GhostBlocks.placeBlock(ev.getPosition(), Blocks.air);
+                    GhostBlocks.placeBlock(ev.getPosition(), Blocks.air.getDefaultState());
                 }
             }
         }

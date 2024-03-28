@@ -118,11 +118,11 @@ public class RoomMines extends RoomTemplate {
                 new AddressedData<>(new BlockPos(-20, 43, 60), Color.green),
                 new AddressedData<>(new BlockPos(-25, 53, 5), Color.green)
         ).blocks(
-                new BBox(10, 82, 10, 10, 82, 8, Blocks.air),
-                new BBox(9, 111, 5, 8, 110, 5, Blocks.air),
-                new BBox(-3, 112, 6, -9, 111, 6, Blocks.air),
-                new BBox(-29, 91, 29, -29, 90, 30, Blocks.air),
-                new BBox(-20, 79, 53, -20, 78, 53, Blocks.air)
+                new BBox(10, 82, 10, 10, 82, 8, Blocks.air.getDefaultState()),
+                new BBox(9, 111, 5, 8, 110, 5, Blocks.air.getDefaultState()),
+                new BBox(-3, 112, 6, -9, 111, 6, Blocks.air.getDefaultState()),
+                new BBox(-29, 91, 29, -29, 90, 30, Blocks.air.getDefaultState()),
+                new BBox(-20, 79, 53, -20, 78, 53, Blocks.air.getDefaultState())
         ).comments(
                 new AddressedData<>(new BlockPos(21, 80, 52), "\u00A7aTNT here")
         );

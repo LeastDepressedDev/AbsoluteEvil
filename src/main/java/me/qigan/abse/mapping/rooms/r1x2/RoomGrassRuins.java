@@ -61,8 +61,8 @@ public class RoomGrassRuins extends RoomTemplate {
                 new AddressedData<>(new BlockPos(6, 53, 31), Color.red),
                 new AddressedData<>(new BlockPos(16, 55, 3), Color.green)
         ).blocks(
-                new BBox(7, 81, 46, 5, 81, 47, Blocks.air),
-                new BBox(8, 55, 37, 8, 54, 34, Blocks.air)
+                new BBox(7, 81, 46, 5, 81, 47, Blocks.air.getDefaultState()),
+                new BBox(8, 55, 37, 8, 54, 34, Blocks.air.getDefaultState())
         );
     }
 }
