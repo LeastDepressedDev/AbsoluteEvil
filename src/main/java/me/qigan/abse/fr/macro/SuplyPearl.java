@@ -32,7 +32,7 @@ public class SuplyPearl extends Module {
                 new Thread(() -> {
                     try {
                         Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot;
-                        Thread.sleep(5);
+                        Thread.sleep(1);
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
