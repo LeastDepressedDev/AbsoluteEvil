@@ -39,7 +39,7 @@ public class MappingController {
     public static List<BlockPos> debug = new ArrayList<>();
 
 
-    public static final boolean DO_DEBUG_RENDER = true;
+    public static final boolean DO_DEBUG_RENDER = false;
 
     public int[][] map = null;
     public Map<Integer, Room> roomMap = new HashMap<>();

@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.dungons;
+package me.qigan.abse.fr.dungons.m7p3;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;

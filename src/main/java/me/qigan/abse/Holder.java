@@ -9,6 +9,8 @@ import me.qigan.abse.crp.Experimental;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.crp.SafeMode;
 import me.qigan.abse.fr.*;
+import me.qigan.abse.fr.dungons.m7p3.DeviceIssue;
+import me.qigan.abse.fr.dungons.m7p3.Terminals;
 import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.kuudra.AutoRefillPearls;
 import me.qigan.abse.fr.macro.AutoDebuff;
@@ -54,6 +56,7 @@ public class Holder {
 		register(new BonzoCorrector());
 		register(new M7Visuals());
 		register(new M7Dragons());
+		register(new Terminals());
 		register(new SFUtils());
 		register(new GhostUtils());
 		register(new AutoDebuff());
