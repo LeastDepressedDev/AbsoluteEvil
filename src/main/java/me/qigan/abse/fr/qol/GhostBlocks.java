@@ -32,8 +32,7 @@ public class GhostBlocks extends Module {
             Blocks.obsidian,
             Blocks.chest,
             Blocks.trapped_chest,
-            Blocks.lever,
-            Blocks.torch
+            Blocks.lever
     ));
 
     public static int tick = 0;
