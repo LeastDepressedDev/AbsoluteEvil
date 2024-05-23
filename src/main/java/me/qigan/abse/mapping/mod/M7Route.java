@@ -81,7 +81,9 @@ public class M7Route extends Module {
             new BBox(52, 132, 140, 39, 136, 140, Blocks.stained_glass.getDefaultState()),
             new BBox(32, 132, 137, 57, 136, 137, Blocks.stained_glass.getDefaultState()),
             new BBox(52, 106, 137, 52, 129, 139, Blocks.stained_glass.getDefaultState()),
-            new BBox(85, 118, 35, 83, 106, 35, Blocks.stained_glass.getDefaultState())
+            new BBox(85, 118, 35, 83, 106, 35, Blocks.stained_glass.getDefaultState()),
+            new BBox(58, 134, 142, 58, 134, 142, Blocks.lapis_block.getDefaultState()),
+            new BBox(58, 123, 122,57, 125, 118, Blocks.air.getDefaultState())
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();
