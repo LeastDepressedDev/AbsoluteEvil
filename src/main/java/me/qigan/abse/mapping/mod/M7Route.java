@@ -79,11 +79,26 @@ public class M7Route extends Module {
                     Blocks.wooden_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP)),
             new BBox(19, 132, 135, 20, 129, 135, Blocks.oak_fence.getDefaultState()),
             new BBox(52, 132, 140, 39, 136, 140, Blocks.stained_glass.getDefaultState()),
-            new BBox(32, 132, 137, 57, 136, 137, Blocks.stained_glass.getDefaultState()),
+            new BBox(32, 132, 137, 60, 136, 137, Blocks.stained_glass.getDefaultState()),
             new BBox(52, 106, 137, 52, 129, 139, Blocks.stained_glass.getDefaultState()),
             new BBox(85, 118, 35, 83, 106, 35, Blocks.stained_glass.getDefaultState()),
             new BBox(58, 134, 142, 58, 134, 142, Blocks.lapis_block.getDefaultState()),
-            new BBox(58, 123, 122,57, 125, 118, Blocks.air.getDefaultState())
+            new BBox(62, 134, 142, 62, 134, 142, Blocks.lapis_block.getDefaultState()),
+            new BBox(86, 128, 46, 86, 128, 46, Blocks.lapis_block.getDefaultState()),
+            new BBox(58, 123, 122,57, 125, 118, Blocks.air.getDefaultState()),
+            new BBox(15, 113, 104, 6, 113, 104,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(6, 113, 103, 6, 113, 105,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(11, 113, 105, 11, 113, 103,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(1, 113, 86, 10, 113, 86,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(5, 113, 85, 5, 113, 87,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(10, 113, 85, 10, 113, 87,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(65, 127, 37, 67, 129, 37, Blocks.stained_glass.getDefaultState())
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();
