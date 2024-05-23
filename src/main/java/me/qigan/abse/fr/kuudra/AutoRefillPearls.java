@@ -28,6 +28,12 @@ public class AutoRefillPearls extends Module {
         return -1;
     }
 
+    private static void proc() {
+        int c = checkCount();
+        if (c == -1 || c == 16) return;
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/gfs ender_pearl " + Integer.toString(16-c));
+    }
+
     private static int tick = -1;
 
     @SubscribeEvent
@@ -40,11 +46,7 @@ public class AutoRefillPearls extends Module {
     void tick(TickEvent.ClientTickEvent e) {
         if (e.phase == TickEvent.Phase.END || Minecraft.getMinecraft().thePlayer == null) return;
         if (tick > -1) tick--;
-        if (tick == 0) {
-            int c = checkCount();
-            if (c == -1 || c == 16) return;
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/gfs ender_pearl " + Integer.toString(16-c));
-        }
+        if (tick == 0) proc();
     }
 
     @Override
@@ -61,6 +63,7 @@ public class AutoRefillPearls extends Module {
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("arefillp_t", "Delay[tick]", ValType.NUMBER, "100"));
+        list.add(new SetsData<>("arefillp_but", "Manual refill", ValType.BUTTON, (Runnable) AutoRefillPearls::proc));
         return list;
     }
 
