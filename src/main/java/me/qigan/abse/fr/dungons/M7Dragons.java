@@ -88,6 +88,7 @@ public class M7Dragons extends Module {
 
     public static Set<DRAGON> done = new HashSet<>();
     public static Map<DRAGON, Long> spawning = new HashMap<>();
+    public static final int SOUND_VOL = 5;
 
     public static boolean started = false;
     public static boolean first = true;
@@ -115,6 +116,9 @@ public class M7Dragons extends Module {
                 if (s.getSoundName().equalsIgnoreCase("random.explode") && started) {
                     if (!done.contains(drag)) {
                         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(drag.name + " is done!"));
+                        for (int i = 0; i < SOUND_VOL; i++) {
+                            Minecraft.getMinecraft().thePlayer.playSound("abse:skeet_hit", 1f, 1f);
+                        }
                         done.add(drag);
                     }
                 }
@@ -191,7 +195,7 @@ public class M7Dragons extends Module {
             }
             if (to != null) currentPath = new Path(Sync.playerPosAsBlockPos(), to).build();
         }
-        GuiNotifier.call(dragon.name, 40, true, 0xFFFFFF);
+        if (!done.contains(dragon)) GuiNotifier.call(dragon.name, 40, true, 0xFFFFFF);
     }
 
     DRAGON check(BlockPos pos) {

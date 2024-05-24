@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.qol;
+package me.qigan.abse.fr.other;
 
 import me.qigan.abse.crp.Module;
 import net.minecraft.client.Minecraft;
