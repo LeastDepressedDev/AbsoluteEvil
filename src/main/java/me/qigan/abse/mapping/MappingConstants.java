@@ -8,7 +8,7 @@ import java.util.*;
 
 public class MappingConstants {
 
-    public static final BlockPos[] MAP_BOUNDS = new BlockPos[]{new BlockPos(-200, 255, -200), new BlockPos(-10, 255, -10)};
+    public static final BlockPos[] MAP_BOUNDS = new BlockPos[]{new BlockPos(-200, 0, -200), new BlockPos(-10, 255, -10)};
     public static final int ROOM_SIZE = 30;
 
     public static final Set<Block> NOT_COLLIDABLE = new HashSet<>();

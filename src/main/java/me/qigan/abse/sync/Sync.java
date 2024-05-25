@@ -1,6 +1,7 @@
 package me.qigan.abse.sync;
 
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+import me.qigan.abse.mapping.MappingConstants;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
@@ -136,7 +137,7 @@ public class Sync {
     }
 
     public static boolean isClear() {
-        return inDungeon && mapExists();
+        return inDungeon && Utils.posInDim(Sync.playerPosAsBlockPos(), MappingConstants.MAP_BOUNDS);
     }
 
     @SubscribeEvent
