@@ -7,6 +7,8 @@ import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.TickTasks;
+import me.qigan.abse.mapping.MappingController;
+import me.qigan.abse.mapping.Room;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.block.Block;
@@ -66,6 +68,12 @@ public class SecretAura extends Module {
             BlockPos pos = Minecraft.getMinecraft().thePlayer.rayTrace(4.6d, 1f).getBlockPos();
             Block block = Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock();
             if (!(block == Blocks.chest || block == Blocks.trapped_chest || block == Blocks.lever)) return;
+            MappingController ctr = Index.MAPPING_CONTROLLER;
+            if (ctr.map != null && ctr.playerCell != null && ctr.roomMap != null) {
+                int iter = ctr.map[ctr.playerCell[0]][ctr.playerCell[1]];
+                Room rm = ctr.roomMap.get(iter);
+                if (rm != null && rm.getType() == Room.Type.PUZZLE) return;
+            }
             if (!clicked.contains(pos) && (System.currentTimeMillis()-force > Index.MAIN_CFG.getIntVal("secar_fd"))) {
                 force = System.currentTimeMillis();
                 new Thread(() -> {
