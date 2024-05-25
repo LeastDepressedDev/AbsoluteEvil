@@ -98,6 +98,7 @@ public class M7Route extends Module {
                     Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
             new BBox(10, 113, 85, 10, 113, 87,
                     Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
+            new BBox(3, 106, 90, 10, 106, 95, Blocks.rail.getDefaultState()),
             new BBox(65, 127, 37, 67, 129, 37, Blocks.stained_glass.getDefaultState())
             ));
 

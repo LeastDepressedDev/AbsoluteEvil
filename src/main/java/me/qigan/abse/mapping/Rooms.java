@@ -2,10 +2,12 @@ package me.qigan.abse.mapping;
 
 import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.mapping.rooms.r1x1.*;
+import me.qigan.abse.mapping.rooms.r1x2.RoomBalcony;
 import me.qigan.abse.mapping.rooms.r1x2.RoomBridges;
 import me.qigan.abse.mapping.rooms.r1x2.RoomGrassRuins;
 import me.qigan.abse.mapping.rooms.r1x2.RoomPedestal;
 import me.qigan.abse.mapping.rooms.r1x3.RoomGravel;
+import me.qigan.abse.mapping.rooms.r1x3.RoomRedBlue;
 import me.qigan.abse.mapping.rooms.r1x4.RoomMossy;
 import me.qigan.abse.mapping.rooms.r1x4.RoomWaterfall;
 import me.qigan.abse.mapping.rooms.r2x2.*;
@@ -39,7 +41,7 @@ public class Rooms {
      *
      *                                         ROOMS
      *
-     *                                   Current max id is 19
+     *                                   Current max id is 22
      *
      *
      *                                          ROUTING
@@ -78,6 +80,9 @@ public class Rooms {
         registerRoom(new RoomPedestal());
         registerRoom(new RoomLongHall());
         registerRoom(new RoomRails());
+        registerRoom(new RoomTemple());
+        registerRoom(new RoomRedBlue());
+        registerRoom(new RoomBalcony());
     }
 
     public static void registerRoom(RoomTemplate temple) {
