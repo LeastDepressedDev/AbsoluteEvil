@@ -51,6 +51,25 @@ public class M7Route extends Module {
                 new BBox(88, 131, 46, 91, 132, 46, Blocks.air.getDefaultState()).run();
             }
         });
+        register(new DynamicRouteElement(new BlockPos(91, 116, 44), Blocks.redstone_block, Blocks.emerald_block) {
+            @Override
+            public void run() {
+                new BBox(93, 115, 44, 93, 135, 45, Blocks.stained_glass.getDefaultState()).run();
+                new BBox(92, 130, 43, 92, 117, 43, Blocks.stained_glass.getDefaultState()).run();
+            }
+        });
+        register(new DynamicRouteElement(new BlockPos(80, 222, 52), Blocks.redstone_block, Blocks.emerald_block) {
+            @Override
+            public void run() {
+                new BBox(78, 240, 52, 78, 221, 52, Blocks.stained_glass.getDefaultState()).run();
+            }
+        });
+        register(new DynamicRouteElement(new BlockPos(66, 222, 52), Blocks.redstone_block, Blocks.emerald_block) {
+            @Override
+            public void run() {
+                new BBox(68, 240, 52, 68, 221, 52, Blocks.stained_glass.getDefaultState()).run();
+            }
+        });
     }
 
     public static void register(DynamicRouteElement e) {
@@ -99,10 +118,34 @@ public class M7Route extends Module {
             new BBox(10, 113, 85, 10, 113, 87,
                     Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
             new BBox(3, 106, 90, 10, 106, 95, Blocks.rail.getDefaultState()),
-            new BBox(65, 127, 37, 67, 129, 37, Blocks.stained_glass.getDefaultState())
+            new BBox(65, 127, 37, 67, 129, 37, Blocks.stained_glass.getDefaultState()),
+            new BBox(57, 116, 57, 58, 116, 56, Blocks.stained_glass.getDefaultState()),
+
+            new BBox(58, 115, 58, 57, 114, 52, Blocks.air.getDefaultState()),
+
+            new BBox(57, 116, 58, 58, 116, 58, Blocks.oak_fence.getDefaultState()),
+            new BBox(53, 114, 52, 52, 114, 53, Blocks.stained_glass.getDefaultState()),
+            new BBox(51, 114, 52, 51, 115, 59, Blocks.air.getDefaultState()),
+            new BBox(51, 115, 51, 52, 117, 51, Blocks.oak_fence.getDefaultState()),
+            new BBox(92, 107, 63, 92, 135, 66, Blocks.glass.getDefaultState()),
+            new BBox(92, 135, 106, 92, 107, 120, Blocks.glass.getDefaultState()),
+            new BBox(110, 135, 71, 108, 107, 70, Blocks.glass.getDefaultState()),
+            //new BBox(37, 130, 139, 50, 130, 138, Blocks.ender_chest.getDefaultState()),
+            new BBox(56, 114, 50, 57, 120, 50, Blocks.stained_glass.getDefaultState())
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();
+
+    public static void placeRoute() {
+        GhostBlocks.blocks.clear();
+        for (BBox b : bounds) {
+            b.run();
+        }
+        for (Map.Entry<BlockPos, DynamicRouteElement> etr : dynamics.entrySet()) {
+            GhostBlocks.placeBlock(etr.getKey(), etr.getValue().before.getDefaultState());
+        }
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7a[ABSE] Healer route set!"));
+    }
 
     //TODO: FIX THIS FUCKING SHIT
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -111,14 +154,7 @@ public class M7Route extends Module {
         try {
             //System.out.println(e.message.getFormattedText());
             if (e.entity instanceof EntityEnderCrystal && readyUp) {
-                GhostBlocks.blocks.clear();
-                for (BBox b : bounds) {
-                    b.run();
-                }
-                for (Map.Entry<BlockPos, DynamicRouteElement> etr : dynamics.entrySet()) {
-                    GhostBlocks.placeBlock(etr.getKey(), etr.getValue().before.getDefaultState());
-                }
-                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7a[ABSE] Healer route set!"));
+                placeRoute();
                 this.readyUp = false;
             }
         } catch (Exception ex) {}
@@ -161,6 +197,7 @@ public class M7Route extends Module {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("m7r_place", "Place route", ValType.BUTTON, (Runnable) M7Route::placeRoute));
         list.add(new SetsData<>("m7r_dg", "Use dynamic routes", ValType.BOOLEAN, "true"));
         return list;
     }

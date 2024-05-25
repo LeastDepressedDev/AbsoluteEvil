@@ -53,10 +53,7 @@ public class InCmd extends CommandBase{
 					sender.addChatMessage(new ChatComponentText("\u00A7a/abse ghosts reset - reset session ghost status."));
 				}
 			} else if (args[0].equalsIgnoreCase("m7")) {
-				for (BBox b : M7Route.bounds) {
-					b.run();
-				}
-				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("\u00A7a[ABSE] Healer route set!"));
+				M7Route.placeRoute();
 			} else if (args[0].equalsIgnoreCase("freeze")) {
 				PacketBreak.stun();
 			} else if (args[0].equalsIgnoreCase("crash")) {
