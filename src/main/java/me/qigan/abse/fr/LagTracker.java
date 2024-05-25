@@ -6,6 +6,8 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.vp.IntList;
+import net.minecraft.network.play.server.S00PacketKeepAlive;
+import net.minecraft.network.status.server.S01PacketPong;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,8 +23,15 @@ public class LagTracker extends Module {
     public static int ticks_since = 0;
     private static final IntList avgl = new IntList();
 
+    public static long ll = 0;
+
+    public static long diff() {
+        return System.currentTimeMillis()-ll;
+    }
+
     @SubscribeEvent
     void packetIn(PacketEvent.ReceiveEvent e) {
+        if (e.packet instanceof S01PacketPong || e.packet instanceof S00PacketKeepAlive) ll = System.currentTimeMillis();
         if (!isEnabled()) return;
         avgl.add(ticks_since);
         if (avgl.size() > Index.MAIN_CFG.getIntVal("lag_tracker_pulls")) avgl.remove(0);

@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.LagTracker;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.sync.Sync;
@@ -152,7 +153,7 @@ public class DeviceIssue extends Module {
                 SmoothAimControl.set(vecs, 2, 23, Index.MAIN_CFG.getDoubleVal("auto_ss_speed"));
                 BlockPos bp = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
                 if (Utils.compare(seqBp.get(iterSS), bp) /*&& !Index.MAIN_CFG.getBoolVal("auto_ss_adv")*/) {
-                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
+                    if (LagTracker.ticks_since < 3 && LagTracker.diff() < Index.MAIN_CFG.getIntVal("ss_l_control")) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("ss_hold"));
                 }
             }
         } else {
@@ -245,6 +246,7 @@ public class DeviceIssue extends Module {
         list.add(new SetsData<>("auto_ss_speed", "Auto SS speed", ValType.DOUBLE_NUMBER, "7.5"));
         list.add(new SetsData<>("auto_ss_adv", "Use advanced detect alg", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("render_ss_step", "Render clicks on SS", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("ss_l_control", "Lag control[ms]", ValType.NUMBER, "850"));
         return list;
     }
 
