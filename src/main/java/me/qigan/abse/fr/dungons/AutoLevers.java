@@ -53,7 +53,7 @@ public class AutoLevers extends Module {
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (!isEnabled() || e.phase == TickEvent.Phase.END
-                || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) return;
+                || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null || !Sync.inDungeon) return;
         try {
             BlockPos pos = Minecraft.getMinecraft().thePlayer
                     .rayTrace(Index.MAIN_CFG.getDoubleVal("aulev_dist"), 1f).getBlockPos();

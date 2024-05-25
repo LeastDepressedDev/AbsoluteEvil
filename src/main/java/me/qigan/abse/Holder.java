@@ -86,6 +86,8 @@ public class Holder {
 		register(new InguiDisplay());
 		register(new AutoBedBreaker());
 		register(new Remapping());
+		register(new SecretAura());
+		register(new SecretAura.SecretAuraRage());
 	}
 	
 	public static void register(Module mod) {
