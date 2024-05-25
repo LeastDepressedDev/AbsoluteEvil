@@ -6,6 +6,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.ClickSimTick;
+import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.block.Block;
@@ -15,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -27,6 +29,7 @@ import java.util.*;
 public class SecretAura extends Module {
 
     public static Set<BlockPos> clicked = new HashSet<>();
+    public static BlockPos last = null;
     public static long force = 0;
 
     @SubscribeEvent
@@ -43,7 +46,8 @@ public class SecretAura extends Module {
             if (c1.getLowerChestInventory().getName().startsWith("Chest") && c1.getLowerChestInventory().getSizeInventory() == 27) {
                 new Thread(() -> {
                     try {
-                        Thread.sleep((long) (Index.MAIN_CFG.getIntVal("secar_fclose_d")+Utils.createRandomDouble(-10, 10)));
+                        int v = Index.MAIN_CFG.getIntVal("secar_fclose_d");
+                        if (v >= 0) Thread.sleep(Math.max((long) (v+Utils.createRandomDouble(-10, 10)), 0));
                         Minecraft.getMinecraft().thePlayer.closeScreen();
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
@@ -59,7 +63,7 @@ public class SecretAura extends Module {
                 || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null
                 || !Sync.inDungeon || !Sync.isClear()) return;
         try {
-            BlockPos pos = Minecraft.getMinecraft().thePlayer.rayTrace(4.2d, 1f).getBlockPos();
+            BlockPos pos = Minecraft.getMinecraft().thePlayer.rayTrace(4.6d, 1f).getBlockPos();
             Block block = Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock();
             if (!(block == Blocks.chest || block == Blocks.trapped_chest || block == Blocks.lever)) return;
             if (!clicked.contains(pos) && (System.currentTimeMillis()-force > Index.MAIN_CFG.getIntVal("secar_fd"))) {
@@ -79,7 +83,16 @@ public class SecretAura extends Module {
     @SubscribeEvent
     void click(PlayerInteractEvent e) {
         if (e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
+        Block block = Minecraft.getMinecraft().theWorld.getBlockState(e.pos).getBlock();
+        if (!(block == Blocks.chest || block == Blocks.trapped_chest || block == Blocks.lever)) return;
+        last = e.pos;
         clicked.add(e.pos);
+    }
+
+    @SubscribeEvent
+    void chat(ClientChatReceivedEvent e) {
+        if (Utils.cleanSB(e.message.getFormattedText()).startsWith("That chest is locked!"))
+            TickTasks.call(() -> clicked.remove(last), 15);
     }
 
 

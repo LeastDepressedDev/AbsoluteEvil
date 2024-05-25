@@ -7,6 +7,7 @@ import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.mapping.Rooms;
 import me.qigan.abse.mapping.mod.M7Route;
 import me.qigan.abse.fr.exc.ClickSimTick;
@@ -102,6 +103,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new MCMainMenu());
         MinecraftForge.EVENT_BUS.register(new SmoothAimControl());
         MinecraftForge.EVENT_BUS.register(new ClickSimTick());
+        MinecraftForge.EVENT_BUS.register(new TickTasks());
         MinecraftForge.EVENT_BUS.register(new RouteUpdater());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
