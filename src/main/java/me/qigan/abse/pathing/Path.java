@@ -78,19 +78,26 @@ public class Path{
             path.add(pos);
             return;
         }
+        double distSQ = limit;
+        BlockPos dl = null;
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
                     BlockPos subPos = pos.add(x, y, z);
                     if (map.containsKey(subPos) && map.get(subPos) < map.get(pos)) {
-                        bph(subPos);
-                        path.add(subPos);
-                        return;
+                        if (pos.distanceSq(subPos) < distSQ) {
+                            distSQ = pos.distanceSq(subPos);
+                            dl = subPos;
+                        }
                     }
                 }
             }
         }
-        fail();
+        if (dl != null) {
+            bph(dl);
+            path.add(dl);
+        }
+        else fail();
     }
 
     private void fail() {
