@@ -1,5 +1,8 @@
 package me.qigan.abse.fr.macro;
 
+import me.qigan.abse.Index;
+import me.qigan.abse.config.SetsData;
+import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.ClickSimTick;
@@ -9,6 +12,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Macro
 public class LeapShortcut extends Module {
@@ -23,25 +29,29 @@ public class LeapShortcut extends Module {
         return -1;
     }
 
+    public static void call(boolean ret) {
+        new Thread(() -> {
+            try {
+                int slot = find();
+                if (slot == -1) return;
+                int pre = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
+                Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot;
+                Thread.sleep(70);
+                ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
+                if (ret) {
+                    Thread.sleep(40);
+                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = pre;
+                }
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        }).start();
+    }
+
     @SubscribeEvent
     void rendTick(RenderWorldLastEvent e) {
         if (!isEnabled() || !Sync.inDungeon) return;
-        if (MainWrapper.Keybinds.leapShortcut.isPressed()) {
-            new Thread(() -> {
-                try {
-                    int slot = find();
-                    if (slot == -1) return;
-                    int pre = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot;
-                    Thread.sleep(70);
-                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
-                    Thread.sleep(40);
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = pre;
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }).start();
-        }
+        if (MainWrapper.Keybinds.leapShortcut.isPressed()) call(Index.MAIN_CFG.getBoolVal("leapSC_back"));
     }
 
     @Override
@@ -52,6 +62,13 @@ public class LeapShortcut extends Module {
     @Override
     public String fname() {
         return "Leap shortcut";
+    }
+
+    @Override
+    public List<SetsData<?>> sets() {
+        List<SetsData<?>> list = new ArrayList<>();
+        list.add(new SetsData<>("leapSC_back", "Switch item back", ValType.BOOLEAN, "true"));
+        return list;
     }
 
     @Override
