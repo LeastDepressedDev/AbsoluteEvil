@@ -23,6 +23,7 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -49,6 +50,7 @@ public class AutoM7P4 extends Module {
     public static boolean exec = true;
     public static boolean swapping = false;
     private static boolean leap = false;
+    public static int lid = 0;
 
     public static int line = 0;
     public static int row = 0;
@@ -61,6 +63,36 @@ public class AutoM7P4 extends Module {
             if (Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(i).getItem() == Items.fishing_rod) return i;
         }
         return -1;
+    }
+
+    private static void warpAway() {
+        leap = true;
+        KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), false);
+        LeapShortcut.call(false);
+        TickTasks.call(() -> ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1), 3);
+        TickTasks.call(() -> {
+            if (Minecraft.getMinecraft().currentScreen instanceof GuiChest) {
+                GuiChest chest = (GuiChest) Minecraft.getMinecraft().currentScreen;
+                ContainerChest c1 = (ContainerChest) chest.inventorySlots;
+                for (int i = 0; i < 27; i++) {
+                    if (c1.getInventory().get(i) == null) continue;
+                    if (c1.getInventory().get(i).getItem() != Item.getItemFromBlock(Blocks.stained_glass_pane)) {
+                        Minecraft.getMinecraft().currentScreen
+                                .mc.playerController.windowClick(c1.windowId, i, 0, 1,
+                                        Minecraft.getMinecraft().currentScreen.mc.thePlayer);
+                        return;
+                    }
+                }
+                Minecraft.getMinecraft().thePlayer.closeScreen();
+            }
+        }, 10);
+    }
+
+    @SubscribeEvent
+    void chat(ClientChatReceivedEvent e) {
+        if (!Index.MAIN_CFG.getBoolVal("am7p4_warp") || !Utils.posInDim(Sync.playerPosAsBlockPos(), DIM, false)) return;
+        if (Utils.cleanSB(e.message.getFormattedText())
+                .startsWith(Minecraft.getMinecraft().thePlayer.getName()+" completed a device!")) warpAway();
     }
 
     @SubscribeEvent
@@ -83,25 +115,7 @@ public class AutoM7P4 extends Module {
             for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                 if (Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent) < 4 &&
                         Utils.cleanSB(ent.getName()).equalsIgnoreCase("Active")) {
-                    leap = true;
-                    KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), false);
-                    LeapShortcut.call(false);
-                    TickTasks.call(() -> {
-                        if (Minecraft.getMinecraft().currentScreen instanceof GuiChest) {
-                            GuiChest chest = (GuiChest) Minecraft.getMinecraft().currentScreen;
-                            ContainerChest c1 = (ContainerChest) chest.inventorySlots;
-                            for (int i = 0; i < 27; i++) {
-                                if (c1.getInventory().get(i) == null) continue;
-                                if (c1.getInventory().get(i).getItem() != Item.getItemFromBlock(Blocks.stained_glass_pane)) {
-                                    Minecraft.getMinecraft().currentScreen
-                                            .mc.playerController.windowClick(c1.windowId, i, 0, 1,
-                                                    Minecraft.getMinecraft().currentScreen.mc.thePlayer);
-                                    return;
-                                }
-                            }
-                            Minecraft.getMinecraft().thePlayer.closeScreen();
-                        }
-                    }, 10);
+                    warpAway();
                     return;
                 }
             }
@@ -123,11 +137,11 @@ public class AutoM7P4 extends Module {
                             return;
                         }
                         int pre = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
-
+                        long del = Index.MAIN_CFG.getIntVal("am7p4_inv_s");
                         Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot;
-                        Thread.sleep(80);
+                        Thread.sleep(del);
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
-                        Thread.sleep(50);
+                        Thread.sleep(del);
                         Minecraft.getMinecraft().thePlayer.inventory.currentItem = pre;
                         swapping = false;
                     } catch (InterruptedException ex) {
@@ -138,10 +152,12 @@ public class AutoM7P4 extends Module {
         }
 
         if (swapping) return;
+        boolean exist = false;
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 BlockPos pos = new BlockPos(startingPos).add(-x*2, -y*2, 0);
                 if (Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock() == Blocks.emerald_block) {
+                    exist = true;
                     if (!Utils.compare(pos, last)) {
                         count++;
                         last = pos;
@@ -161,10 +177,23 @@ public class AutoM7P4 extends Module {
         Float[] angles = Utils.getRotationsTo(Sync.playerPosAsBlockPos().add(0, 1, 0), startingPos.add(-1-2*line, -2*row, 0),
                 new float[]{Minecraft.getMinecraft().thePlayer.rotationYaw, Minecraft.getMinecraft().thePlayer.rotationPitch});
         angles[1]-=1.5f;
+        angles[0]-=0.5f;
 
-        KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Math.abs(angles[0] - Minecraft.getMinecraft().thePlayer.rotationYaw) < 2 &&
-                Math.abs(angles[1] - Minecraft.getMinecraft().thePlayer.rotationPitch) < 2);
-        if (last != null) SmoothAimControl.set(angles, 3, 23, 11);
+        if (exist) {
+            double p = Index.MAIN_CFG.getDoubleVal("am7p4_p");
+            if (lid <= 0) {
+                if (Math.abs(angles[0] - Minecraft.getMinecraft().thePlayer.rotationYaw) < p &&
+                        Math.abs(angles[1] - Minecraft.getMinecraft().thePlayer.rotationPitch) < p) {
+                    KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), true);
+                    lid = Index.MAIN_CFG.getIntVal("am7p4_d");
+                }
+            } else {
+                KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(),
+                        false);
+                lid--;
+            }
+        }
+        if (last != null) SmoothAimControl.set(angles, 3, 23, Index.MAIN_CFG.getDoubleVal("am7p4_s"));
     }
 
     @SubscribeEvent
@@ -188,10 +217,13 @@ public class AutoM7P4 extends Module {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
-        list.add(new SetsData<>("am7p4_del", "Shoot delay[ticks]", ValType.NUMBER, "8"));
+        list.add(new SetsData<>("am7p4_p", "Shoot click precision", ValType.DOUBLE_NUMBER, "0.4"));
+        list.add(new SetsData<>("am7p4_d", "Delay ticks", ValType.NUMBER, "8"));
+        list.add(new SetsData<>("am7p4_s", "Speed", ValType.DOUBLE_NUMBER, "14"));
         list.add(new SetsData<>("am7p4_warp", "Warp after", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("am7p4_warp_d", "Warp after delay[ticks]", ValType.NUMBER, "18"));
         list.add(new SetsData<>("am7p4_inv", "Inv control", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("am7p4_inv_s", "Inv control del[ms]", ValType.NUMBER, "80"));
         list.add(new SetsData<>("am7p4_inv_t", "Rod swap time[ms]", ValType.NUMBER, "700"));
         return list;
     }
