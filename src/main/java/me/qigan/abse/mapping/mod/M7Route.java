@@ -47,8 +47,8 @@ public class M7Route extends Module {
         register(new DynamicRouteElement(new BlockPos(91, 132, 45), Blocks.redstone_block, Blocks.emerald_block) {
             @Override
             public void run() {
-                new BBox(90, 131, 44, 91, 132, 46, Blocks.air.getDefaultState()).run();
-                new BBox(88, 131, 46, 91, 132, 46, Blocks.air.getDefaultState()).run();
+                new BBox(90, 131, 44, 91, 133, 46, Blocks.air.getDefaultState()).run();
+                new BBox(88, 131, 46, 91, 133, 46, Blocks.air.getDefaultState()).run();
             }
         });
         register(new DynamicRouteElement(new BlockPos(91, 116, 44), Blocks.redstone_block, Blocks.emerald_block) {
@@ -82,7 +82,10 @@ public class M7Route extends Module {
             new BBox(54, 64, 80, 54, 63, 78, Blocks.air.getDefaultState()),
             new BBox(57, 108, 123, 56, 111, 118, Blocks.air.getDefaultState()),
             new BBox(88, 165, 41, 95, 166, 41, Blocks.oak_fence.getDefaultState()),
-            new BBox(75, 221, 38, 76, 221, 38, Blocks.ender_chest.getDefaultState()),
+            new BBox(70, 221, 38, 71, 221, 38, Blocks.ender_chest.getDefaultState()),
+            new BBox(77, 221, 37, 77, 222, 32, Blocks.ender_chest.getDefaultState()),
+            new BBox(78, 221, 38, 78, 240, 38, Blocks.stained_glass.getDefaultState()),
+            new BBox(77, 220, 37, 78, 220, 37, Blocks.air.getDefaultState()),
             new BBox(75, 220, 38, 76, 220, 38, Blocks.air.getDefaultState()),
             new BBox(51, 114, 112, 51, 114, 112, Blocks.ender_chest.getDefaultState()),
             new BBox(100, 167, 47, 100, 165, 46, Blocks.air.getDefaultState()),
