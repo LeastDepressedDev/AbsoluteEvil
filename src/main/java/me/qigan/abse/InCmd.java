@@ -2,6 +2,7 @@ package me.qigan.abse;
 
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
+import me.qigan.abse.fr.dungons.m7p3.AutoM7P4;
 import me.qigan.abse.fr.exc.PacketBreak;
 import me.qigan.abse.fr.qol.GhostBlocks;
 import me.qigan.abse.fr.qol.GhostUtils;
@@ -75,7 +76,7 @@ public class InCmd extends CommandBase{
 					sender.addChatMessage(new ChatComponentText("\u00A7a/abse dbg <items/sound/al>"));
 				}
 			} else if (args[0].equalsIgnoreCase("test")) {
-				GuiNotifier.call("Test", 100, true, 0xFFFFFF);
+				AutoM7P4.warpAway();
 			} else if (args[0].equalsIgnoreCase("cfg")) {
 				if (args.length > 1) {
 					if (args[1].equalsIgnoreCase("set")) {
