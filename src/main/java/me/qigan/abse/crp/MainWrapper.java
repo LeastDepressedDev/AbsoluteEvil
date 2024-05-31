@@ -3,6 +3,7 @@ package me.qigan.abse.crp;
 import me.qigan.abse.Holder;
 import me.qigan.abse.InCmd;
 import me.qigan.abse.Index;
+import me.qigan.abse.PathCmd;
 import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
@@ -109,6 +110,7 @@ public class MainWrapper {
 
 
         ClientCommandHandler.instance.registerCommand(new InCmd());
+        ClientCommandHandler.instance.registerCommand(new PathCmd());
 
         File file = new File(Loader.instance().getConfigDir() + "/abse");
         if (!file.exists()) file.mkdirs();

@@ -1,5 +1,6 @@
 package me.qigan.abse.pathing;
 
+import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
@@ -32,9 +33,13 @@ public class MovementController {
     @SubscribeEvent
     void onWorldRender(RenderWorldLastEvent e) {
         if (path != null && !paused) {
-            BlockPos next = getNext(getClosest());
+            BlockPos cur = getClosest();
+            BlockPos next = getNext(cur);
+            if (Utils.compare(cur, path.to)) path = null;
             if (next == null) return;
-            EntityPlayer staticPlayer =  Minecraft.getMinecraft().thePlayer;
+            EntityPlayer staticPlayer = Minecraft.getMinecraft().thePlayer;
+            if (next.getY()-cur.getY() > 0)
+                ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), 2);
 
             double dx = next.getX() + 0.5d - staticPlayer.posX;
             double dz = next.getZ() + 0.5 - staticPlayer.posZ;
@@ -46,7 +51,8 @@ public class MovementController {
             Float[] rotations = Utils.getRotationsTo(dx, 0, dz, new float[]{staticPlayer.rotationYaw, staticPlayer.rotationPitch});
             rotations[1] = null;
             rotations[0] = dist > 0.75d ? rotations[0] : null;
-            SmoothAimControl.set(rotations, 1, 20, 2*dist);
+            SmoothAimControl.set(rotations, 1, 20, 6*dist);
+            ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
 
             Esp.autoBox3D(path.from, Color.green, 2f, true);
             Esp.autoBox3D(path.to, Color.red, 2f, true);

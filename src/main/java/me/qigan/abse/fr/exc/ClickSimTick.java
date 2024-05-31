@@ -6,24 +6,22 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.List;
+import java.util.*;
 
 public class ClickSimTick {
 
-    public static List<AddressedData<Integer, Integer>> data = new ArrayList<>();
+    public static Map<Integer, Integer> data = new HashMap<>();
 
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (e.phase == TickEvent.Phase.END) return;
         try {
-            for (AddressedData<Integer, Integer> s : data) {
-                if (s.getObject() > 0) {
-                    s.setObject(s.getObject() - 1);
+            for (Map.Entry<Integer, Integer> s : data.entrySet()) {
+                if (s.getValue() > 0) {
+                    s.setValue(s.getValue() - 1);
                 } else {
-                    data.remove(s);
-                    KeyBinding.setKeyBindState(s.getNamespace(), false);
+                    data.remove(s.getKey());
+                    KeyBinding.setKeyBindState(s.getKey(), false);
                 }
             }
         } catch (ConcurrentModificationException ex) {}
@@ -31,6 +29,6 @@ public class ClickSimTick {
 
     public static void click(int code, int tick) {
         KeyBinding.setKeyBindState(code, true);
-        data.add(new AddressedData<>(code, tick));
+        data.put(code, tick);
     }
 }
