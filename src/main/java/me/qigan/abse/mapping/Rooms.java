@@ -32,7 +32,7 @@ import java.util.List;
 public class Rooms {
 
 
-    public static Map<Room.Shape, List<RoomTemplate>> rooms = new HashMap<>();
+    public static List<RoomTemplate> rooms = new ArrayList<>();
     public static Map<Integer, Route> routes = new HashMap<>();
 
 
@@ -55,13 +55,6 @@ public class Rooms {
      *
      */
     public static void setup() {
-        rooms.put(Room.Shape.r1X1, new ArrayList<>());
-        rooms.put(Room.Shape.r1X2, new ArrayList<>());
-        rooms.put(Room.Shape.r1X3, new ArrayList<>());
-        rooms.put(Room.Shape.r1X4, new ArrayList<>());
-        rooms.put(Room.Shape.r2X2, new ArrayList<>());
-        rooms.put(Room.Shape.rL, new ArrayList<>());
-
         registerRoom(new RoomScaffolding());
         registerRoom(new RoomRacoon());
         registerRoom(new RoomDueces());
@@ -86,13 +79,12 @@ public class Rooms {
     }
 
     public static void registerRoom(RoomTemplate temple) {
-        rooms.get(temple.getShape()).add(temple);
+        rooms.add(temple);
         routes.put(temple.getId(), temple.route());
     }
 
     public static int match(Room rm) {
-        if (!rooms.containsKey(rm.getShape())) return -1;
-        for (RoomTemplate temple : rooms.get(rm.getShape())) {
+        for (RoomTemplate temple : rooms) {
             if (check(temple.hooks(), rm)) return temple.getId();
         }
         return -1;
