@@ -2,15 +2,14 @@ package me.qigan.abse.mapping;
 
 import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.mapping.rooms.r1x1.*;
-import me.qigan.abse.mapping.rooms.r1x2.RoomBalcony;
-import me.qigan.abse.mapping.rooms.r1x2.RoomBridges;
-import me.qigan.abse.mapping.rooms.r1x2.RoomGrassRuins;
-import me.qigan.abse.mapping.rooms.r1x2.RoomPedestal;
+import me.qigan.abse.mapping.rooms.r1x2.*;
 import me.qigan.abse.mapping.rooms.r1x3.RoomGravel;
 import me.qigan.abse.mapping.rooms.r1x3.RoomRedBlue;
 import me.qigan.abse.mapping.rooms.r1x4.RoomMossy;
+import me.qigan.abse.mapping.rooms.r1x4.RoomQuartzKnight;
 import me.qigan.abse.mapping.rooms.r1x4.RoomWaterfall;
 import me.qigan.abse.mapping.rooms.r2x2.*;
+import me.qigan.abse.mapping.rooms.rL.RoomLavaRevine;
 import me.qigan.abse.mapping.routing.BBox;
 import me.qigan.abse.mapping.routing.Route;
 import net.minecraft.block.Block;
@@ -41,7 +40,7 @@ public class Rooms {
      *
      *                                         ROOMS
      *
-     *                                   Current max id is 22
+     *                                   Current max id is 27
      *
      *
      *                                          ROUTING
@@ -76,6 +75,11 @@ public class Rooms {
         registerRoom(new RoomTemple());
         registerRoom(new RoomRedBlue());
         registerRoom(new RoomBalcony());
+        registerRoom(new RoomQuartzKnight());
+        registerRoom(new RoomCrypt());
+        registerRoom(new RoomLavaRevine());
+        registerRoom(new RoomAtlas());
+        registerRoom(new RoomPressurePlates());
     }
 
     public static void registerRoom(RoomTemplate temple) {

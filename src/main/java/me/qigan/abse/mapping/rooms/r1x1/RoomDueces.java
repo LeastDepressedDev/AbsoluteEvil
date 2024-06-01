@@ -38,7 +38,8 @@ public class RoomDueces extends RoomTemplate {
                         new AddressedData<>(new BlockPos(23, 71, 9), Color.green)
                 )
                 .blocks(
-                        new BBox(18, 73, 9, 20, 72, 9, Blocks.air.getDefaultState())
+                        new BBox(18, 73, 9, 20, 72, 9, Blocks.air.getDefaultState()),
+                        new BBox(15, 77, 1, 15, 77, 2, Blocks.air.getDefaultState())
                 );
     }
 }

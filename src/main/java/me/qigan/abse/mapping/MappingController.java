@@ -38,9 +38,6 @@ public class MappingController {
 
     public static List<BlockPos> debug = new ArrayList<>();
 
-
-    public static final boolean DO_DEBUG_RENDER = false;
-
     public int[][] map = null;
     public Map<Integer, Room> roomMap = new HashMap<>();
     public int[] playerCell;
@@ -101,7 +98,7 @@ public class MappingController {
 
     @SubscribeEvent
     void ovr(RenderGameOverlayEvent.Text e) {
-        if (!DO_DEBUG_RENDER || map == null) return;
+        if (!Index.MAIN_CFG.getBoolVal("remap_debug") || map == null) return;
         Point pt = new Point(100, 300);
         int[] k = Mapping.realToCell(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posZ);
         Esp.drawOverlayString(k[0] + ":" + k[1], pt.x, pt.y-30, Color.cyan, S2Dtype.DEFAULT);
@@ -115,7 +112,7 @@ public class MappingController {
 
     @SubscribeEvent
     void rend(RenderWorldLastEvent e) {
-        if (!DO_DEBUG_RENDER || map == null || Minecraft.getMinecraft().theWorld == null) return;
+        if (!Index.MAIN_CFG.getBoolVal("remap_debug") || map == null || Minecraft.getMinecraft().theWorld == null) return;
         for (BlockPos pos : debug) {
             Esp.autoBox3D(pos, Color.red, 2f, true);
         }
