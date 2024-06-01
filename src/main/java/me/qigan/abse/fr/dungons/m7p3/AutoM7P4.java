@@ -79,7 +79,6 @@ public class AutoM7P4 extends Module {
                         Minecraft.getMinecraft().currentScreen
                                 .mc.playerController.windowClick(c1.windowId, i, 0, 0,
                                         Minecraft.getMinecraft().currentScreen.mc.thePlayer);
-                        System.out.println("Clicked: " + i);
                         return;
                     }
                 }

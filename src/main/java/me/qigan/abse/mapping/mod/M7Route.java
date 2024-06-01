@@ -25,7 +25,7 @@ public class M7Route extends Module {
 
     private boolean readyUp = false;
 
-    public static class DynamicRouteElement implements Runnable {
+    public static abstract class DynamicRouteElement implements Runnable {
 
         public final Block before;
         public final Block after;
@@ -38,9 +38,7 @@ public class M7Route extends Module {
         }
 
         @Override
-        public void run() {
-
-        }
+        public abstract void run();
     }
 
     public static void setup() {
@@ -106,7 +104,6 @@ public class M7Route extends Module {
             new BBox(85, 118, 35, 83, 106, 35, Blocks.stained_glass.getDefaultState()),
             new BBox(58, 134, 142, 58, 134, 142, Blocks.lapis_block.getDefaultState()),
             new BBox(62, 134, 142, 62, 134, 142, Blocks.lapis_block.getDefaultState()),
-            new BBox(86, 128, 46, 86, 128, 46, Blocks.lapis_block.getDefaultState()),
             new BBox(58, 123, 122,57, 125, 118, Blocks.air.getDefaultState()),
 //            new BBox(15, 113, 104, 6, 113, 104,
 //                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
@@ -134,7 +131,9 @@ public class M7Route extends Module {
             new BBox(92, 135, 106, 92, 107, 120, Blocks.glass.getDefaultState()),
             new BBox(110, 135, 71, 108, 107, 70, Blocks.glass.getDefaultState()),
             //new BBox(37, 130, 139, 50, 130, 138, Blocks.ender_chest.getDefaultState()),
-            new BBox(56, 114, 50, 57, 120, 50, Blocks.stained_glass.getDefaultState())
+            new BBox(56, 114, 50, 57, 120, 50, Blocks.stained_glass.getDefaultState()),
+            new BBox(37, 106, 139, 36, 106, 138, Blocks.ladder.getDefaultState()),
+            new BBox(24, 106, 141, 25, 106, 142, Blocks.rail.getDefaultState())
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();

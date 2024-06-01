@@ -6,6 +6,7 @@ import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -20,6 +21,7 @@ import java.util.List;
 public class MovementController {
     private Path path = null;
     private boolean paused = true;
+    public boolean sprint = true;
 
     public MovementController() {
 
@@ -53,6 +55,7 @@ public class MovementController {
             rotations[0] = dist > 0.75d ? rotations[0] : null;
             SmoothAimControl.set(rotations, 1, 20, 6*dist);
             ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
+            KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), sprint);
 
             Esp.autoBox3D(path.from, Color.green, 2f, true);
             Esp.autoBox3D(path.to, Color.red, 2f, true);
