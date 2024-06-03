@@ -192,8 +192,9 @@ public class Utils {
         return -1;
     }
 
-    public static String cleanSB(String scoreboard) {
-        char[] nvString = StringUtils.stripControlCodes(scoreboard).toCharArray();
+    public static String cleanSB(String ln) {
+        if (ln == null) return "";
+        char[] nvString = StringUtils.stripControlCodes(ln).toCharArray();
         StringBuilder cleaned = new StringBuilder();
 
         for (char c : nvString) {
@@ -213,7 +214,12 @@ public class Utils {
         }
     }
 
-    
+    public static NBTTagCompound getDisplay(ItemStack stack) {
+        if (stack == null) return null;
+        return ((stack.hasTagCompound() && stack.getTagCompound().hasKey("display"))) ? stack.getTagCompound().getCompoundTag("display") : null;
+    }
+
+
     public static List<String> getDataFromTab() {
         List<String> result = new ArrayList<String>();
         for (NetworkPlayerInfo ev: Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {

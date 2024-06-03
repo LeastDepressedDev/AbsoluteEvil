@@ -123,6 +123,10 @@ public class InCmd extends CommandBase{
 				}
 			} else if (args[0].equalsIgnoreCase("new")) {
 				NewMainMenu.queue = true;
+			} else if (args[0].equalsIgnoreCase("item")) {
+				Minecraft.getMinecraft().thePlayer.addChatMessage(
+						new ChatComponentText(
+								Minecraft.getMinecraft().thePlayer.getHeldItem().serializeNBT().toString()));
 			} else {
 				for (Module mdl: Holder.MRL) {
 					if (args[0].equalsIgnoreCase(mdl.id())) {

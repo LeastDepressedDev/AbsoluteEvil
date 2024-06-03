@@ -90,7 +90,7 @@ public class M7Route extends Module {
             new BBox(100, 169, 46, 100, 169, 46, Blocks.ender_chest.getDefaultState()),
             new BBox(52, 114, 111, 51, 114, 111, Blocks.ender_chest.getDefaultState()),
             new BBox(52, 113, 111, 51, 113, 111, Blocks.air.getDefaultState()),
-            new BBox(72, 106,142, 63, 106, 123, Blocks.rail.getDefaultState()),
+            new BBox(72, 106,142, 63, 106, 132, Blocks.rail.getDefaultState()),
             new BBox(53, 106, 137, 55, 106, 139, Blocks.rail.getDefaultState()),
 //            new BBox(20, 130, 135, 15, 128, 137, Blocks.air.getDefaultState()),
 //            new BBox(20, 130, 135, 18, 132, 135, Blocks.oak_fence.getDefaultState()),
@@ -99,7 +99,7 @@ public class M7Route extends Module {
                     Blocks.wooden_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP)),
             new BBox(19, 132, 135, 20, 129, 135, Blocks.oak_fence.getDefaultState()),
             new BBox(52, 132, 140, 39, 136, 140, Blocks.stained_glass.getDefaultState()),
-            new BBox(32, 132, 137, 60, 136, 137, Blocks.stained_glass.getDefaultState()),
+            new BBox(32, 132, 137, 60, 140, 137, Blocks.stained_glass.getDefaultState()),
             new BBox(52, 106, 137, 52, 129, 139, Blocks.stained_glass.getDefaultState()),
             new BBox(85, 118, 35, 83, 106, 35, Blocks.stained_glass.getDefaultState()),
             new BBox(58, 134, 142, 58, 134, 142, Blocks.lapis_block.getDefaultState()),
@@ -117,7 +117,7 @@ public class M7Route extends Module {
                     Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
             new BBox(10, 113, 85, 10, 113, 87,
                     Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)),
-            new BBox(3, 106, 90, 10, 106, 95, Blocks.rail.getDefaultState()),
+            //new BBox(3, 106, 90, 10, 106, 95, Blocks.rail.getDefaultState()),
             new BBox(65, 127, 37, 67, 129, 37, Blocks.stained_glass.getDefaultState()),
             new BBox(57, 116, 57, 58, 116, 56, Blocks.stained_glass.getDefaultState()),
 
@@ -133,7 +133,38 @@ public class M7Route extends Module {
             //new BBox(37, 130, 139, 50, 130, 138, Blocks.ender_chest.getDefaultState()),
             new BBox(56, 114, 50, 57, 120, 50, Blocks.stained_glass.getDefaultState()),
             new BBox(37, 106, 139, 36, 106, 138, Blocks.ladder.getDefaultState()),
-            new BBox(24, 106, 141, 25, 106, 142, Blocks.rail.getDefaultState())
+            new BBox(24, 106, 141, 25, 106, 142, Blocks.rail.getDefaultState()),
+            new BBox(3, 119, 56, 1, 106, 54, Blocks.stained_glass.getDefaultState()),
+            new BBox(13, 119, 56, 15, 106, 54, Blocks.stained_glass.getDefaultState()),
+            new BBox(51, 113, 110, 52, 110, 110, Blocks.air.getDefaultState()),
+            new BBox(97, 120, 121, 97, 125, 120, Blocks.oak_fence.getDefaultState()),
+            new BBox(96, 120, 122, 97, 122, 123, Blocks.air.getDefaultState()),
+            new BBox(97, 122, 122, 96, 122, 122,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP)),
+
+
+            new BBox(39, 109, 31, 42, 109, 31, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(61, 127, 34, 61, 129, 36, Blocks.stained_glass.getDefaultState()),
+            new BBox(-1, 109, 84, -1, 113, 70,
+                    Blocks.stone_slab.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP)),
+            new BBox(45, 121, 31, 45, 123, 30, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(17, 123, 94, 17, 123, 92, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(-1, 119, 94, -1, 119, 92, Blocks.dark_oak_fence.getDefaultState()),
+
+            new BBox(-1, 109, 110, -2, 109, 110, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(-2, 109, 110, -2, 109, 113, Blocks.dark_oak_fence.getDefaultState()),
+
+            new BBox(66, 109, 31, 68, 109, 31, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(68, 109, 31, 68, 109, 32, Blocks.dark_oak_fence.getDefaultState()),
+
+            new BBox(38, 109, 141, 40, 109, 141, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(41, 108, 141, 51, 114, 141, Blocks.dark_oak_fence.getDefaultState()),
+            new BBox(38, 124, 124, 41, 124, 124, Blocks.dark_oak_fence.getDefaultState()),
+
+            new BBox(59, 114, 112, 59, 117, 108, Blocks.glass.getDefaultState()),
+            new BBox(57, 114, 111, 57, 115, 112, Blocks.ender_chest.getDefaultState()),
+            new BBox(58, 113, 112, 58, 110, 112, Blocks.air.getDefaultState()),
+            new BBox(58, 114, 113, 58, 115, 113, Blocks.iron_block.getDefaultState())
             ));
 
     public static Map<BlockPos, DynamicRouteElement> dynamics = new HashMap<>();

@@ -90,6 +90,7 @@ public class Holder {
 		register(new Remapping());
 		register(new SecretAura());
 		register(new SecretAura.SecretAuraRage());
+		register(new AutoChoco());
 	}
 	
 	public static void register(Module mod) {
