@@ -34,37 +34,41 @@ public class MovementController {
 
     @SubscribeEvent
     void onWorldRender(RenderWorldLastEvent e) {
-        if (path != null && !paused) {
-            BlockPos cur = getClosest();
-            BlockPos next = getNext(cur);
-            if (Utils.compare(cur, path.to)) path = null;
-            if (next == null) return;
-            EntityPlayer staticPlayer = Minecraft.getMinecraft().thePlayer;
-            if (next.getY()-cur.getY() > 0)
-                ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), 2);
+        try {
+            if (path != null && !paused) {
+                BlockPos cur = getClosest();
+                BlockPos next = getNext(cur);
+                if (Utils.compare(cur, path.to)) path = null;
+                if (next == null) return;
+                EntityPlayer staticPlayer = Minecraft.getMinecraft().thePlayer;
+                if (next.getY() - cur.getY() > 0)
+                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), 2);
+                double dist = staticPlayer.getDistance(next.getX() + 0.5d, next.getY() + 0.5d, next.getZ() + 0.5d);
+                double cd = staticPlayer.getDistance(cur.getX() + 0.5d, cur.getY() + 0.5d, cur.getZ() + 0.5d);
 
-            double dx = next.getX() + 0.5d - staticPlayer.posX;
-            double dz = next.getZ() + 0.5 - staticPlayer.posZ;
+                double dx = next.getX() + 0.5d - staticPlayer.posX;
+                double dz = next.getZ() + 0.5d - staticPlayer.posZ;
 
-            double dist = staticPlayer.getDistance(next.getX() + 0.5d, next.getY() + 0.5d, next.getZ() + 0.d);
-            if (dist > 3)
-                path = new Path(Sync.playerPosAsBlockPos(), path.to).build();
+                if (dist > 3)
+                    path = new Path(Sync.playerPosAsBlockPos(), path.to).build();
 
-            Float[] rotations = Utils.getRotationsTo(dx, 0, dz, new float[]{staticPlayer.rotationYaw, staticPlayer.rotationPitch});
-            rotations[1] = null;
-            rotations[0] = dist > 0.75d ? rotations[0] : null;
-            SmoothAimControl.set(rotations, 1, 20, 6*dist);
-            ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
-            KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), sprint);
-
-            Esp.autoBox3D(path.from, Color.green, 2f, true);
-            Esp.autoBox3D(path.to, Color.red, 2f, true);
-            List<Point3d> points = new ArrayList<>();
-            for (BlockPos pos : path.getPosPath()) {
-                points.add(new Point3d(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5));
+                Float[] rotations = Utils.getRotationsTo(dx, 0, dz, new float[]{staticPlayer.rotationYaw, staticPlayer.rotationPitch});
+                rotations[1] = null;
+                //rotations[0] = cd > 0.35d ? rotations[0] : null;
+//                SmoothAimControl.set(rotations, 1, 20, Math.min(16*cd, 18));
+                Minecraft.getMinecraft().thePlayer.rotationYaw= rotations[0];
+                if (Math.abs(rotations[0] - Minecraft.getMinecraft().thePlayer.rotationYawHead) < 3d)
+                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
+                if (sprint) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), 2);
+                Esp.autoBox3D(path.from, Color.green, 2f, true);
+                Esp.autoBox3D(path.to, Color.red, 2f, true);
+                List<Point3d> points = new ArrayList<>();
+                for (BlockPos pos : path.getPosPath()) {
+                    points.add(new Point3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5));
+                }
+                Esp.drawAsSingleLine(points, Color.cyan, 4f, false);
             }
-            Esp.drawAsSingleLine(points, Color.cyan, 4f, false);
-        }
+        } catch (Exception ignored) {}
     }
 
     private BlockPos getClosest() {
