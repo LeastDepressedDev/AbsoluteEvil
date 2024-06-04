@@ -33,6 +33,8 @@ public class AutoChoco extends Module {
 
     public static int lastPrio = -1;
 
+    public static int[][] rabbits = new int[7][];
+
     @SubscribeEvent
     void runtime(GuiScreenEvent.InitGuiEvent e) {
         if (!isEnabled()) return;
@@ -52,10 +54,16 @@ public class AutoChoco extends Module {
             GuiChest chest = (GuiChest) e.gui;
             ContainerChest c1 = (ContainerChest) chest.inventorySlots;
             if (c1.getLowerChestInventory().getName().equalsIgnoreCase("Chocolate Factory") && System.currentTimeMillis()-openTime > 2000) {
-                Esp.drawAllignedTextList(Arrays.asList(
-                        "\u00A76Prio: \u00A7a" + lastPrio,
-                        "\u00A76Delay ticks: \u00A7c" + tick
-                ), 10, 10, false, new ScaledResolution(Minecraft.getMinecraft()), S2Dtype.CORNERED);
+                try {
+                    List<String> render = new ArrayList<>();
+                    render.add("\u00A76Prio: \u00A7a" + lastPrio);
+                    render.add("\u00A76Delay ticks: \u00A7c" + tick);
+                    for (int i = 0; i < rabbits.length; i++) {
+                        render.add("\u00A76" + i + ":  " + rabbits[i][0] + "||" + rabbits[i][1] + "||" +
+                                ((double) rabbits[i][0] / (double) rabbits[i][1]));
+                    }
+                    Esp.drawAllignedTextList(render, 10, 10, false, new ScaledResolution(Minecraft.getMinecraft()), S2Dtype.CORNERED);
+                } catch (NullPointerException ignored) {}
                 guiTick(chest, c1);
             }
         }
@@ -65,7 +73,6 @@ public class AutoChoco extends Module {
         int amount = Integer.parseInt(Utils.cleanSB(c.getInventory().get(13).getDisplayName().split(" ")[0].replaceAll(",", "")));
         //28-34
         Random rand = new Random();
-        int[][] rabbits = new int[7][];
         int optimalSlot = -1;
         double optimalValue = 0;
         for (int i = 28; i <= 34; i++) {
@@ -109,9 +116,16 @@ public class AutoChoco extends Module {
         for (int i = 2; i <= 5; i++) {
             defLine += list.getStringTagAt(i)+"\n";
         }
-        try {
-            asw[0] = Integer.parseInt(Utils.cleanSB(defLine.split(" ")[13]).substring(1));
-        } catch (NumberFormatException ignore) {}
+
+        for (String part : defLine.split(" ")) {
+            part = Utils.cleanSB(part);
+            try {
+                asw[0] = Integer.parseInt(part.substring(1));
+                break;
+            } catch (Exception ignore) {}
+        }
+
+
         for (int i = 0; i < list.tagCount(); i++) {
             String line = Utils.cleanSB(list.getStringTagAt(i));
             if (line.startsWith("PROMOTE") || line.startsWith("HIRE")) {
