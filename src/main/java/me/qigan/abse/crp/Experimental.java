@@ -3,11 +3,17 @@ package me.qigan.abse.crp;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
+import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.mapping.MappingController;
 import me.qigan.abse.pathing.Path;
 import me.qigan.abse.sync.Sync;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -42,6 +48,15 @@ public class Experimental extends Module implements EDLogic {
 //        }
 //    }
 
+    @SubscribeEvent
+    void click(PlayerInteractEvent e) {
+        if (!isEnabled()) return;
+        if (!Minecraft.getMinecraft().thePlayer.isSneaking()) return;
+        if (e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
+        TickTasks.call(() -> Sync.doBlockRightClick(e.pos), 60);
+
+    }
+
 
 
     @Override
@@ -65,7 +80,7 @@ public class Experimental extends Module implements EDLogic {
 
     @Override
     public void onEnable() {
-
+        Sync.doBlockRightClick(new BlockPos(5, 5, 5));
     }
 
     @Override

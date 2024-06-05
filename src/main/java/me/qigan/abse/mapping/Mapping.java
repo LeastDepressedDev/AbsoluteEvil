@@ -1,5 +1,6 @@
 package me.qigan.abse.mapping;
 
+import me.qigan.abse.Index;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -65,6 +66,13 @@ public class Mapping {
         WorldClient client = Minecraft.getMinecraft().theWorld;
         return rayDown(coord[0], coord[1], client) != 0 && rayDown(coord[0]+MappingConstants.ROOM_SIZE, coord[1], client) != 0 &&
                 rayDown(coord[0], coord[1]+MappingConstants.ROOM_SIZE, client) != 0 && rayDown(coord[0]+MappingConstants.ROOM_SIZE, coord[1]+MappingConstants.ROOM_SIZE, client) != 0;
+    }
+
+    public static Room currentRoom() {
+        if (Index.MAPPING_CONTROLLER.map != null && Index.MAPPING_CONTROLLER.playerCell != null && Index.MAPPING_CONTROLLER.roomMap != null) {
+            int iter = Index.MAPPING_CONTROLLER.map[Index.MAPPING_CONTROLLER.playerCell[0]][Index.MAPPING_CONTROLLER.playerCell[1]];
+            return Index.MAPPING_CONTROLLER.roomMap.get(iter);
+        } else return null;
     }
 
     private static int[][] req(int iter, int[][] re, int i, int j, WorldClient world) {

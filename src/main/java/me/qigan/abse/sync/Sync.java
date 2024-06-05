@@ -7,7 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -31,6 +33,23 @@ public class Sync {
     public static char getPlayerDungeonClass() {
         if (!Sync.inDungeon) return 'N';
         return cls;
+    }
+
+    public static void doBlockRightClick(BlockPos pos) {
+        if (Minecraft.getMinecraft().thePlayer.getDistance(pos.getX(), pos.getY()-1, pos.getZ()) >
+                Minecraft.getMinecraft().playerController.getBlockReachDistance()) return;
+        EnumFacing face = EnumFacing.fromAngle(Minecraft.getMinecraft().thePlayer.rotationYawHead);
+        Minecraft.getMinecraft().thePlayer.swingItem();
+        Minecraft.getMinecraft().playerController.onPlayerRightClick(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().theWorld,
+                Minecraft.getMinecraft().thePlayer.getHeldItem(), pos,
+                face, new Vec3(face.getDirectionVec()));
+    }
+
+    public static void doBlockLeftClick(BlockPos pos) {
+        if (Minecraft.getMinecraft().thePlayer.getDistance(pos.getX(), pos.getY()-1, pos.getZ()) >
+                Minecraft.getMinecraft().playerController.getBlockReachDistance()) return;
+        Minecraft.getMinecraft().thePlayer.swingItem();
+        Minecraft.getMinecraft().playerController.clickBlock(pos, EnumFacing.fromAngle(Minecraft.getMinecraft().thePlayer.rotationYawHead));
     }
 
     public static void ovrCheck() {
