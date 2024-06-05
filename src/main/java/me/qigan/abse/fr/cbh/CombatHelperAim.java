@@ -101,12 +101,15 @@ public class CombatHelperAim extends Module {
         Esp.drawAllignedTextList(tr, e.resolution.getScaledWidth()/2+120, e.resolution.getScaledHeight()/2+10, false, e.resolution, S2Dtype.SHADOW);
     }
 
+    private static boolean isActive() {
+        return Index.MAIN_CFG.getBoolVal("cbh_kbk") ? MainWrapper.Keybinds.aimLock.isKeyDown() : Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown();
+    }
+
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") &&
                 MainWrapper.Keybinds.aimBreak.isPressed()) BREAK_TOGGLE=!BREAK_TOGGLE;
-        if (Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() &&
-                !(Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ? BREAK_TOGGLE : MainWrapper.Keybinds.aimBreak.isKeyDown())) atkTick = Index.MAIN_CFG.getIntVal("cbh_atk");
+        if (isActive() && !(Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ? BREAK_TOGGLE : MainWrapper.Keybinds.aimBreak.isKeyDown())) atkTick = Index.MAIN_CFG.getIntVal("cbh_atk");
         if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (SmoothAimControl.OVERRIDE || !isEnabled()) return;
         if (skip == 0) {
@@ -194,6 +197,7 @@ public class CombatHelperAim extends Module {
         list.add(new SetsData<>("cbh_tickskip", "Tick skip[don't change if you are not sure]", ValType.NUMBER, "1"));
         list.add(new SetsData<>("cbh_atk", "Attack tick mod", ValType.NUMBER, "20"));
         list.add(new SetsData<>("cbh_hide_target", "Hide aim cursor", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("cbh_kbk", "Use keybind key", ValType.BOOLEAN, "false"));
         return list;
     }
 

@@ -91,6 +91,7 @@ public class Holder {
 		register(new SecretAura());
 		register(new SecretAura.SecretAuraRage());
 		register(new AutoChoco());
+		register(new KillerPhase());
 	}
 	
 	public static void register(Module mod) {

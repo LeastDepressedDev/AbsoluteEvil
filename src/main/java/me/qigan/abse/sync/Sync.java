@@ -37,7 +37,7 @@ public class Sync {
 
     public static void doBlockRightClick(BlockPos pos) {
         if (Minecraft.getMinecraft().thePlayer.getDistance(pos.getX(), pos.getY()-1, pos.getZ()) >
-                Minecraft.getMinecraft().playerController.getBlockReachDistance()) return;
+                Minecraft.getMinecraft().playerController.getBlockReachDistance()-.15d) return;
         EnumFacing face = EnumFacing.fromAngle(Minecraft.getMinecraft().thePlayer.rotationYawHead);
         Minecraft.getMinecraft().thePlayer.swingItem();
         Minecraft.getMinecraft().playerController.onPlayerRightClick(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().theWorld,
@@ -47,7 +47,7 @@ public class Sync {
 
     public static void doBlockLeftClick(BlockPos pos) {
         if (Minecraft.getMinecraft().thePlayer.getDistance(pos.getX(), pos.getY()-1, pos.getZ()) >
-                Minecraft.getMinecraft().playerController.getBlockReachDistance()) return;
+                Minecraft.getMinecraft().playerController.getBlockReachDistance()-.15d) return;
         Minecraft.getMinecraft().thePlayer.swingItem();
         Minecraft.getMinecraft().playerController.clickBlock(pos, EnumFacing.fromAngle(Minecraft.getMinecraft().thePlayer.rotationYawHead));
     }

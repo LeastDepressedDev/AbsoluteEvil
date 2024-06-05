@@ -51,6 +51,7 @@ public class MainWrapper {
         public static KeyBinding ghostChest;
         public static KeyBinding autoBridging;
         public static KeyBinding aimBreak;
+        public static KeyBinding aimLock;
         public static KeyBinding blockBreaker;
         public static KeyBinding debuffKey;
         public static KeyBinding ssKey;
@@ -77,6 +78,8 @@ public class MainWrapper {
         ClientRegistry.registerKeyBinding(Keybinds.autoBridging);
         Keybinds.aimBreak = new KeyBinding("Aim break button", Keyboard.KEY_NONE, "key.abse");
         ClientRegistry.registerKeyBinding(Keybinds.aimBreak);
+        Keybinds.aimLock = new KeyBinding("Aim lock", Keyboard.KEY_G, "key.abse");
+        ClientRegistry.registerKeyBinding(Keybinds.aimLock);
         Keybinds.blockBreaker = new KeyBinding("Block breaker", Keyboard.KEY_NONE, "key.abse");
         ClientRegistry.registerKeyBinding(Keybinds.blockBreaker);
 
