@@ -65,7 +65,7 @@ public class SecretAura extends Module {
                 || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null
                 || !Sync.inDungeon || !Sync.isClear()) return;
         try {
-            BlockPos pos = Minecraft.getMinecraft().thePlayer.rayTrace(4.6d, 1f).getBlockPos();
+            BlockPos pos = Minecraft.getMinecraft().thePlayer.rayTrace(Minecraft.getMinecraft().playerController.getBlockReachDistance(), 1f).getBlockPos();
             Block block = Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock();
             if (!(block == Blocks.chest || block == Blocks.trapped_chest || block == Blocks.lever)) return;
             MappingController ctr = Index.MAPPING_CONTROLLER;
