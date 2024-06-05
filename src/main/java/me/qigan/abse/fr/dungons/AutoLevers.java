@@ -6,6 +6,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.sync.Sync;
+import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -54,14 +55,15 @@ public class AutoLevers extends Module {
     void tick(TickEvent.ClientTickEvent e) {
         if (!isEnabled() || e.phase == TickEvent.Phase.END
                 || Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null || !Sync.inDungeon) return;
+        if (del > 0) del--;
+        if (del != 0) return;
         try {
             BlockPos pos = Minecraft.getMinecraft().thePlayer
                     .rayTrace(Index.MAIN_CFG.getDoubleVal("aulev_dist"), 1f).getBlockPos();
-            if (tracks.contains(pos) && del == 0 && !Minecraft.getMinecraft().thePlayer.isSneaking()) {
+            if (tracks.contains(pos) && !Minecraft.getMinecraft().thePlayer.isSneaking()) {
                 ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), Index.MAIN_CFG.getIntVal("aulev_hold"));
                 del = Index.MAIN_CFG.getIntVal("aulev_t");
             }
-            if (del > 0) del--;
         } catch (Exception exd) {}
     }
 
