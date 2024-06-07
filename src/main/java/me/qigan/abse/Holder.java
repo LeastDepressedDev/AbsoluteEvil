@@ -92,6 +92,7 @@ public class Holder {
 		register(new SecretAura.SecretAuraRage());
 		register(new AutoChoco());
 		register(new KillerPhase());
+		register(new ProjectilePath());
 	}
 	
 	public static void register(Module mod) {

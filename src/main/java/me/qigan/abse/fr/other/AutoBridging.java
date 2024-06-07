@@ -5,6 +5,8 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.MainWrapper;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.exc.ClickSimTick;
+import me.qigan.abse.sync.Sync;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLiquid;
@@ -12,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -23,39 +26,21 @@ import java.util.List;
 
 public class AutoBridging extends Module {
 
-    public static boolean toggle = false;
-
-    public static boolean pressed = false;
-
     @SubscribeEvent
-    void tick(RenderWorldLastEvent e) {
-        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
-        if (!isEnabled()) return;
-        boolean tgState = Index.MAIN_CFG.getBoolVal("abrig_tog");
-        if (tgState && MainWrapper.Keybinds.autoBridging.isPressed()) toggle=!toggle;
-        if ((MainWrapper.Keybinds.autoBridging.isKeyDown() && !tgState) || (toggle && tgState)) {
-            BlockPos blockBelowPlayer = new BlockPos(Minecraft.getMinecraft().thePlayer.posX,
-                    Minecraft.getMinecraft().thePlayer.posY - 1,
-                    Minecraft.getMinecraft().thePlayer.posZ);
-            Block block = Minecraft.getMinecraft().theWorld.getBlockState(blockBelowPlayer).getBlock();
-            MovingObjectPosition prePos = Minecraft.getMinecraft().thePlayer.rayTrace(Index.MAIN_CFG.getDoubleVal("abrig_tracel"), e.partialTicks);
-            if (prePos == null) return;
-            BlockPos trace = prePos.getBlockPos();
-            if (trace == null) return;
-            if (!pressed && Minecraft.getMinecraft().theWorld.getBlockState(trace).getBlock() instanceof BlockAir) {
-                new Thread(() -> {
-                    try {
-                        KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), true);
-                        pressed = true;
-                        Thread.sleep(Index.MAIN_CFG.getIntVal("abrig_hold"));
-                        KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), false);
-                        pressed = false;
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }).start();
-           }
+    void rend(RenderWorldLastEvent e) {
+        if (!isEnabled() || !MainWrapper.Keybinds.autoBridging.isKeyDown()) return;
+        MovingObjectPosition pos = Minecraft.getMinecraft().objectMouseOver;
+        if (Minecraft.getMinecraft().theWorld.getBlockState(Sync.playerPosAsBlockPos().add(0, -1, 0)).getBlock() == Blocks.air &&
+                pos.getBlockPos() != null && Minecraft.getMinecraft().theWorld.getBlockState(pos.getBlockPos()) != Blocks.air) {
+            if (Minecraft.getMinecraft().theWorld.getBlockState(Sync.playerPosAsBlockPos().add(0, -2, 0))
+                    .getBlock() != Blocks.air) {
+                ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
+            } else if (pos.sideHit != EnumFacing.DOWN && pos.sideHit != EnumFacing.UP) {
+                ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
+            }
+
         }
+        //Esp.autoBox3D(pos.hitVec.xCoord, pos.hitVec.yCoord+0.25, pos.hitVec.zCoord, 0.5, 0.5, Color.cyan, false);
     }
 
     @Override
@@ -66,15 +51,6 @@ public class AutoBridging extends Module {
     @Override
     public String fname() {
         return "Auto bridging[WIP]";
-    }
-
-    @Override
-    public List<SetsData<?>> sets() {
-        List<SetsData<?>> list = new ArrayList<>();
-        list.add(new SetsData<>("abrig_tog", "Toggle mode", ValType.BOOLEAN, "true"));
-        list.add(new SetsData<>("abrig_tracel", "Trace length", ValType.DOUBLE_NUMBER, "1.7"));
-        list.add(new SetsData<>("abrig_hold", "Hold time(ms)", ValType.NUMBER, "30"));
-        return list;
     }
 
     @Override

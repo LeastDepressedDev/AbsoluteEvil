@@ -3,20 +3,37 @@ package me.qigan.abse.crp;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
+import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.mapping.MappingController;
+import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.pathing.Path;
 import me.qigan.abse.sync.Sync;
 
+import me.qigan.abse.vp.Esp;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.item.EntityEnderPearl;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemBow;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.util.*;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
+import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 
@@ -39,26 +56,6 @@ public class Experimental extends Module implements EDLogic {
         return nstr;
     }
 
-//    @SubscribeEvent
-//    void render(RenderWorldLastEvent e) {
-//        if (isEnabled() && Minecraft.getMinecraft().theWorld != null) {
-//            for (BlockPos pos : Mapping.debug) {
-//                Esp.autoBox3D(pos, Color.red, 2f, true);
-//            }
-//        }
-//    }
-
-    @SubscribeEvent
-    void click(PlayerInteractEvent e) {
-        if (!isEnabled()) return;
-        if (!Minecraft.getMinecraft().thePlayer.isSneaking()) return;
-        if (e.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
-        TickTasks.call(() -> Sync.doBlockRightClick(e.pos), 60);
-
-    }
-
-
-
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
@@ -80,7 +77,7 @@ public class Experimental extends Module implements EDLogic {
 
     @Override
     public void onEnable() {
-        Sync.doBlockRightClick(new BlockPos(5, 5, 5));
+
     }
 
     @Override

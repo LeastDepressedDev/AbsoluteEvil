@@ -49,9 +49,6 @@ public class Hud extends Module{
         }
 
         if (MainWrapper.Keybinds.unlimitedRange.isKeyDown()) lines.add("\u00A7cRender distance++");
-        if (MainWrapper.Keybinds.autoBridging.isKeyDown() && !Index.MAIN_CFG.getBoolVal("abrig_tog") ||
-                Index.MAIN_CFG.getBoolVal("abrig_tog") && AutoBridging.toggle)
-            lines.add("\u00A7cAuto bridging" + (Index.MAIN_CFG.getBoolVal("abrig_tog") ? "[toggle]" : "[hold]"));
         if (MainWrapper.Keybinds.aimBreak.isKeyDown() && !Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ||
                 Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") && CombatHelperAim.BREAK_TOGGLE)
             lines.add("\u00A7cAim break! " + (Index.MAIN_CFG.getBoolVal("cbh_aim_tbkm") ? "[toggle]" : "[hold]"));

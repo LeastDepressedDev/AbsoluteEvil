@@ -59,6 +59,11 @@ public class InCmd extends CommandBase{
 				PacketBreak.stun();
 			} else if (args[0].equalsIgnoreCase("crash")) {
 				Minecraft.getMinecraft().crashed(null);
+			} else if (args[0].equalsIgnoreCase("clip") && args.length > 3) {
+				Minecraft.getMinecraft().thePlayer.setPositionAndUpdate(
+						Minecraft.getMinecraft().thePlayer.posX+Double.parseDouble(args[1]),
+						Minecraft.getMinecraft().thePlayer.posY+Double.parseDouble(args[2]),
+						Minecraft.getMinecraft().thePlayer.posZ+Double.parseDouble(args[3]));
 			} else if (args[0].equalsIgnoreCase("dbg")) {
 				if (args.length > 1) {
 					if (args[1].equalsIgnoreCase("items")) {

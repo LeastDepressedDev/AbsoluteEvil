@@ -204,6 +204,14 @@ public class Esp {
         GL11.glPopMatrix();
     }
 
+    public static void autoBeaconBeam(double x, double y, double z, int rgb, float alpha, float pt) {
+        x = x - Minecraft.getMinecraft().getRenderManager().viewerPosX;
+        y = y - Minecraft.getMinecraft().getRenderManager().viewerPosY;
+        z = z - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+
+        renderBeaconBeam(x, y, z, rgb, alpha, pt);
+    }
+
     /**
      * Taken from NotEnoughUpdates under Creative Commons Attribution-NonCommercial 3.0
      * https://github.com/Moulberry/NotEnoughUpdates/blob/master/LICENSE

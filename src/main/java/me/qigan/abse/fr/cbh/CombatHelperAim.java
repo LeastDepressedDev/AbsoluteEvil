@@ -11,6 +11,7 @@ import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
+import me.qigan.abse.vp.VisualApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
@@ -41,14 +42,16 @@ public class CombatHelperAim extends Module {
         public final Entity ref;
         public final double theta;
         public final double zeta;
+        public final double fovAt;
 
         public boolean lockTheta = true;
         public boolean lockZeta = true;
 
-        public Target(Entity ref, double theta, double zeta) {
+        public Target(Entity ref, double theta, double zeta, double fovAt) {
             this.ref = ref;
             this.theta = theta;
             this.zeta = zeta;
+            this.fovAt = fovAt;
         }
 
         public Target unlockTheta() {
@@ -80,9 +83,26 @@ public class CombatHelperAim extends Module {
 
             GL11.glTranslatef(x, y, 0);
             Esp.drawModalRectWithCustomSizedTexture(-4, -4, 8, 8, 0, 0, 8, 8,
-                    new ResourceLocation("abse", "target.png"), new Color(0xFFFFFF));
+                    new ResourceLocation("abse", "target.png"), Color.white);
             GL11.glPopMatrix();
             Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.icons);
+
+//            GL11.glPushMatrix();
+//            VisualApi.setupLine(1f, Color.cyan);
+//            GL11.glBegin(1);
+//            double fov = Index.MAIN_CFG.getDoubleVal("cbh_fovat");
+//            double v = 0;
+//            Point pt = new Point((int) ((double) e.resolution.getScaledWidth() /2+fov/2*Math.cos(v)),
+//                    (int) ((double) e.resolution.getScaledHeight() /2+fov/2*Math.sin(v)));
+//            final double step = Math.PI/64;
+//            while (v < 2*Math.PI) {
+//                v+=step;
+//                GL11.glVertex2i(pt.x, pt.y);
+//                pt = new Point((int) ((double) e.resolution.getScaledWidth() /2+fov/2*Math.cos(v)),
+//                        (int) ((double) e.resolution.getScaledHeight() /2+fov/2*Math.sin(v)));
+//                GL11.glVertex2i(pt.x, pt.y);
+//            }
+//            GL11.glPopMatrix();
         }
     }
 
@@ -135,7 +155,7 @@ public class CombatHelperAim extends Module {
             double s = Index.MAIN_CFG.getDoubleVal("cbh_speed");
 
                 for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-                    if (ent.getName() == Minecraft.getMinecraft().thePlayer.getName()) continue;
+                    if (ent.getName().equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getName())) continue;
                     if (ent instanceof EntityPlayer || Debug.GENERAL) {
                         if (selState && !Debug.GENERAL) {
                             EntityPlayer player = (EntityPlayer) ent;
@@ -148,9 +168,15 @@ public class CombatHelperAim extends Module {
                         }
                         double f = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(ent);
 
-                        if (!ent.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && f < distLim && (primary == null || (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(ent) && f < primary.ref.getDistanceToEntity(Minecraft.getMinecraft().thePlayer)))) {
-                            final Float[] rotations = Utils.getRotationsTo(Minecraft.getMinecraft().thePlayer, ent);
-                            primary = new Target(ent, rotations[0], rotations[1]);
+                        final Float[] rotations = Utils.getRotationsTo(Minecraft.getMinecraft().thePlayer, ent);
+                        double dx = rotations[0]-Minecraft.getMinecraft().thePlayer.rotationYawHead;
+                        double dy = rotations[1]-Minecraft.getMinecraft().thePlayer.rotationPitch;
+                        double inScreenDistance = Math.sqrt(dx*dx + dy*dy);
+                        if (!ent.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer) && f < distLim
+                                && inScreenDistance < Index.MAIN_CFG.getDoubleVal("cbh_fovat")/2
+                                && (primary == null || (Minecraft.getMinecraft().thePlayer.canEntityBeSeen(ent) &&
+                                        inScreenDistance < primary.fovAt))) {
+                            primary = new Target(ent, rotations[0], rotations[1], inScreenDistance);
                         }
                     }
                 }
@@ -164,11 +190,11 @@ public class CombatHelperAim extends Module {
                     double v = (prim.theta - fYaw) * (s / (10 * d));
                     double u = (prim.zeta - fPitch) * (s / (10 * d));
                     if (advcState) {
-                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDoubleVal("cbh_aim_px")) ? 0 : v;
-                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDoubleVal("cbh_aim_py")) ? 0 : u;
+                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += (Math.abs(prim.theta - fYaw) < Index.MAIN_CFG.getDoubleVal("cbh_aim_px")) ? 0 : (float) v;
+                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += (Math.abs(prim.zeta - fPitch) < Index.MAIN_CFG.getDoubleVal("cbh_aim_py")) ? 0 : (float) u;
                     } else {
-                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += v;
-                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += u;
+                        if (prim.lockTheta) Minecraft.getMinecraft().thePlayer.rotationYaw += (float) v;
+                        if (prim.lockZeta) Minecraft.getMinecraft().thePlayer.rotationPitch += (float) u;
                     }
                 }
             }
@@ -198,6 +224,7 @@ public class CombatHelperAim extends Module {
         list.add(new SetsData<>("cbh_atk", "Attack tick mod", ValType.NUMBER, "20"));
         list.add(new SetsData<>("cbh_hide_target", "Hide aim cursor", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("cbh_kbk", "Use keybind key", ValType.BOOLEAN, "false"));
+        list.add(new SetsData<>("cbh_fovat", "Fov", ValType.DOUBLE_NUMBER, "60"));
         return list;
     }
 
