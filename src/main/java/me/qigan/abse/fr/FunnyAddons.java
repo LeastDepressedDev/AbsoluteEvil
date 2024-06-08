@@ -1,6 +1,5 @@
 package me.qigan.abse.fr;
 
-import javafx.util.Pair;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.SetsData;
