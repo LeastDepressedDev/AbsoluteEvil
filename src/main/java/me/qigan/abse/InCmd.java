@@ -81,7 +81,7 @@ public class InCmd extends CommandBase{
 					sender.addChatMessage(new ChatComponentText("\u00A7a/abse dbg <items/sound/al>"));
 				}
 			} else if (args[0].equalsIgnoreCase("test")) {
-				AutoM7P4.warpAway();
+				Minecraft.getMinecraft().thePlayer.motionY=Integer.parseInt(args[1]);
 			} else if (args[0].equalsIgnoreCase("cfg")) {
 				if (args.length > 1) {
 					if (args[1].equalsIgnoreCase("set")) {

@@ -101,7 +101,7 @@ public class Utils {
     }
 
     public static boolean pointInDim(Point pt, Dimension dim) {
-        return pt.x <= dim.width && pt.y <= dim.height;
+        return pt.x <= dim.width && pt.y <= dim.height && pt.x >= 0 && pt.y >= 0;
     }
 
     public static boolean pointInMovedDim(Point pt, Point begin, Dimension dim) {

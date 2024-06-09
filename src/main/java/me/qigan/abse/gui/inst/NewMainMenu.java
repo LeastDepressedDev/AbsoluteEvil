@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Vector2d;
 import java.awt.*;
@@ -22,7 +23,7 @@ public class NewMainMenu extends QGuiScreen {
     private static Dimension PREV_DIM;
 
     public static Point MATRIX_BEGIN = null;
-    public static Dimension MATRIX_SIZES = new Dimension(200, 90);
+    public static Dimension MATRIX_SIZES = new Dimension(400, 300);
 
     public static boolean queue = false;
 
@@ -57,10 +58,15 @@ public class NewMainMenu extends QGuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate(MATRIX_BEGIN.x+(float) MATRIX_SIZES.width/2, MATRIX_BEGIN.y+(float) MATRIX_SIZES.height/2, 0f);
-        Esp.drawModalRectWithCustomSizedTexture(-(float) MATRIX_SIZES.width/2, -(float) MATRIX_SIZES.height/2, 200, 90,
+        GlStateManager.translate(MATRIX_BEGIN.x, MATRIX_BEGIN.y, 0f);
+        Esp.drawModalRectWithCustomSizedTexture(0, 0, MATRIX_SIZES.width, MATRIX_SIZES.height,
                 0, 0, 16, 16, new ResourceLocation("abse", "filler.png"), new Color(255, 255, 255));
-
+//        GL11.glScissor(500, 500, 700, 700);
+//        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        Esp.drawModalRectWithCustomSizedTexture((float) MATRIX_SIZES.width/20, (float) MATRIX_SIZES.height/20,
+                MATRIX_SIZES.width-2*((float) MATRIX_SIZES.width/20), MATRIX_SIZES.height-2*((float)MATRIX_SIZES.height/20),
+                0, 0, 16, 16, new ResourceLocation("abse", "filler.png"), new Color(255, 0, 255));
+//        GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GlStateManager.popMatrix();
 //        Esp.drawModalRectWithCustomSizedTexture((float) MATRIX_BEGIN.x, (float) MATRIX_BEGIN.y, 200, 90,
 //                0, 0, 200, 90, new ResourceLocation("abse", "filler.png"), new Color(255, 255, 255));
@@ -72,7 +78,11 @@ public class NewMainMenu extends QGuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         clickDef = new Point(mouseX, mouseY);
         matrixSavePrev = new Point(MATRIX_BEGIN);
-        translationTrigger = Utils.pointInMovedDim(clickDef, MATRIX_BEGIN, MATRIX_SIZES);
+        translationTrigger = Utils.pointInMovedDim(clickDef, MATRIX_BEGIN, MATRIX_SIZES) &&
+                !Utils.pointInMovedDim(clickDef,
+                new Point((int) (MATRIX_BEGIN.x+(float) MATRIX_SIZES.width/20), (int) (MATRIX_BEGIN.y+(float) MATRIX_SIZES.height/20)),
+                new Dimension((int) (MATRIX_SIZES.width-2*((float) MATRIX_SIZES.width/20)),
+                        (int) (MATRIX_SIZES.height-2*((float) MATRIX_SIZES.height/20))));
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -86,7 +96,7 @@ public class NewMainMenu extends QGuiScreen {
 
     @Override
     protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        if (translationTrigger) MATRIX_BEGIN = Utils.diff(matrixSavePrev, new Point(mouseX - clickDef.x, mouseY - clickDef.y));
+        if (translationTrigger) MATRIX_BEGIN = Utils.diff(matrixSavePrev, new Point( clickDef.x - mouseX, clickDef.y - mouseY));
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 }
