@@ -18,7 +18,7 @@ import java.io.IOException;
 public class NewMainMenu extends QGuiScreen {
 
     public static Color BG_COL_1 = new Color(32, 106, 125);
-    public static Color SEMI_BG_COL_1 = new Color(12, 60, 60);
+    public static Color SEMI_BG_COL_1 = new Color(2, 34, 35);
     public static Color BG_COL_2 = new Color(4, 17, 20);
 
     private Point clickDef = null;
