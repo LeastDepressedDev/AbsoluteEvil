@@ -60,6 +60,14 @@ public class Utils {
         return accumulator;
     }
 
+    public static Dimension scaleDim(Dimension dim, double factorW, double factorH) {
+        return new Dimension((int) (dim.width*factorW), (int) (dim.height*factorH));
+    }
+
+    public static Point scaleDim(Point pt, double factorW, double factorH) {
+        return new Point((int) (pt.x*factorW), (int) (pt.y*factorH));
+    }
+
 
     public static boolean compare(BlockPos pos1, BlockPos pos2) {
         if (pos1 == null || pos2 == null) return false;

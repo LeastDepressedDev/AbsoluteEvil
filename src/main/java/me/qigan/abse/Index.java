@@ -3,9 +3,13 @@ package me.qigan.abse;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.MainWrapper;
+import me.qigan.abse.fr.other.BWTeamTracker;
+import me.qigan.abse.fr.other.BowPracticeMod;
+import me.qigan.abse.fr.other.FireballDetector;
 import me.qigan.abse.mapping.MappingController;
 import me.qigan.abse.pathing.MovementController;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.Session;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -41,6 +45,14 @@ public class Index
 
 
         JOptionPane.showMessageDialog(null, "Logged as " + username, "Asolute Evil", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void absoluteFix() {
+        FireballDetector.scan.clear();
+        BWTeamTracker.team.clear();
+        BowPracticeMod.tracking.clear();
+
+        Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A76Absolute fix applied!"));
     }
 
     public static boolean isSafe() {

@@ -296,9 +296,7 @@ public class MainGui extends QGuiScreen {
                 Minecraft.getMinecraft().displayGuiScreen(new PositionsGui(this));
                 break;
             case 4:
-                FireballDetector.scan.clear();
-                BWTeamTracker.team.clear();
-                BowPracticeMod.tracking.clear();
+                Index.absoluteFix();
                 break;
             case 5:
                 Minecraft.getMinecraft().displayGuiScreen(new MappingSettings(this));
