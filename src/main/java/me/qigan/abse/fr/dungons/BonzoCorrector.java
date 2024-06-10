@@ -45,6 +45,11 @@ public class BonzoCorrector extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Bonzo corrector";
     }

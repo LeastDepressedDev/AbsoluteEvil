@@ -43,6 +43,11 @@ public class CombatHelperAimShake extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_shake_amount", "Amount", ValType.DOUBLE_NUMBER, "1.5"));

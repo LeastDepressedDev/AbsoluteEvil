@@ -66,11 +66,6 @@ public class AutoHarp extends Module {
                 }
                 pre = new ArrayList<>(c1.getInventory());
             }
-//            for (int i = 0; i < c1.inventoryItemStacks.size(); i++) {
-//                if (c1.inventoryItemStacks.get(i).getItem() == Item.getItemFromBlock(Blocks.quartz_block)) {
-//                    event.gui.mc.playerController.windowClick(c1.windowId, i, 0, 0, event.gui.mc.thePlayer);
-//                }
-//            }
         }
     }
 
@@ -78,6 +73,11 @@ public class AutoHarp extends Module {
     @Override
     public String id() {
         return "harp";
+    }
+
+    @Override
+    public Specification category() {
+        return Specification.SB_QOL;
     }
 
     @Override

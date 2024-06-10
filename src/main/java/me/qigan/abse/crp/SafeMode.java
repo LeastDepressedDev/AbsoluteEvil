@@ -8,6 +8,11 @@ public class SafeMode extends Module{
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public String description() {
         return "If enabled - preserve you from the most of possible crashes(caused by mode). Lower performance, can cause incorrect work of module";
     }

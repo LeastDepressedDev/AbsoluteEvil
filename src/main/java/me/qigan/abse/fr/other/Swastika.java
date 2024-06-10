@@ -64,6 +64,11 @@ public class Swastika extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public String fname() {
         return "Custom crosshair";
     }

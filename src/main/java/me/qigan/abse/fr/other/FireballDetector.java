@@ -122,6 +122,11 @@ public class FireballDetector extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.BEDWARS;
+    }
+
+    @Override
     public String fname() {
         return "Fireball detector";
     }

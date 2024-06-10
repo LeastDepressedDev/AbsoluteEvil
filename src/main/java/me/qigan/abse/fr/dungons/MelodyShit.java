@@ -44,6 +44,11 @@ public class MelodyShit extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Custom melody message";
     }

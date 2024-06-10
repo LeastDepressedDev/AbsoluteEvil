@@ -108,6 +108,11 @@ public class BowPracticeMod extends Module implements EDLogic {
     }
 
     @Override
+    public Specification category() {
+        return Specification.QOL;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("bowpm_alpha", "Alpha[0-255]", ValType.NUMBER, "200"));

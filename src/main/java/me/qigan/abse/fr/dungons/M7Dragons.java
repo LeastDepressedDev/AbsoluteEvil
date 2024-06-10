@@ -241,6 +241,11 @@ public class M7Dragons extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "M7 dragons";
     }

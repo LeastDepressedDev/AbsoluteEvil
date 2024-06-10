@@ -48,6 +48,11 @@ public class SuplyPearl extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SB_QOL;
+    }
+
+    @Override
     public String fname() {
         return "Supply pearl";
     }

@@ -75,6 +75,11 @@ public class AutoLeapDungeon extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Dungeon pearl stonk";
     }

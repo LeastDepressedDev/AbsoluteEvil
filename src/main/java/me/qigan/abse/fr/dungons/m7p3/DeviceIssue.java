@@ -230,6 +230,11 @@ public class DeviceIssue extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Device issue";
     }

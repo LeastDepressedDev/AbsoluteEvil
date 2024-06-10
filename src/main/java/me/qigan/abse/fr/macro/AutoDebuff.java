@@ -60,6 +60,11 @@ public class AutoDebuff extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Auto debuff [M7]";
     }

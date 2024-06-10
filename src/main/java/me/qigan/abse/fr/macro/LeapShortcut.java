@@ -60,6 +60,11 @@ public class LeapShortcut extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Leap shortcut";
     }

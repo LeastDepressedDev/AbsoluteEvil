@@ -120,6 +120,11 @@ public class BloodCamp extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String description() {
         return "Blood camp helper";
     }

@@ -48,6 +48,11 @@ public class PacketBreak extends Module implements EDLogic {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public String fname() {
         return "Packet breaker";
     }

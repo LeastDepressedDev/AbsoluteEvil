@@ -35,6 +35,11 @@ public class InguiDisplay extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public String fname() {
         return "Ingui display";
     }

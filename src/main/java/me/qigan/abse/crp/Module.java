@@ -9,8 +9,49 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 
 public abstract class Module {
+
+	public static enum Category {
+
+		MINIGAMES("Mini-games"),
+		SKYBLOCK("Skyblock"),
+		OTHER("Other")
+
+		;
+
+		public final String name;
+
+        Category(String name) {
+            this.name = name;
+        }
+    }
+
+	public static enum Specification {
+		//MINI-GAmes
+		COMBAT(Category.MINIGAMES, "Combat"),
+		BEDWARS(Category.MINIGAMES, "Bedwars"),
+
+		//SKYBLOCK
+		DUNGEONS(Category.SKYBLOCK, "Dungeons"),
+		//OVERWORLD(Category.SKYBLOCK, "Overworld"),
+		SB_QOL(Category.SKYBLOCK, "Qol"),
+
+		//OTHER
+		QOL(Category.OTHER, "Qol"),
+		SPECIAL(Category.OTHER, "Special")
+
+		;
+
+		public final Category category;
+		public final String name;
+
+        Specification(Category category, String name) {
+            this.category = category;
+            this.name = name;
+        }
+    }
 	
 	public abstract String id();
+	public abstract Specification category();
 	public String fname() {
 		return this.id();
 	}

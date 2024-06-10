@@ -63,6 +63,11 @@ public class Debug extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("debug_render_names", "Render names", ValType.BOOLEAN, "true"));

@@ -22,6 +22,11 @@ public class CombatHelperAimRandomize extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("cbh_aim_ups", "Up scale", ValType.DOUBLE_NUMBER, "2"));

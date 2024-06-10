@@ -47,6 +47,11 @@ public class Experimental extends Module implements EDLogic {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public String fname() {
         char[] str = "Experimental".toCharArray();
         String nstr = "";

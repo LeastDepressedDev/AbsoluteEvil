@@ -33,6 +33,11 @@ public class NFBA extends Module {
 	}
 
 	@Override
+	public Specification category() {
+		return Specification.QOL;
+	}
+
+	@Override
 	public String fname() {
 		return "Hide falling blocks";
 	}

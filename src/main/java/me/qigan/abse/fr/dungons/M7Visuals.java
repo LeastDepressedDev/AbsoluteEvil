@@ -64,6 +64,11 @@ public class M7Visuals extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "M7 visuals";
     }

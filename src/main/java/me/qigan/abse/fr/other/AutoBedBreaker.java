@@ -63,6 +63,11 @@ public class AutoBedBreaker extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.BEDWARS;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("abbbr_dist", "Distance", ValType.DOUBLE_NUMBER, "3"));

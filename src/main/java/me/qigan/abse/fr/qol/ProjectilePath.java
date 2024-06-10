@@ -81,6 +81,11 @@ public class ProjectilePath extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public String description() {
         return "Predics where the projectile lands[with random uga-buga]";
     }

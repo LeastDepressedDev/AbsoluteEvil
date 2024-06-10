@@ -113,6 +113,11 @@ public class BWTeamTracker extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.BEDWARS;
+    }
+
+    @Override
     public String fname() {
         return "Bedwars team tracker";
     }

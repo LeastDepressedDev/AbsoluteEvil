@@ -80,6 +80,11 @@ public class ImportantChatOVR extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.BEDWARS;
+    }
+
+    @Override
     public String fname() {
         return "Important chat";
     }

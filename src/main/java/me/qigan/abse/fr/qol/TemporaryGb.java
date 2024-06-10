@@ -76,6 +76,11 @@ public class TemporaryGb extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.QOL;
+    }
+
+    @Override
     public String fname() {
         return "Temp ghost blocks";
     }

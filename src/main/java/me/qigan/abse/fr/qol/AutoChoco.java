@@ -161,6 +161,11 @@ public class AutoChoco extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SB_QOL;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("auto_choco_tdel", "Click delay[tick]", ValType.NUMBER, "10"));

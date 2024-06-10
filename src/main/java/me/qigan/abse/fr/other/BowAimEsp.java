@@ -48,6 +48,11 @@ public class BowAimEsp extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public String fname() {
         return "Bow aim esp";
     }

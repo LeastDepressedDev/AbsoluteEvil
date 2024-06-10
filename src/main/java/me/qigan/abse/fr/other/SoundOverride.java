@@ -30,6 +30,11 @@ public class SoundOverride extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.QOL;
+    }
+
+    @Override
     public String fname() {
         return "Sound override";
     }

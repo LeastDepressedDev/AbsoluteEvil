@@ -41,6 +41,11 @@ public class CombatHelperSR extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public String fname() {
         return "Combat helper[sprint]";
     }

@@ -129,6 +129,11 @@ public class GhostBlocks extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.QOL;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("render_gb_box", "Render ghost block box", ValType.BOOLEAN, "true"));

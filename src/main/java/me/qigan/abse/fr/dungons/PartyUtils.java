@@ -172,6 +172,11 @@ public class PartyUtils extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("patils_st", "Scan tick", ValType.NUMBER, "20"));

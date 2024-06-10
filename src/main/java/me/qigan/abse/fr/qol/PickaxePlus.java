@@ -35,6 +35,11 @@ public class PickaxePlus extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SB_QOL;
+    }
+
+    @Override
     public String fname() {
         return "Pickaxe++";
     }

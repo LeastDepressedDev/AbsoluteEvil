@@ -55,6 +55,11 @@ public class LagTracker extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.QOL;
+    }
+
+    @Override
     public String fname() {
         return "\u00A7cLag tracker";
     }

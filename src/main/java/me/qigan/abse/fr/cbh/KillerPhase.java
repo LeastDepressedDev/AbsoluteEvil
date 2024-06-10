@@ -49,12 +49,17 @@ public class KillerPhase extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public String description() {
         return "This is wild, actually, works on [aim_lock] key";
     }
 
     @Override
     public String fname() {
-        return "\u00A7cKillerphase";
+        return "Killerphase";
     }
 }

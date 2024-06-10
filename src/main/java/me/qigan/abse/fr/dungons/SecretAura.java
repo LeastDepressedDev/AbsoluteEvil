@@ -110,6 +110,11 @@ public class SecretAura extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Secret aura";
     }
@@ -133,6 +138,11 @@ public class SecretAura extends Module {
         @Override
         public String id() {
             return "secar_rage";
+        }
+
+        @Override
+        public Specification category() {
+            return Specification.DUNGEONS;
         }
 
         @Override

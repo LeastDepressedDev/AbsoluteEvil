@@ -46,6 +46,11 @@ public class StarredMobs extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Show starred mobs";
     }

@@ -11,6 +11,11 @@ public class M7Redesign extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String description() {
         return "Redesign of the most shitty floor";
     }

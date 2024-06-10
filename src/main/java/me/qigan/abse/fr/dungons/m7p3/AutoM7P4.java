@@ -192,6 +192,11 @@ public class AutoM7P4 extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Auto P4 dev";
     }

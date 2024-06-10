@@ -27,6 +27,11 @@ public class Hud extends Module{
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public String fname() {
         return "Hud";
     }

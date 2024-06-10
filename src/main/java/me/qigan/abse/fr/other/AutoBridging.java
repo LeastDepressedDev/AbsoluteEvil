@@ -49,6 +49,11 @@ public class AutoBridging extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.COMBAT;
+    }
+
+    @Override
     public String fname() {
         return "Auto bridging[WIP]";
     }

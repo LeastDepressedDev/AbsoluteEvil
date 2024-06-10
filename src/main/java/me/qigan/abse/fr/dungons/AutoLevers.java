@@ -81,6 +81,11 @@ public class AutoLevers extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.DUNGEONS;
+    }
+
+    @Override
     public String fname() {
         return "Auto levers on F7/M7";
     }

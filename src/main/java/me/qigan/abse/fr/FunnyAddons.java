@@ -62,6 +62,11 @@ public class FunnyAddons extends Module {
     }
 
     @Override
+    public Specification category() {
+        return Specification.SPECIAL;
+    }
+
+    @Override
     public String fname() {
         return "Funny addons";
     }
