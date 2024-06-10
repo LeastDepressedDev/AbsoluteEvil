@@ -56,6 +56,12 @@ public class Experimental extends Module implements EDLogic {
         return nstr;
     }
 
+    @SubscribeEvent
+    void tick(RenderWorldLastEvent e) {
+        if (!isEnabled()) return;
+        Minecraft.getMinecraft().thePlayer.motionX=0.15;
+    }
+
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
