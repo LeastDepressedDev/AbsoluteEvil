@@ -172,4 +172,14 @@ public class NewMainMenu extends QGuiScreen {
         if (translationTrigger) MATRIX_BEGIN = Utils.diff(matrixSavePrev, new Point( clickDef.x - mouseX, clickDef.y - mouseY));
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        for (WidgetElement elem : elements) {
+            if (elem instanceof WidgetUpdatable) {
+                ((WidgetUpdatable) elem).keyTyped(typedChar, keyCode);
+            }
+        }
+        super.keyTyped(typedChar, keyCode);
+    }
 }

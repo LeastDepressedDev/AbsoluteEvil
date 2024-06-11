@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import java.awt.*;
 
 public class WidgetUpperBar extends WidgetUpdatable {
+
+    public WidgetTextField searchBar = new WidgetTextField(90, 28, 207, 18).placeholder("Enter your prompt here.");
+
     public WidgetUpperBar() {
         super(0, 0);
     }
@@ -33,6 +36,7 @@ public class WidgetUpperBar extends WidgetUpdatable {
         Esp.drawCenteredString("All", 247, 8, 0xFFFFFF, S2Dtype.SHADOW);
 
         Esp.drawOverlayString(NewMainMenu.fntj, "Search:", 0, 32, 0xFFFFFF, S2Dtype.DEFAULT);
+        searchBar.draw(mouseX, mouseY, partialTicks);
 
         GlStateManager.popMatrix();
     }
@@ -45,5 +49,12 @@ public class WidgetUpperBar extends WidgetUpdatable {
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY),
                 new Point((int) (NewMainMenu.MATRIX_SIZES.width/4f)+207, 9),
                 new Dimension(100, 20))) NewMainMenu.viewMode = 1;
+        searchBar.onClick(mouseX-(int) (NewMainMenu.MATRIX_SIZES.width/4f)-10, mouseY, mouseButton);
+    }
+
+    @Override
+    public void keyTyped(char typedChar, int keyCode) {
+        searchBar.keyTyped(typedChar, keyCode);
+        super.keyTyped(typedChar, keyCode);
     }
 }

@@ -11,6 +11,7 @@ Fix supply pearl no throwing - Done
 Modify autoskip - Done
 Added auto p4 - Done
 Added a lot of other shit done
+Added auto Harp - done
 Finally auto melody - Done
 Added auto chocolate Farm - Done
 Improved m7 route - Almot-Done

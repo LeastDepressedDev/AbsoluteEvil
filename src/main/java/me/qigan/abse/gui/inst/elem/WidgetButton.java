@@ -51,14 +51,19 @@ public class WidgetButton extends WidgetUpdatable{
         Gui.drawRect(cordX+2, cordY+2, cordX+boxX-2, cordY+boxY-2, colIn.getRGB());
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(cordX+ (double) boxX / 2, cordY+ (double) boxY / 2, 0d);
+        GlStateManager.translate(cordX+ (double) boxX / 2, cordY + (double) boxY / 2, 0d);
         GlStateManager.scale(textScale, textScale, 0d);
-        Esp.drawOverlayString(NewMainMenu.fntj, text, - NewMainMenu.fntj.getStringWidth(text) / 2, -3, 0xFFFFFF, S2Dtype.DEFAULT);
+        Esp.drawOverlayString(NewMainMenu.fntj, text, -NewMainMenu.fntj.getStringWidth(text) / 2, -3, 0xFFFFFF, S2Dtype.DEFAULT);
         GlStateManager.popMatrix();
     }
 
     @Override
     public void onClick(int mouseX, int mouseY, int mouseButton) {
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY))) fun.run();
+    }
+
+    @Override
+    public void keyTyped(char typedChar, int keyCode) {
+        super.keyTyped(typedChar, keyCode);
     }
 }

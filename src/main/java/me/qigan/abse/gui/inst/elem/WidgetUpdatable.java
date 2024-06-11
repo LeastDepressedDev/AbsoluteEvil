@@ -21,4 +21,6 @@ public class WidgetUpdatable extends WidgetElement {
     public void draw(int mouseX, int mouseY, float partialTicks) {}
 
     public void onClick(int mouseX, int mouseY, int mouseButton) {}
+
+    public void keyTyped(char typedChar, int keyCode) {}
 }
