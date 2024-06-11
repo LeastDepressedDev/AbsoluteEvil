@@ -1,6 +1,8 @@
 package me.qigan.abse.gui.inst;
 
+import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
+import me.qigan.abse.config.Loc2d;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.QGuiScreen;
 import me.qigan.abse.gui.inst.elem.*;
@@ -13,11 +15,15 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class NewMainMenu extends QGuiScreen {
 
@@ -30,6 +36,7 @@ public class NewMainMenu extends QGuiScreen {
     public static Color BG_COL_2 = new Color(4, 17, 20);
 
     public List<WidgetElement> elements = new ArrayList<>();
+    public static List<RenderableModule> modToRender = null;
 
     public static double scaleFactorW = 1;
     public static double scaleFactorH = 1;
@@ -42,11 +49,15 @@ public class NewMainMenu extends QGuiScreen {
 
     public static Point MATRIX_BEGIN = null;
     public static Dimension MATRIX_SIZES = new Dimension(600, 400);
+    public static int scroll = 0;
+    public static int scrollSpeed = 12;
 
     public static boolean queue = false;
 
     public static Module.Specification selectedCategory = Module.Specification.COMBAT;
     public static int viewMode = 0;
+
+    public static WidgetUpperBar upperBar = new WidgetUpperBar();
 
     public NewMainMenu(QGuiScreen screen) {
         super(screen);
@@ -72,9 +83,27 @@ public class NewMainMenu extends QGuiScreen {
         elements.add(new WidgetButton((int) (MATRIX_SIZES.width-((float) MATRIX_SIZES.width/70))-50, 10, 40, 40, () -> Minecraft.getMinecraft().displayGuiScreen(new PositionsGui(this)))
                 .textScale(4d).text("\u233A"));
         elements.add(new WidgetCategoryRenderer());
-        elements.add(new WidgetUpperBar());
+        elements.add(upperBar);
+
+        if (modToRender == null) updateRenderedModules();
 
         super.initGui();
+    }
+
+    public static void updateRenderedModules() {
+        scroll = 0;
+        modToRender = new ArrayList<>();
+        for (Module mod : Holder.MRL) {
+            if (mod.category() == selectedCategory && viewMode == 0) {
+                if (mod.fname().contains(upperBar.searchBar.innerText) ||
+                        mod.id().contains(upperBar.searchBar.innerText))
+                    modToRender.add(new RenderableModule(mod));
+            } else if (viewMode == 1) {
+                if (mod.fname().contains(upperBar.searchBar.innerText) ||
+                        mod.id().contains(upperBar.searchBar.innerText))
+                    modToRender.add(new RenderableModule(mod));
+            }
+        }
     }
 
     /**
@@ -104,6 +133,27 @@ public class NewMainMenu extends QGuiScreen {
         Gui.drawRect((int) (5*MATRIX_SIZES.width/6f), (MATRIX_SIZES.height/7), (int) (5*MATRIX_SIZES.width/6f)+2, l_bound_h, LINES_COL.getRGB());
     }
 
+    private void drawModules(int mouseX, int mouseY, float partialTicks) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((int) (MATRIX_SIZES.width/4f)+10, (MATRIX_SIZES.height/7f)+15-scroll, 0d);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        //TODO: Fix this semi working resize
+        GL11.glScissor(0, (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight()-(MATRIX_BEGIN.y+MATRIX_SIZES.height)*scaleFactorH+4)*2),
+                100000, (int) ((6d*MATRIX_SIZES.height/7d-10)*2*scaleFactorH));
+        int d = 0;
+        for (RenderableModule mod : modToRender) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0, d, 0d);
+            mod.draw(mouseX, mouseY, partialTicks);
+            GlStateManager.popMatrix();
+
+            d+=mod.calcSize();
+        }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+        GlStateManager.popMatrix();
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
@@ -127,6 +177,7 @@ public class NewMainMenu extends QGuiScreen {
             GlStateManager.popMatrix();
 
 
+        drawModules(mouseX, mouseY, partialTicks);
         GlStateManager.popMatrix();
 
 
@@ -181,5 +232,19 @@ public class NewMainMenu extends QGuiScreen {
             }
         }
         super.keyTyped(typedChar, keyCode);
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        int dwheel = Mouse.getEventDWheel();
+        if (dwheel != 0) {
+            if (dwheel > 0) {
+                if (scroll+scrollSpeed < 1000) scroll+=scrollSpeed;
+            } else {
+                if (scroll-scrollSpeed >= 0) scroll-=scrollSpeed;
+            }
+        }
     }
 }

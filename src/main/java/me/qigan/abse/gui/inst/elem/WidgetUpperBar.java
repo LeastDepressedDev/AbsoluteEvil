@@ -45,10 +45,16 @@ public class WidgetUpperBar extends WidgetUpdatable {
     public void onClick(int mouseX, int mouseY, int mouseButton) {
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY),
                 new Point((int) (NewMainMenu.MATRIX_SIZES.width/4f)+100, 9),
-                new Dimension(100, 20))) NewMainMenu.viewMode = 0;
+                new Dimension(100, 20))) {
+            NewMainMenu.viewMode = 0;
+            NewMainMenu.updateRenderedModules();
+        }
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY),
                 new Point((int) (NewMainMenu.MATRIX_SIZES.width/4f)+207, 9),
-                new Dimension(100, 20))) NewMainMenu.viewMode = 1;
+                new Dimension(100, 20))) {
+            NewMainMenu.viewMode = 1;
+            NewMainMenu.updateRenderedModules();
+        }
         searchBar.onClick(mouseX-(int) (NewMainMenu.MATRIX_SIZES.width/4f)-10, mouseY, mouseButton);
     }
 

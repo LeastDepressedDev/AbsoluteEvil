@@ -80,6 +80,7 @@ public class WidgetTextField extends WidgetUpdatable{
         } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar)){
             innerText += typedChar;
         }
+        NewMainMenu.updateRenderedModules();
         super.keyTyped(typedChar, keyCode);
     }
 }

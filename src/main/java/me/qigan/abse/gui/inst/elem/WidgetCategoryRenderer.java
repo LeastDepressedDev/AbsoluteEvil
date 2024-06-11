@@ -60,6 +60,9 @@ public class WidgetCategoryRenderer extends WidgetUpdatable {
 
     @Override
     public void onClick(int mouseX, int mouseY, int mouseButton) {
-        if (selected != null) NewMainMenu.selectedCategory = selected;
+        if (selected != null) {
+            NewMainMenu.selectedCategory = selected;
+            NewMainMenu.updateRenderedModules();
+        }
     }
 }
