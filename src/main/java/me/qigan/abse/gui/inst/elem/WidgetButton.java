@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class WidgetButton extends WidgetUpdatable{
 
-    public static Color colorMain = new Color(46, 132, 176);
+    public static Color colorMain = new Color(36, 97, 129);
     public double textScale = 1;
 
     private String text;

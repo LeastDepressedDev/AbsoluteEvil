@@ -48,6 +48,14 @@ public abstract class Module {
             this.category = category;
             this.name = name;
         }
+
+		public static List<Specification> allByCategory(Category category) {
+			List<Specification> specs = new ArrayList<>();
+			for (Specification spec : Specification.values()) {
+				if (spec.category == category) specs.add(spec);
+			}
+			return specs;
+		}
     }
 	
 	public abstract String id();

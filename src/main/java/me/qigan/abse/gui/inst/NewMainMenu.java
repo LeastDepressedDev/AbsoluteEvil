@@ -1,11 +1,9 @@
 package me.qigan.abse.gui.inst;
 
 import me.qigan.abse.Index;
+import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.QGuiScreen;
-import me.qigan.abse.gui.inst.elem.WidgetButton;
-import me.qigan.abse.gui.inst.elem.WidgetUpdatable;
-import me.qigan.abse.gui.inst.elem.WidgetElement;
-import me.qigan.abse.gui.inst.elem.WidgetText;
+import me.qigan.abse.gui.inst.elem.*;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
@@ -47,6 +45,9 @@ public class NewMainMenu extends QGuiScreen {
 
     public static boolean queue = false;
 
+    public static Module.Specification selectedCategory = Module.Specification.COMBAT;
+    public static int viewMode = 0;
+
     public NewMainMenu(QGuiScreen screen) {
         super(screen);
     }
@@ -68,6 +69,10 @@ public class NewMainMenu extends QGuiScreen {
 
         elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+2, (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50))-20,
                 (int) (MATRIX_SIZES.width/6d-11), 20, Index::absoluteFix).textScale(1.2).text("Absolute fix"));
+        elements.add(new WidgetButton((int) (MATRIX_SIZES.width-((float) MATRIX_SIZES.width/70))-50, 10, 40, 40, () -> Minecraft.getMinecraft().displayGuiScreen(new PositionsGui(this)))
+                .textScale(4d).text("\u233A"));
+        elements.add(new WidgetCategoryRenderer());
+        elements.add(new WidgetUpperBar());
 
         super.initGui();
     }
@@ -112,6 +117,8 @@ public class NewMainMenu extends QGuiScreen {
         drawGuiShape();
 
         Point innerCords = Utils.scaleDim(new Point(mouseX-MATRIX_BEGIN.x, mouseY-MATRIX_BEGIN.y), 1/scaleFactorW, 1/scaleFactorH);
+        innerCords.x-=3;
+        innerCords.y-=6;
         for (WidgetElement elem : elements) {
             if (elem instanceof WidgetUpdatable) {
                 ((WidgetUpdatable) elem).draw(innerCords.x, innerCords.y, partialTicks);
@@ -134,6 +141,8 @@ public class NewMainMenu extends QGuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         clickDef = new Point(mouseX, mouseY);
         Point innerCords = Utils.scaleDim(new Point(mouseX-MATRIX_BEGIN.x, mouseY-MATRIX_BEGIN.y), 1/scaleFactorW, 1/scaleFactorH);
+        innerCords.x-=3;
+        innerCords.y-=6;
         matrixSavePrev = new Point(MATRIX_BEGIN);
         translationTrigger = Utils.pointInMovedDim(clickDef, MATRIX_BEGIN, Utils.scaleDim(MATRIX_SIZES, scaleFactorW, scaleFactorH))
                 &&
