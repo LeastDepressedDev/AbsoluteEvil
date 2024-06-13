@@ -135,11 +135,11 @@ public class NewMainMenu extends QGuiScreen {
 
     private void drawModules(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((int) (MATRIX_SIZES.width/4f)+10, (MATRIX_SIZES.height/7f)+15-scroll, 0d);
+        GlStateManager.translate((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15-scroll, 0d);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         //TODO: Fix this semi working resize
         GL11.glScissor(0, (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight()-(MATRIX_BEGIN.y+MATRIX_SIZES.height)*scaleFactorH+4)*2),
-                100000, (int) ((6d*MATRIX_SIZES.height/7d-10)*2*scaleFactorH));
+                100000, (int) ((6d*MATRIX_SIZES.height/7d-15)*2*scaleFactorH));
         int d = 0;
         for (RenderableModule mod : modToRender) {
             GlStateManager.pushMatrix();
@@ -191,7 +191,8 @@ public class NewMainMenu extends QGuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         clickDef = new Point(mouseX, mouseY);
-        Point innerCords = Utils.scaleDim(new Point(mouseX-MATRIX_BEGIN.x, mouseY-MATRIX_BEGIN.y), 1/scaleFactorW, 1/scaleFactorH);
+        Point realCords = new Point(mouseX-MATRIX_BEGIN.x, mouseY-MATRIX_BEGIN.y);
+        Point innerCords = Utils.scaleDim(realCords, 1/scaleFactorW, 1/scaleFactorH);
         innerCords.x-=3;
         innerCords.y-=6;
         matrixSavePrev = new Point(MATRIX_BEGIN);
@@ -199,11 +200,17 @@ public class NewMainMenu extends QGuiScreen {
                 &&
                 !Utils.pointInMovedDim(clickDef,
                 new Point((int) ((MATRIX_BEGIN.x+(float) MATRIX_SIZES.width/40)), (int) ((MATRIX_BEGIN.y+(float) MATRIX_SIZES.height/40))),
-                Utils.scaleDim(new Dimension((int) ((MATRIX_SIZES.width-2*((float) MATRIX_SIZES.width/40*scaleFactorW))),
-                        (int) ((MATRIX_SIZES.height-2*((float) MATRIX_SIZES.height/40*scaleFactorH)))), scaleFactorW, scaleFactorH)
+                Utils.scaleDim(new Dimension((int) ((MATRIX_SIZES.width-2*((float) MATRIX_SIZES.width/40))),
+                        (int) ((MATRIX_SIZES.height-2*((float) MATRIX_SIZES.height/40)))), scaleFactorW, scaleFactorH)
                 );
-        for (WidgetElement elem : elements) {
-            if (elem instanceof WidgetUpdatable) {
+
+        if (Utils.pointInMovedDim(realCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15),
+                new Dimension(10000, (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)))))
+            for (RenderableModule elem : modToRender) {
+                elem.onClick((int) (MATRIX_SIZES.width / 4f) + 10 + innerCords.x, (int) (MATRIX_SIZES.height / 7f) + 15 + innerCords.y, mouseButton);
+            }
+        else {
+            for (WidgetElement elem : elements) {
                 ((WidgetUpdatable) elem).onClick(innerCords.x, innerCords.y, mouseButton);
             }
         }
