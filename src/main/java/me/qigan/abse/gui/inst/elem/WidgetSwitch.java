@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class WidgetSwitch extends WidgetUpdatable{
 
-    public static int CONST_SIZE_W = 12;
+    public static int CONST_SIZE_W = 24;
     public static int CONST_SIZE_H = 12;
 
     public static Dimension CONST_SIZES = new Dimension(CONST_SIZE_W, CONST_SIZE_H);

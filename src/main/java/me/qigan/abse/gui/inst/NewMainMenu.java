@@ -143,6 +143,7 @@ public class NewMainMenu extends QGuiScreen {
         int d = 0;
         for (RenderableModule mod : modToRender) {
             GlStateManager.pushMatrix();
+            mod.updatablePosition = new Point(0, d);
             GlStateManager.translate(0, d, 0d);
             mod.draw(mouseX, mouseY, partialTicks);
             GlStateManager.popMatrix();
@@ -204,12 +205,14 @@ public class NewMainMenu extends QGuiScreen {
                         (int) ((MATRIX_SIZES.height-2*((float) MATRIX_SIZES.height/40)))), scaleFactorW, scaleFactorH)
                 );
 
-        if (Utils.pointInMovedDim(realCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15),
-                new Dimension(10000, (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)))))
+        Dimension subDim = new Dimension((int) (5*MATRIX_SIZES.width/6f)+2-((int) (MATRIX_SIZES.width/4f)+10), (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)-(int) (MATRIX_SIZES.height/7f)+15));
+        if (Utils.pointInMovedDim(innerCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15), subDim)) {
+            System.out.println("LOG CLICK: INNER MODULE");
             for (RenderableModule elem : modToRender) {
-                elem.onClick((int) (MATRIX_SIZES.width / 4f) + 10 + innerCords.x, (int) (MATRIX_SIZES.height / 7f) + 15 + innerCords.y, mouseButton);
+                elem.onClick(innerCords.x - (int) (MATRIX_SIZES.width / 4f) - 10, innerCords.y - (int) (MATRIX_SIZES.height / 7f) - 5, mouseButton);
             }
-        else {
+        } else {
+            System.out.println("LOG CLICK: OUTER SPACE");
             for (WidgetElement elem : elements) {
                 ((WidgetUpdatable) elem).onClick(innerCords.x, innerCords.y, mouseButton);
             }
@@ -248,9 +251,9 @@ public class NewMainMenu extends QGuiScreen {
         int dwheel = Mouse.getEventDWheel();
         if (dwheel != 0) {
             if (dwheel > 0) {
-                if (scroll+scrollSpeed < 1000) scroll+=scrollSpeed;
+                if (scroll+scrollSpeed < 1000) scroll-=scrollSpeed;
             } else {
-                if (scroll-scrollSpeed >= 0) scroll-=scrollSpeed;
+                if (scroll-scrollSpeed >= 0) scroll+=scrollSpeed;
             }
         }
     }

@@ -82,6 +82,7 @@ public class InCmd extends CommandBase{
 				}
 			} else if (args[0].equalsIgnoreCase("test")) {
 				Minecraft.getMinecraft().thePlayer.motionX=Double.parseDouble(args[1]);
+//				Minecraft.getMinecraft().thePlayer.capabilities.
 			} else if (args[0].equalsIgnoreCase("cfg")) {
 				if (args.length > 1) {
 					if (args[1].equalsIgnoreCase("set")) {

@@ -8,6 +8,8 @@ import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 
+import java.awt.*;
+
 public class RenderableModule extends WidgetUpdatable {
 
     public static int VERTICAL_GAP = 5;
@@ -17,6 +19,8 @@ public class RenderableModule extends WidgetUpdatable {
     public boolean optionOpened = false;
 
     public final WidgetSwitch sch;
+
+    public Point updatablePosition = new Point(0, 0);
 
     public RenderableModule(Module module) {
         super(0, 0);
@@ -45,6 +49,6 @@ public class RenderableModule extends WidgetUpdatable {
 
     @Override
     public void onClick(int mouseX, int mouseY, int mouseButton) {
-        this.sch.onClick(mouseX, mouseY-cordY, mouseButton);
+        this.sch.onClick(mouseX, mouseY-updatablePosition.y, mouseButton);
     }
 }
