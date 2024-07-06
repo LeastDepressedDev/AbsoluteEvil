@@ -44,6 +44,10 @@ public class WidgetTextField extends WidgetUpdatable{
         return selected;
     }
 
+    public void deselect() {
+        selected = false;
+    }
+
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();

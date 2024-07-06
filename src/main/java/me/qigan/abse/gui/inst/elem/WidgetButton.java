@@ -17,6 +17,8 @@ public class WidgetButton extends WidgetUpdatable{
     private String text;
     private final Runnable fun;
 
+    private Dimension textOffset = new Dimension(0, 0);
+
     public WidgetButton(int x, int y, int width, int height, Runnable runnable) {
         super(x, y);
         this.fun = runnable;
@@ -30,6 +32,11 @@ public class WidgetButton extends WidgetUpdatable{
 
     public WidgetButton textScale(double scale) {
         this.textScale = scale;
+        return this;
+    }
+
+    public WidgetButton textOffset(int x, int y) {
+        textOffset = new Dimension(x, y);
         return this;
     }
 
@@ -51,7 +58,7 @@ public class WidgetButton extends WidgetUpdatable{
         Gui.drawRect(cordX+2, cordY+2, cordX+boxX-2, cordY+boxY-2, colIn.getRGB());
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(cordX+ (double) boxX / 2, cordY + (double) boxY / 2, 0d);
+        GlStateManager.translate(cordX+ (double) boxX / 2 + textOffset.width, cordY + (double) boxY / 2 + textOffset.height, 0d);
         GlStateManager.scale(textScale, textScale, 0d);
         Esp.drawOverlayString(NewMainMenu.fntj, text, -NewMainMenu.fntj.getStringWidth(text) / 2, -3, 0xFFFFFF, S2Dtype.DEFAULT);
         GlStateManager.popMatrix();

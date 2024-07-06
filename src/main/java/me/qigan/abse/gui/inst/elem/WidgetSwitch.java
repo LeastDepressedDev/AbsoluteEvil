@@ -36,6 +36,7 @@ public class WidgetSwitch extends WidgetUpdatable{
 
     @Override
     public void onClick(int mouseX, int mouseY, int mouseButton) {
+        if (mouseButton != 0) return;
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), CONST_SIZES)) {
             enabled=!enabled;
             function.run();

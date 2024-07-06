@@ -23,6 +23,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class NewMainMenu extends QGuiScreen {
@@ -80,30 +81,59 @@ public class NewMainMenu extends QGuiScreen {
 
         elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+2, (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50))-20,
                 (int) (MATRIX_SIZES.width/6d-11), 20, Index::absoluteFix).textScale(1.2).text("Absolute fix"));
+        elements.add(new WidgetHoveringTextBox("\u00A7aIf somethings breaks, just press it!", (int) (5*MATRIX_SIZES.width/6f)+2, (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50))-20,
+                (int) (MATRIX_SIZES.width/6d-11), 20));
+
         elements.add(new WidgetButton((int) (MATRIX_SIZES.width-((float) MATRIX_SIZES.width/70))-50, 10, 40, 40, () -> Minecraft.getMinecraft().displayGuiScreen(new PositionsGui(this)))
-                .textScale(4d).text("\u233A"));
+                .textScale(4.1d).text("\u2693").textOffset(2, -3));
+        elements.add(new WidgetHoveringTextBox("Position settings gui", (int) (MATRIX_SIZES.width-((float) MATRIX_SIZES.width/70))-50, 10, 40, 40));
+
         elements.add(new WidgetCategoryRenderer());
         elements.add(upperBar);
+
 
         if (modToRender == null) updateRenderedModules();
 
         super.initGui();
     }
 
+    private static int compareInnerText(String in, String obj) {
+        obj = obj.toLowerCase(Locale.ROOT);
+        in = in.toLowerCase(Locale.ROOT);
+        if (obj.startsWith(in)) return 0;
+
+        String[] parts = obj.split(" ");
+
+        for (String pt : parts) {
+            if (pt.startsWith(in)) return 1;
+        }
+
+        return obj.contains(in) ? 2 : -1;
+    }
+
     public static void updateRenderedModules() {
         scroll = 0;
         modToRender = new ArrayList<>();
+
+        //TODO: Rewrite and optimize this shitty search!
+        List<RenderableModule> zeroCat = new ArrayList<>();
+        List<RenderableModule> firstCat = new ArrayList<>();
+        List<RenderableModule> secondCat = new ArrayList<>();
         for (Module mod : Holder.MRL) {
-            if (mod.category() == selectedCategory && viewMode == 0) {
-                if (mod.fname().contains(upperBar.searchBar.innerText) ||
-                        mod.id().contains(upperBar.searchBar.innerText))
-                    modToRender.add(new RenderableModule(mod));
-            } else if (viewMode == 1) {
-                if (mod.fname().contains(upperBar.searchBar.innerText) ||
-                        mod.id().contains(upperBar.searchBar.innerText))
-                    modToRender.add(new RenderableModule(mod));
+            if (mod.category() == selectedCategory && viewMode == 0 || viewMode == 1) {
+                int cmp = compareInnerText(upperBar.searchBar.innerText, mod.fname());
+                if (cmp == 0 || mod.id().startsWith(upperBar.searchBar.innerText))
+                    zeroCat.add(new RenderableModule(mod));
+                else if (cmp == 1)
+                    firstCat.add(new RenderableModule(mod));
+                else if (cmp == 2)
+                    secondCat.add(new RenderableModule(mod));
             }
         }
+
+        modToRender.addAll(zeroCat);
+        modToRender.addAll(firstCat);
+        modToRender.addAll(secondCat);
     }
 
     /**
@@ -170,8 +200,13 @@ public class NewMainMenu extends QGuiScreen {
         Point innerCords = Utils.scaleDim(new Point(mouseX-MATRIX_BEGIN.x, mouseY-MATRIX_BEGIN.y), 1/scaleFactorW, 1/scaleFactorH);
         innerCords.x-=3;
         innerCords.y-=6;
+        List<WidgetUpdatable> postRender = new ArrayList<>();
         for (WidgetElement elem : elements) {
             if (elem instanceof WidgetUpdatable) {
+                if (elem instanceof WidgetHoveringTextBox) {
+                    postRender.add((WidgetUpdatable) elem);
+                    continue;
+                }
                 ((WidgetUpdatable) elem).draw(innerCords.x, innerCords.y, partialTicks);
             }
         }
@@ -179,13 +214,23 @@ public class NewMainMenu extends QGuiScreen {
 
 
         drawModules(mouseX, mouseY, partialTicks);
+
+            GlStateManager.pushMatrix();
+        GlStateManager.translate(((float) MATRIX_SIZES.width/140), ((float) MATRIX_SIZES.height/70), 0f);
+        for (WidgetUpdatable post : postRender) {
+            if (post instanceof WidgetHoveringTextBox) {
+                ((WidgetHoveringTextBox) post).insertRealCords(mouseX, mouseY);
+            }
+            post.draw(innerCords.x, innerCords.y, partialTicks);
+        }
+            GlStateManager.popMatrix();
         GlStateManager.popMatrix();
 
-
-        Esp.drawOverlayString(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() + "||" + new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight(),
-                10, 10, 0xFFFFFF, S2Dtype.CORNERED);
-        Esp.drawOverlayString(innerCords.x + "||" + innerCords.y,
-                10, 25, 0xFFFFFF, S2Dtype.CORNERED);
+//    Debug render things
+//        Esp.drawOverlayString(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() + "||" + new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight(),
+//                10, 10, 0xFFFFFF, S2Dtype.CORNERED);
+//        Esp.drawOverlayString(innerCords.x + "||" + innerCords.y,
+//                10, 25, 0xFFFFFF, S2Dtype.CORNERED);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -205,14 +250,16 @@ public class NewMainMenu extends QGuiScreen {
                         (int) ((MATRIX_SIZES.height-2*((float) MATRIX_SIZES.height/40)))), scaleFactorW, scaleFactorH)
                 );
 
-        Dimension subDim = new Dimension((int) (5*MATRIX_SIZES.width/6f)+2-((int) (MATRIX_SIZES.width/4f)+10), (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)-(int) (MATRIX_SIZES.height/7f)+15));
-        if (Utils.pointInMovedDim(innerCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15), subDim)) {
-            System.out.println("LOG CLICK: INNER MODULE");
+        Dimension subDim = new Dimension((int) (5*MATRIX_SIZES.width/6f)+2-((int) (MATRIX_SIZES.width/4f)+10), (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)-(int) (MATRIX_SIZES.height/7f)));
+        if (Utils.pointInMovedDim(innerCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)), subDim)) {
+            for (WidgetElement elem : elements) {
+                if (elem instanceof WidgetTextField) ((WidgetTextField) elem).deselect();
+            }
+
             for (RenderableModule elem : modToRender) {
-                elem.onClick(innerCords.x - (int) (MATRIX_SIZES.width / 4f) - 10, innerCords.y - (int) (MATRIX_SIZES.height / 7f) - 5, mouseButton);
+                elem.onClick(innerCords.x - (int) (MATRIX_SIZES.width / 4f) - 10, innerCords.y - (int) (MATRIX_SIZES.height / 7f) - 10 + scroll, mouseButton);
             }
         } else {
-            System.out.println("LOG CLICK: OUTER SPACE");
             for (WidgetElement elem : elements) {
                 ((WidgetUpdatable) elem).onClick(innerCords.x, innerCords.y, mouseButton);
             }
@@ -250,10 +297,10 @@ public class NewMainMenu extends QGuiScreen {
         ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         int dwheel = Mouse.getEventDWheel();
         if (dwheel != 0) {
-            if (dwheel > 0) {
-                if (scroll+scrollSpeed < 1000) scroll-=scrollSpeed;
+            if (dwheel < 0) {
+                if (scroll+scrollSpeed < 1000) scroll+=scrollSpeed;
             } else {
-                if (scroll-scrollSpeed >= 0) scroll+=scrollSpeed;
+                if (scroll-scrollSpeed >= 0) scroll-=scrollSpeed;
             }
         }
     }
