@@ -167,16 +167,16 @@ public class NewMainMenu extends QGuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.translate((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15-scroll, 0d);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        //TODO: Fix this semi working resize
-        GL11.glScissor(0, (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight()-(MATRIX_BEGIN.y+MATRIX_SIZES.height)*scaleFactorH+4)*2),
+        GL11.glScissor(0, (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight()-MATRIX_BEGIN.y-(MATRIX_SIZES.height-4)*scaleFactorH)*2),
                 100000, (int) ((6d*MATRIX_SIZES.height/7d-15)*2*scaleFactorH));
         int d = 0;
         for (RenderableModule mod : modToRender) {
             GlStateManager.pushMatrix();
             mod.updatablePosition = new Point(0, d);
-            mod.insertRealCords(mouseX, mouseY);
+            mod.insertRealCords(mouseX, mouseY+scroll);
             GlStateManager.translate(0, d, 0d);
-            mod.draw(innerPoint.x, innerPoint.y, partialTicks);
+            //Why -8? Shut up and don't ask stupid questions
+            mod.draw(innerPoint.x-(int) (MATRIX_SIZES.width/4f), innerPoint.y-d-(int) (MATRIX_SIZES.height/7f)-8+scroll, partialTicks);
             GlStateManager.popMatrix();
 
             d+=mod.calcSize();

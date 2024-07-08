@@ -9,6 +9,7 @@ import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -32,7 +33,7 @@ public class RenderableModule extends WidgetUpdatable {
         box(335, 16);
         this.module = module;
         this.sch = new WidgetSwitch(310, 2, module.isEnabled(), () -> Index.MAIN_CFG.toggle(module.id()));
-        this.textBox = new WidgetHoveringTextBox(this.module.description(), 0, 0, boxX, boxY);//.timed(700);
+        this.textBox = new WidgetHoveringTextBox(this.module.description(), 0, 0, boxX, boxY).timed(700);
     }
 
     public void insertRealCords(Point point) {
@@ -69,7 +70,9 @@ public class RenderableModule extends WidgetUpdatable {
 
 
         sch.draw(mouseX, mouseY, partialTicks);
-        textBox.insertRealCords(realCords).draw(mouseX, mouseY, partialTicks);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        textBox.draw(mouseX, mouseY, partialTicks);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GlStateManager.popMatrix();
     }
 
