@@ -163,7 +163,7 @@ public class NewMainMenu extends QGuiScreen {
         Gui.drawRect((int) (5*MATRIX_SIZES.width/6f), (MATRIX_SIZES.height/7), (int) (5*MATRIX_SIZES.width/6f)+2, l_bound_h, LINES_COL.getRGB());
     }
 
-    private void drawModules(int mouseX, int mouseY, float partialTicks) {
+    private void drawModules(int mouseX, int mouseY, float partialTicks, Point innerPoint) {
         GlStateManager.pushMatrix();
         GlStateManager.translate((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15-scroll, 0d);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -174,8 +174,9 @@ public class NewMainMenu extends QGuiScreen {
         for (RenderableModule mod : modToRender) {
             GlStateManager.pushMatrix();
             mod.updatablePosition = new Point(0, d);
+            mod.insertRealCords(mouseX, mouseY);
             GlStateManager.translate(0, d, 0d);
-            mod.draw(mouseX, mouseY, partialTicks);
+            mod.draw(innerPoint.x, innerPoint.y, partialTicks);
             GlStateManager.popMatrix();
 
             d+=mod.calcSize();
@@ -213,7 +214,7 @@ public class NewMainMenu extends QGuiScreen {
             GlStateManager.popMatrix();
 
 
-        drawModules(mouseX, mouseY, partialTicks);
+        drawModules(mouseX, mouseY, partialTicks, innerCords);
 
             GlStateManager.pushMatrix();
         GlStateManager.translate(((float) MATRIX_SIZES.width/140), ((float) MATRIX_SIZES.height/70), 0f);

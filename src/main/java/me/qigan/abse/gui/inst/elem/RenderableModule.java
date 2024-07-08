@@ -21,14 +21,26 @@ public class RenderableModule extends WidgetUpdatable {
     public boolean optionOpened = false;
 
     public final WidgetSwitch sch;
+    public final WidgetHoveringTextBox textBox;
 
     public Point updatablePosition = new Point(0, 0);
+    //This one doesn't reset on purpose
+    public Point realCords = new Point(0, 0);
 
     public RenderableModule(Module module) {
         super(0, 0);
         box(335, 16);
         this.module = module;
         this.sch = new WidgetSwitch(310, 2, module.isEnabled(), () -> Index.MAIN_CFG.toggle(module.id()));
+        this.textBox = new WidgetHoveringTextBox(this.module.description(), 0, 0, boxX, boxY);//.timed(700);
+    }
+
+    public void insertRealCords(Point point) {
+        this.realCords = point;
+    }
+
+    public void insertRealCords(int x, int y) {
+        insertRealCords(new Point(x, y));
     }
 
     @Override
@@ -55,7 +67,9 @@ public class RenderableModule extends WidgetUpdatable {
         }
 
 
+
         sch.draw(mouseX, mouseY, partialTicks);
+        textBox.insertRealCords(realCords).draw(mouseX, mouseY, partialTicks);
         GlStateManager.popMatrix();
     }
 
