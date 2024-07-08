@@ -1,5 +1,6 @@
 package me.qigan.abse.gui.inst;
 
+import javafx.scene.chart.ScatterChart;
 import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
@@ -142,11 +143,16 @@ public class MainGui extends QGuiScreen {
                     case BUTTON:
                         cumSize = sizeW;
                         break;
+                    case BOOLEAN:
+                    case STRING:
+                    case NUMBER:
+                    case DOUBLE_NUMBER:
+                        cumSize = size + comMove + sizeW/2;
+                        break;
                     case COMMENT:
                         cumSize = size;
-                        break;
                     default:
-                        cumSize = size + comMove + sizeW/2;
+                        cumSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth(ddr.guiName + ": Unsupported");
                         break;
                 }
                 if (sumSize + cumSize > width) {i++; sumSize = 60;}
@@ -227,6 +233,14 @@ public class MainGui extends QGuiScreen {
                     {
                         GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
                         label1.func_175202_a(call);
+                        labelList.add(label1);
+                        Id++;
+                    }
+                    break;
+                    default:
+                    {
+                        GuiLabel label1 = new GuiLabel(fontRendererObj, Id, sumSize, 60 + i*2*sizeH, sizeW/2, sizeH, 0xFFFFFF);
+                        label1.func_175202_a(ddr.guiName + ": Unsupported");
                         labelList.add(label1);
                         Id++;
                     }
