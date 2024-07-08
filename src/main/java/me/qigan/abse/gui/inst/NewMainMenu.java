@@ -176,7 +176,7 @@ public class NewMainMenu extends QGuiScreen {
             mod.insertRealCords(mouseX, mouseY+scroll);
             GlStateManager.translate(0, d, 0d);
             //Why -8? Shut up and don't ask stupid questions
-            mod.draw(innerPoint.x-(int) (MATRIX_SIZES.width/4f), innerPoint.y-d-(int) (MATRIX_SIZES.height/7f)-8+scroll, partialTicks);
+            mod.draw(innerPoint.x-(int) (MATRIX_SIZES.width/4f)-5, innerPoint.y-d-(int) (MATRIX_SIZES.height/7f)-8+scroll, partialTicks);
             GlStateManager.popMatrix();
 
             d+=mod.calcSize();

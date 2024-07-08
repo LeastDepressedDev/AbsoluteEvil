@@ -24,7 +24,7 @@ public class WidgetCategoryRenderer extends WidgetUpdatable {
     public boolean deselect = true;
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(0d, ((double) NewMainMenu.MATRIX_SIZES.height / 7), 0d);
         dx = 20;
@@ -39,6 +39,7 @@ public class WidgetCategoryRenderer extends WidgetUpdatable {
 
         if (deselect) selected = null;
         GlStateManager.popMatrix();
+        return true;
     }
 
     private void drawOption(Module.Specification spec, Point mousePoint) {

@@ -41,11 +41,12 @@ public class WidgetText extends WidgetUpdatable {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(cordX, cordY, 0f);
         GlStateManager.scale(scaleFactorW, scaleFactorH, 0d);
         Esp.drawOverlayString(fntj, line, 0, 0, col, rType);
         GlStateManager.popMatrix();
+        return true;
     }
 }

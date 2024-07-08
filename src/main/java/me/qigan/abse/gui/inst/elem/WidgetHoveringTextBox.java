@@ -51,10 +51,10 @@ public class WidgetHoveringTextBox extends WidgetUpdatable{
     }
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY))) {
             if (timeSpec == null) timeSpec = System.currentTimeMillis();
-            if (System.currentTimeMillis()-timeSpec<timeDiff) return;
+            if (System.currentTimeMillis()-timeSpec<timeDiff) return false;
             ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
             String[] lines = text.split("\n");
             int ln = 0;
@@ -78,9 +78,12 @@ public class WidgetHoveringTextBox extends WidgetUpdatable{
             for (int i = 0; i < lines.length; i++) {
                 Esp.drawOverlayString(NewMainMenu.fntj, lines[i], cdX+3, cdY-GAP_SIZE*lines.length+GAP_SIZE*i+3, 0xFFFFFF, S2Dtype.SHADOW);
             }
+            realCords = null;
+            return true;
         } else {
             timeSpec = null;
+            realCords = null;
+            return false;
         }
-        realCords = null;
     }
 }

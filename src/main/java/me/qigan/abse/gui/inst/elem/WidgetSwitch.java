@@ -25,13 +25,14 @@ public class WidgetSwitch extends WidgetUpdatable{
     }
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(cordX, cordY, 0d);
         Gui.drawRect(0, 0, CONST_SIZE_W, CONST_SIZE_H, NewMainMenu.LINES_COL.getRGB());
         Gui.drawRect(2, 2, CONST_SIZE_W-2, CONST_SIZE_H-2, NewMainMenu.SEMI_BG_COL_1.getRGB());
         if (enabled) Gui.drawRect(4, 4, CONST_SIZE_W-4, CONST_SIZE_H-4, NewMainMenu.LINES_COL.getRGB());
         GlStateManager.popMatrix();
+        return true;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class WidgetButton extends WidgetUpdatable{
     }
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         Color colIn = new Color(colorMain.getRed()-20, colorMain.getGreen()-20, colorMain.getBlue()-20);
         if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY))) {
             Gui.drawRect(cordX-1, cordY-1, cordX+boxX+1, cordY+boxY+1, Color.white.getRGB());
@@ -62,6 +62,7 @@ public class WidgetButton extends WidgetUpdatable{
         GlStateManager.scale(textScale, textScale, 0d);
         Esp.drawOverlayString(NewMainMenu.fntj, text, -NewMainMenu.fntj.getStringWidth(text) / 2, -3, 0xFFFFFF, S2Dtype.DEFAULT);
         GlStateManager.popMatrix();
+        return true;
     }
 
     @Override

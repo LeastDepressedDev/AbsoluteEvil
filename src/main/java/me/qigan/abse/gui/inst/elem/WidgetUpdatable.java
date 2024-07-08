@@ -18,7 +18,7 @@ public class WidgetUpdatable extends WidgetElement {
         super(x, y);
     }
 
-    public void draw(int mouseX, int mouseY, float partialTicks) {}
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {return true;}
 
     public void onClick(int mouseX, int mouseY, int mouseButton) {}
 

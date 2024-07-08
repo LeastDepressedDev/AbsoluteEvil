@@ -18,7 +18,7 @@ public class WidgetUpperBar extends WidgetUpdatable {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.translate((int) (NewMainMenu.MATRIX_SIZES.width/4f)+10, 7, 0d);
 
@@ -39,6 +39,7 @@ public class WidgetUpperBar extends WidgetUpdatable {
         searchBar.draw(mouseX, mouseY, partialTicks);
 
         GlStateManager.popMatrix();
+        return true;
     }
 
     @Override

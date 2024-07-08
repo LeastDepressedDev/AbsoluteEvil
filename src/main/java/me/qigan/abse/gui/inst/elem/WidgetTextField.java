@@ -49,7 +49,7 @@ public class WidgetTextField extends WidgetUpdatable{
     }
 
     @Override
-    public void draw(int mouseX, int mouseY, float partialTicks) {
+    public boolean draw(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(cordX, cordY, 0d);
         Color col = new Color(NewMainMenu.LINES_COL.getRed()+50, NewMainMenu.LINES_COL.getGreen()+50, NewMainMenu.LINES_COL.getBlue()+50);
@@ -61,6 +61,7 @@ public class WidgetTextField extends WidgetUpdatable{
         Esp.drawOverlayString(NewMainMenu.fntj, innerText.isEmpty() ? ph : innerText, 0, -3, innerText.isEmpty() ? Color.darkGray : Color.gray, S2Dtype.DEFAULT);
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
+        return true;
     }
 
     @Override
