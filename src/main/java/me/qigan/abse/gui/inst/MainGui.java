@@ -1,6 +1,5 @@
 package me.qigan.abse.gui.inst;
 
-import javafx.scene.chart.ScatterChart;
 import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
@@ -9,23 +8,12 @@ import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
 import me.qigan.abse.fr.macro.Macro;
-import me.qigan.abse.fr.other.BWTeamTracker;
-import me.qigan.abse.fr.other.BowAimEsp;
-import me.qigan.abse.fr.other.BowPracticeMod;
-import me.qigan.abse.fr.other.FireballDetector;
 import me.qigan.abse.gui.*;
-import me.qigan.abse.vp.Esp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainGui extends QGuiScreen {
