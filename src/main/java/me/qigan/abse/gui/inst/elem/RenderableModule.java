@@ -2,6 +2,7 @@ package me.qigan.abse.gui.inst.elem;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
+import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.Debug;
@@ -15,11 +16,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RenderableModule extends WidgetUpdatable {
 
     public static int VERTICAL_GAP = 5;
     public static int INNER_GAP = 3;
+    public static String UNSUPPORTED_STRING = "Unsupported!";
 
     public final Module module;
     public boolean optionOpened = false;
@@ -32,6 +36,8 @@ public class RenderableModule extends WidgetUpdatable {
     //This one doesn't reset on purpose
     public Point realCords = new Point(0, 0);
 
+    public final List<WidgetUpdatable> triggers;
+
     public RenderableModule(Module module) {
         super(0, 0);
         box(335, 16);
@@ -40,6 +46,36 @@ public class RenderableModule extends WidgetUpdatable {
         this.textBox = new WidgetHoveringTextBox(this.module.description(), 0, 0, boxX, boxY).timed(700);
         this.disablerState = new WidgetHoveringTextBox("\u00A7cTemporary disabled!", 310, 2,
                 WidgetSwitch.CONST_SIZE_W, WidgetSwitch.CONST_SIZE_H);
+        this.triggers = new ArrayList<>();
+        for (int i = 0; i < module.sets().size(); i++) {
+            SetsData<?> data = module.sets().get(i);
+            int calcYPos = cordY+boxY+(INNER_GAP+10)*i+4;
+
+            switch (data.dataType) {
+                case BOOLEAN:
+                    triggers.add(new WidgetSwitch(305, calcYPos, Index.MAIN_CFG.getBoolVal(data.setId), () -> Index.MAIN_CFG.toggle(data.setId)));
+                    break;
+                case BUTTON:
+                    triggers.add(new WidgetButton(305, calcYPos, WidgetSwitch.CONST_SIZE_W, WidgetSwitch.CONST_SIZE_H, (Runnable) data.defVal));
+                    break;
+                case STRING:
+                    triggers.add(new WidgetTextField(250, calcYPos, 85, WidgetSwitch.CONST_SIZE_H)
+                            .setText(Index.MAIN_CFG.getStrVal(data.setId)));
+                    break;
+                case NUMBER:
+                    triggers.add(new WidgetTextField(250, calcYPos, 85, WidgetSwitch.CONST_SIZE_H)
+                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).filter("-1234567890"));
+                    break;
+                case DOUBLE_NUMBER:
+                    triggers.add(new WidgetTextField(250, calcYPos, 85, WidgetSwitch.CONST_SIZE_H)
+                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).filter("-.1234567890"));
+                    break;
+
+                case COMMENT:
+                default:
+                    triggers.add(null);
+            }
+        }
     }
 
     public void insertRealCords(Point point) {
@@ -76,7 +112,7 @@ public class RenderableModule extends WidgetUpdatable {
                 int calcYPos = cordY+boxY+(INNER_GAP+10)*i+4;
                 Esp.drawOverlayString(NewMainMenu.fntj, data.guiName, cordX+2, calcYPos, 0xFFFFFF, S2Dtype.SHADOW);
 
-
+                if (triggers.get(i) != null) triggers.get(i).draw(mouseX, mouseY, partialTicks);
             }
         }
 
@@ -115,5 +151,28 @@ public class RenderableModule extends WidgetUpdatable {
         if (mouseButton == 1 && Utils.pointInMovedDim(new Point(mouseX-2, mouseY), new Point(0, 0), new Dimension(boxX,
                 (optionOpened && !module.sets().isEmpty() ? calcSize()-VERTICAL_GAP : boxY)))) optionOpened=!optionOpened;
         if (!Debug.DISABLE_STATE.contains(module.id())) this.sch.onClick(mouseX, mouseY, mouseButton);
+        for (int i = 0; i < triggers.size(); i++) {
+            WidgetUpdatable upt = triggers.get(i);
+            if (upt == null) continue;
+            if (!Debug.DISABLE_STATE.contains(module.sets().get(i).setId)) upt.onClick(mouseX, mouseY, mouseButton);
+        }
+    }
+
+    @Override
+    public void keyTyped(char typedChar, int keyCode) {
+        for (WidgetUpdatable upt : triggers) {
+            if (upt == null) continue;
+            upt.keyTyped(typedChar, keyCode);
+        }
+    }
+
+    public void onClose() {
+        for (int i = 0; i < module.sets().size(); i++) {
+            WidgetUpdatable tg = triggers.get(i);
+            if (tg == null) continue;
+            if (tg instanceof WidgetTextField) {
+                Index.MAIN_CFG.set(module.sets().get(i).setId, ((WidgetTextField) tg).innerText);
+            }
+        }
     }
 }

@@ -56,7 +56,7 @@ public class WidgetUpperBar extends WidgetUpdatable {
             NewMainMenu.viewMode = 1;
             NewMainMenu.updateRenderedModules();
         }
-        searchBar.onClick(mouseX-(int) (NewMainMenu.MATRIX_SIZES.width/4f)-10, mouseY, mouseButton);
+        searchBar.onClick(mouseX-(int) (NewMainMenu.MATRIX_SIZES.width/4f)-10-3, mouseY-6, mouseButton);
     }
 
     @Override

@@ -77,7 +77,7 @@ public class WidgetTextField extends WidgetUpdatable{
 
     @Override
     public void onClick(int mouseX, int mouseY, int mouseButton) {
-        selected = Utils.pointInMovedDim(new Point(mouseX-3, mouseY-6), new Point(cordX, cordY), new Dimension(boxX, boxY));
+        selected = Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY));
         super.onClick(mouseX, mouseY, mouseButton);
     }
 
@@ -93,7 +93,7 @@ public class WidgetTextField extends WidgetUpdatable{
         } else if (GuiScreen.isKeyComboCtrlX(keyCode)) {
             GuiScreen.setClipboardString(innerText);
             innerText = "";
-        } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar)) {
+        } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar) && innerText.length() < limit) {
             if (filterLine.length() == 0 || filterLine.contains(Character.toString(typedChar))) innerText += typedChar;
         }
         NewMainMenu.updateRenderedModules();

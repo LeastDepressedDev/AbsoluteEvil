@@ -289,6 +289,9 @@ public class NewMainMenu extends QGuiScreen {
                 ((WidgetUpdatable) elem).keyTyped(typedChar, keyCode);
             }
         }
+        for (RenderableModule rm : modToRender) {
+            rm.keyTyped(typedChar, keyCode);
+        }
         super.keyTyped(typedChar, keyCode);
     }
 
@@ -304,5 +307,11 @@ public class NewMainMenu extends QGuiScreen {
                 if (scroll-scrollSpeed >= 0) scroll-=scrollSpeed;
             }
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        for (RenderableModule module : modToRender) module.onClose();
+        super.onGuiClosed();
     }
 }
