@@ -18,11 +18,17 @@ public class WidgetTextField extends WidgetUpdatable{
 
     public String innerText = "";
     public String ph = "";
+    public String filterLine = "";
     public int limit = 256;
 
     public WidgetTextField(int x, int y, int w, int h) {
         super(x, y);
         box(w, h);
+    }
+
+    public WidgetTextField setText(String line) {
+        this.innerText = line;
+        return this;
     }
 
     public WidgetTextField textScale(double scale) {
@@ -32,6 +38,11 @@ public class WidgetTextField extends WidgetUpdatable{
 
     public WidgetTextField placeholder(String ph) {
         this.ph = ph;
+        return this;
+    }
+
+    public WidgetTextField filter(String filterLine) {
+        this.filterLine = filterLine;
         return this;
     }
 
@@ -82,8 +93,8 @@ public class WidgetTextField extends WidgetUpdatable{
         } else if (GuiScreen.isKeyComboCtrlX(keyCode)) {
             GuiScreen.setClipboardString(innerText);
             innerText = "";
-        } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar)){
-            innerText += typedChar;
+        } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar)) {
+            if (filterLine.length() == 0 || filterLine.contains(Character.toString(typedChar))) innerText += typedChar;
         }
         NewMainMenu.updateRenderedModules();
         super.keyTyped(typedChar, keyCode);
