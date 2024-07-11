@@ -127,8 +127,8 @@ public class InCmd extends CommandBase{
 				} else {
 					sender.addChatMessage(new ChatComponentText("\u00A7c Ghost blocks shit"));
 				}
-			} else if (args[0].equalsIgnoreCase("new")) {
-				NewMainMenu.queue = true;
+			} else if (args[0].equalsIgnoreCase("old")) {
+				MainGui.queue = true;
 			} else if (args[0].equalsIgnoreCase("item")) {
 				Minecraft.getMinecraft().thePlayer.addChatMessage(
 						new ChatComponentText(
@@ -144,8 +144,8 @@ public class InCmd extends CommandBase{
 				}
 			}
 		} else {
-			sender.addChatMessage(new ChatComponentText("\u00A7aAbsoluteEvil " + Index.VERSION + " by qigan"));
-			MainGui.queue = true;
+			//sender.addChatMessage(new ChatComponentText("\u00A7aAbsoluteEvil " + Index.VERSION + " by qigan"));
+			NewMainMenu.queue = true;
 		}
 	}
 	

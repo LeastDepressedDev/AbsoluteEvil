@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class WidgetUpperBar extends WidgetUpdatable {
 
-    public WidgetTextField searchBar = new WidgetTextField(90, 28, 207, 18).placeholder("Enter your prompt here.");
+    public WidgetTextField searchBar = new WidgetTextField(90, 28, 207, 18).placeholder("Enter your prompt here.").allowAutoUpdate();
 
     public WidgetUpperBar() {
         super(0, 0);

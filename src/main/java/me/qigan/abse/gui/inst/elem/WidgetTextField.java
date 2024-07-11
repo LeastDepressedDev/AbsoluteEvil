@@ -21,9 +21,16 @@ public class WidgetTextField extends WidgetUpdatable{
     public String filterLine = "";
     public int limit = 256;
 
+    public boolean useAutoUpdates = false;
+
     public WidgetTextField(int x, int y, int w, int h) {
         super(x, y);
         box(w, h);
+    }
+
+    public WidgetTextField allowAutoUpdate() {
+        this.useAutoUpdates = true;
+        return this;
     }
 
     public WidgetTextField setText(String line) {
@@ -96,7 +103,7 @@ public class WidgetTextField extends WidgetUpdatable{
         } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar) && innerText.length() < limit) {
             if (filterLine.length() == 0 || filterLine.contains(Character.toString(typedChar))) innerText += typedChar;
         }
-        NewMainMenu.updateRenderedModules();
+        if (useAutoUpdates) NewMainMenu.updateRenderedModules();
         super.keyTyped(typedChar, keyCode);
     }
 }

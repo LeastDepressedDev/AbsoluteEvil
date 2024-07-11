@@ -256,6 +256,7 @@ public class NewMainMenu extends QGuiScreen {
             for (WidgetElement elem : elements) {
                 if (elem instanceof WidgetTextField) ((WidgetTextField) elem).deselect();
             }
+            upperBar.searchBar.deselect();
 
             for (RenderableModule elem : modToRender) {
                 elem.onClick(innerCords.x - (int) (MATRIX_SIZES.width / 4f) - 10, innerCords.y - (int) (MATRIX_SIZES.height / 7f) - 10 + scroll, mouseButton);
@@ -263,6 +264,12 @@ public class NewMainMenu extends QGuiScreen {
         } else {
             for (WidgetElement elem : elements) {
                 ((WidgetUpdatable) elem).onClick(innerCords.x, innerCords.y, mouseButton);
+            }
+
+            for (RenderableModule elem : modToRender) {
+                for (WidgetUpdatable upt : elem.triggers) {
+                    if (upt instanceof WidgetTextField) ((WidgetTextField) upt).deselect();
+                }
             }
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
