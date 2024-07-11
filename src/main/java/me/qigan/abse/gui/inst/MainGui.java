@@ -139,6 +139,7 @@ public class MainGui extends QGuiScreen {
                         break;
                     case COMMENT:
                         cumSize = size;
+                        break;
                     default:
                         cumSize = Minecraft.getMinecraft().fontRendererObj.getStringWidth(ddr.guiName + ": Unsupported");
                         break;
