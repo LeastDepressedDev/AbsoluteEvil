@@ -93,6 +93,7 @@ public class Holder {
 		register(new AutoChoco());
 		register(new KillerPhase());
 		register(new ProjectilePath());
+		register(new AbsoluteReach());
 	}
 	
 	public static void register(Module mod) {

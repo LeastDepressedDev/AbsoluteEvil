@@ -81,8 +81,8 @@ public class InCmd extends CommandBase{
 					sender.addChatMessage(new ChatComponentText("\u00A7a/abse dbg <items/sound/al>"));
 				}
 			} else if (args[0].equalsIgnoreCase("test")) {
-				Minecraft.getMinecraft().thePlayer.motionX=Double.parseDouble(args[1]);
-//				Minecraft.getMinecraft().thePlayer.capabilities.
+				Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(
+						Minecraft.getMinecraft().playerController.getBlockReachDistance() + ""));
 			} else if (args[0].equalsIgnoreCase("cfg")) {
 				if (args.length > 1) {
 					if (args[1].equalsIgnoreCase("set")) {

@@ -7,6 +7,8 @@ import me.qigan.abse.PathCmd;
 import me.qigan.abse.ant.LoginScreen;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
+import me.qigan.abse.crp.ovr.CustomEntRender;
+import me.qigan.abse.crp.ovr.ExtendedController;
 import me.qigan.abse.crp.ovr.MCMainMenu;
 import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.mapping.Rooms;
@@ -92,7 +94,14 @@ public class MainWrapper {
         ClientRegistry.registerKeyBinding(Keybinds.leapShortcut);
     }
 
+    public static void setCustomEntRenderer() {
+        Minecraft.getMinecraft().entityRenderer = new CustomEntRender(Minecraft.getMinecraft(), Minecraft.getMinecraft().getResourceManager());
+    }
+
     public static void initialise(FMLInitializationEvent e) {
+
+        setCustomEntRenderer();
+
         Utils.setupRoman();
         MappingConstants.setup();
         TagConstants.init();

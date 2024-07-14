@@ -3,6 +3,7 @@ package me.qigan.abse.crp;
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
+import me.qigan.abse.crp.ovr.ExtendedController;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.mapping.MappingController;
@@ -64,7 +65,11 @@ public class Experimental extends Module implements EDLogic {
     @SubscribeEvent
     void tick(RenderWorldLastEvent e) {
         if (!isEnabled()) return;
-        Minecraft.getMinecraft().thePlayer.motionX=0.15;
+
+        if (Minecraft.getMinecraft().objectMouseOver.getBlockPos() != null)
+            Esp.autoBox3D(Minecraft.getMinecraft().objectMouseOver.getBlockPos(), Color.cyan, 2f, true);
+        if (Minecraft.getMinecraft().objectMouseOver.entityHit != null)
+            Esp.autoBox3D(Minecraft.getMinecraft().objectMouseOver.entityHit, Color.cyan, 2f, true);
     }
 
     @Override
