@@ -5,6 +5,7 @@ import me.qigan.abse.InCmd;
 import me.qigan.abse.Index;
 import me.qigan.abse.PathCmd;
 import me.qigan.abse.ant.LoginScreen;
+import me.qigan.abse.config.ConfigManager;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.CustomEntRender;
@@ -124,11 +125,13 @@ public class MainWrapper {
         ClientCommandHandler.instance.registerCommand(new InCmd());
         ClientCommandHandler.instance.registerCommand(new PathCmd());
 
-        File file = new File(Loader.instance().getConfigDir() + "/abse");
+        File file = new File(Loader.instance().getConfigDir() + "/abse/configs");
         if (!file.exists()) file.mkdirs();
 
         Holder.link();
         System.out.println("ABSE SOUND REG: " + SoundUtils.initialise() + " sounds registered.");
+
+        Index.CFG_MANAGER = new ConfigManager("abse/configs");
 
         Index.MAIN_CFG = new MuConfig();
         Index.POS_CFG = new PositionConfig();

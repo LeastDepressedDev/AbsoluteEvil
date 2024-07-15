@@ -18,6 +18,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
+import java.io.File;
+
 public class InCmd extends CommandBase{
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
@@ -106,8 +108,24 @@ public class InCmd extends CommandBase{
 						} else {
 							sender.addChatMessage(new ChatComponentText("\u00A7c <cfg_name> field is missing!"));
 						}
+					} else if (args[1].equalsIgnoreCase("load")) {
+						if (args.length > 2) {
+							Index.CFG_MANAGER.loadFrom(args[2]);
+						} else {
+							sender.addChatMessage(new ChatComponentText("\u00A7c Config name required!"));
+						}
+					} else if (args[1].equalsIgnoreCase("save")) {
+						if (args.length > 2) {
+							Index.CFG_MANAGER.saveTo(args[2]);
+						} else {
+							sender.addChatMessage(new ChatComponentText("\u00A7c Config name required!"));
+						}
+					} else if (args[1].equalsIgnoreCase("list")) {
+						for (File file : Index.CFG_MANAGER.getConfigFiles()) {
+							sender.addChatMessage(new ChatComponentText("\u00A73 " + file.getName()));
+						}
 					} else {
-						sender.addChatMessage(new ChatComponentText("\u00A7c Wrong action"));
+						sender.addChatMessage(new ChatComponentText("\u00A7c Wrong action!"));
 					}
 				} else {
 					sender.addChatMessage(new ChatComponentText("\u00A7a AbsoluteEvil cfg help: "));

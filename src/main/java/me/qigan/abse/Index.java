@@ -1,5 +1,6 @@
 package me.qigan.abse;
 
+import me.qigan.abse.config.ConfigManager;
 import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.MainWrapper;
@@ -24,6 +25,7 @@ import java.lang.reflect.Modifier;
 public class Index
 {
     public static MuConfig MAIN_CFG;
+    public static ConfigManager CFG_MANAGER;
     public static MovementController MOVEMENT_CONTROLLER;
     public static MappingController MAPPING_CONTROLLER;
     public static PositionConfig POS_CFG;
