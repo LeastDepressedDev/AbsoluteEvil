@@ -94,6 +94,7 @@ public class Holder {
 		register(new KillerPhase());
 		register(new ProjectilePath());
 		register(new AbsoluteReach());
+		register(new GrottoFinder());
 	}
 	
 	public static void register(Module mod) {
