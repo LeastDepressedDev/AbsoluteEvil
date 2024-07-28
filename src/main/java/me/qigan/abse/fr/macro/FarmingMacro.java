@@ -1,4 +1,4 @@
-package me.qigan.abse.fr;
+package me.qigan.abse.fr.macro;
 
 //TODO: Do at least something with that
 public class FarmingMacro {
