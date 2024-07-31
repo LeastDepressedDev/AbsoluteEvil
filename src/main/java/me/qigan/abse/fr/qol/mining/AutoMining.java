@@ -111,8 +111,15 @@ public class AutoMining extends Module {
 
                 BlockPos trace = player.rayTrace(56, 1f).getBlockPos();
                 if (Utils.compare(trace, target)) {
+                    int slot = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
+                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = aotvSlot;
+                    TickTasks.call(() -> {
+                        ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2);
+                        TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 4);
+                    }, 10);
+
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
-                    TickTasks.call(() -> ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2), 10);
+
                     forceDelay = 15;
                 }
             }
@@ -229,13 +236,19 @@ public class AutoMining extends Module {
                     Color.magenta, 8f, true);
             Esp.autoBox3D(curPos, i == progress ? Color.green : Color.yellow, 2f, true);
             prePos = curPos;
+            if (i == blockRoute.size()-1) {
+                BlockPos sp = blockRoute.get(0);
+                Esp.drawTracer(prePos.getX()+0.5d, prePos.getY()+0.5d, prePos.getZ()+0.5d,
+                        sp.getX()+0.5d, sp.getY()+0.5d, sp.getZ()+0.5d,
+                        Color.magenta, 8f, true);
+            }
         }
         if (mining != null) Esp.autoBox3D(mining, Color.magenta, 4f, false);
     }
 
     @SubscribeEvent
     void interactEvent(PlayerInteractEvent e) {
-        if (!isEnabled()) return;
+        if (!isEnabled() || blockRoute.isEmpty()) return;
         if (e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
             if (Utils.compare(blockRoute.get(progress), e.pos)) {
                 active = true;
@@ -246,14 +259,14 @@ public class AutoMining extends Module {
     @Override
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
-        list.add(new SetsData<>("test_route", "Test route", ValType.BUTTON, (Runnable) () -> {
-            blockRoute = new ArrayList<>(Arrays.asList(
-                    new BlockPos(5, 5, 5),
-                    new BlockPos(5, 7, 10),
-                    new BlockPos(3, 3, 9)
-            ));
-        }));
-        list.add(new SetsData<>("auto_mining_comment0", "Manual mode is disabling all the automation but keeps visuals enabled", ValType.COMMENT, null));
+//        list.add(new SetsData<>("test_route", "Test route", ValType.BUTTON, (Runnable) () -> {
+//            blockRoute = new ArrayList<>(Arrays.asList(
+//                    new BlockPos(5, 5, 5),
+//                    new BlockPos(5, 7, 10),
+//                    new BlockPos(3, 3, 9)
+//            ));
+//        }));
+        list.add(new SetsData<>("auto_mining_comment0", "Manual mode is disabling automation but keeps visuals enabled", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_manual", "Manual mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_debug", "\u00A7cDebug mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_comment1", "Routes are located in config/abse/mining", ValType.COMMENT, null));
