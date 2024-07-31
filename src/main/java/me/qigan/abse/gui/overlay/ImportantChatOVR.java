@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@EnabledByDefault
 public class ImportantChatOVR extends Module {
 
     public static List<String> list = new ArrayList<>();
