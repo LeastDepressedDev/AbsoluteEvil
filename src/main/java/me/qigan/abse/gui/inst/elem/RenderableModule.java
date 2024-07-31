@@ -151,6 +151,7 @@ public class RenderableModule extends WidgetUpdatable {
         if (mouseButton == 1 && Utils.pointInMovedDim(new Point(mouseX-2, mouseY), new Point(0, 0), new Dimension(boxX,
                 (optionOpened && !module.sets().isEmpty() ? calcSize()-VERTICAL_GAP : boxY)))) optionOpened=!optionOpened;
         if (!Debug.DISABLE_STATE.contains(module.id())) this.sch.onClick(mouseX, mouseY, mouseButton);
+        if (!optionOpened) return;
         for (int i = 0; i < triggers.size(); i++) {
             WidgetUpdatable upt = triggers.get(i);
             if (upt == null) continue;
