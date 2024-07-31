@@ -33,6 +33,12 @@ public class ClickSimTick {
         data.put(code, tick);
     }
 
+    public static void updatableClick(int code, int tick) {
+        KeyBinding.setKeyBindState(code, true);
+        if (!data.containsKey(code)) KeyBinding.onTick(code);
+        data.put(code, tick);
+    }
+
     public static void clickWCheck(int code, int tick) {
         if (data.containsKey(code)) return;
         click(code, tick);

@@ -24,6 +24,7 @@ import me.qigan.abse.fr.dungons.*;
 import me.qigan.abse.fr.other.*;
 import me.qigan.abse.fr.qol.*;
 import me.qigan.abse.fr.qol.mining.AutoMining;
+import me.qigan.abse.fr.qol.mining.GrottoFinder;
 import me.qigan.abse.fr.qol.mining.RouteRecorder;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import me.qigan.abse.mapping.mod.M7Route;

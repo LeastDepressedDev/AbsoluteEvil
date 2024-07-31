@@ -1,11 +1,10 @@
-package me.qigan.abse.fr.other;
+package me.qigan.abse.fr.qol.mining;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
-import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.vp.Esp;
@@ -17,14 +16,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.network.play.server.S21PacketChunkData;
-import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.Sys;
 
 import java.awt.*;
 import java.util.*;

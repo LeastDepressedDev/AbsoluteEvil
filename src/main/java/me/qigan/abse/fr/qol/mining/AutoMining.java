@@ -17,6 +17,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.network.play.server.S21PacketChunkData;
+import net.minecraft.network.play.server.S22PacketMultiBlockChange;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -25,6 +27,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -64,6 +67,11 @@ public class AutoMining extends Module {
     }
 
     @SubscribeEvent
+    void worldChange(WorldEvent.Load e) {
+        clearRoute();
+    }
+
+    @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
         if (!isEnabled() || e.phase == TickEvent.Phase.END) return;
         if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) return;
@@ -76,6 +84,7 @@ public class AutoMining extends Module {
         BlockPos playerPos = Sync.playerPosAsBlockPos();
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (active) {
+            reselect();
             if (Utils.compare(playerPos, blockRoute.get(progress).add(0, 1, 0))) {
                 if (stage != STAGE.MINING) reselect();
                 stage = STAGE.MINING;
@@ -96,7 +105,7 @@ public class AutoMining extends Module {
 
                     BlockPos trace = player.rayTrace(DIST, 1f).getBlockPos();
                     if (Utils.compare(trace, mining)) {
-                        ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 2);
+                        ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 2);
                     }
                 } else {
                     if (progress+1 < blockRoute.size()) progress++;
@@ -118,7 +127,7 @@ public class AutoMining extends Module {
                         TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 4);
                     }, 10);
 
-                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
+                    ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
 
                     forceDelay = 15;
                 }
@@ -158,12 +167,12 @@ public class AutoMining extends Module {
     @SubscribeEvent
     void blockDestroyPacket(PacketEvent.ReceiveEvent e) {
         if (!isEnabled()) return;
-        if (e.packet instanceof S23PacketBlockChange) {
-            S23PacketBlockChange packet = (S23PacketBlockChange) e.packet;
-            if (Utils.compare(packet.getBlockPosition(), mining)) {
-                forceDelay = Index.MAIN_CFG.getIntVal("auto_mining_force");
-                rollOffset();
-                reselect();
+        if (e.packet instanceof S22PacketMultiBlockChange) {
+            S22PacketMultiBlockChange packet = (S22PacketMultiBlockChange) e.packet;
+            for (S22PacketMultiBlockChange.BlockUpdateData data : packet.getChangedBlocks()) {
+                if (Utils.compare(data.getPos(), mining)) {
+                    forceDelay = Index.MAIN_CFG.getIntVal("auto_mining_force");
+                }
             }
         }
     }
@@ -205,7 +214,8 @@ public class AutoMining extends Module {
             for (int y = -4; y < 4; y++) {
                 for (int z = -4; z < 4; z++) {
                     BlockPos scanPos = playerPos.add(x, y, z);
-                    if (scanPos.distanceSq(playerPos) > DIST*DIST) continue;
+                    double sq = scanPos.distanceSq(playerPos);
+                    if (sq > DIST*DIST || sq < 1.3d*1.3d) continue;
                     Block curBlock = Minecraft.getMinecraft().theWorld.getBlockState(scanPos).getBlock();
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
                     if (sel == null) {
@@ -249,7 +259,7 @@ public class AutoMining extends Module {
     @SubscribeEvent
     void interactEvent(PlayerInteractEvent e) {
         if (!isEnabled() || blockRoute.isEmpty()) return;
-        if (e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+        if (e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             if (Utils.compare(blockRoute.get(progress), e.pos)) {
                 active = true;
             }
@@ -302,7 +312,9 @@ public class AutoMining extends Module {
     }
 
     public static void reselect() {
-        mining = crystalScan(Sync.playerPosAsBlockPos().add(0, 1, 0), mining);
+        BlockPos pseudoMining = crystalScan(Sync.playerPosAsBlockPos().add(0, 1, 0), mining);
+        if (!Utils.compare(pseudoMining, mining)) rollOffset();
+        mining = pseudoMining;
     }
 
     public static void loadRoute() {

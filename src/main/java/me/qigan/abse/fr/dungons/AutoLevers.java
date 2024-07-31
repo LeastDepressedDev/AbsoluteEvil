@@ -101,6 +101,6 @@ public class AutoLevers extends Module {
 
     @Override
     public String description() {
-        return "This shit was annoying so no it's automatic";
+        return "This shit was annoying so now it's automatic";
     }
 }

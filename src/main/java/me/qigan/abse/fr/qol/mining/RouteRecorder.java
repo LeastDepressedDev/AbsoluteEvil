@@ -44,7 +44,7 @@ public class RouteRecorder extends Module {
     @SubscribeEvent
     void interact(PlayerInteractEvent e) {
         if (!isEnabled()) return;
-        if (e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && Minecraft.getMinecraft().thePlayer.isSneaking() && Minecraft.getMinecraft().thePlayer.getHeldItem() == null) {
+        if (e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && Minecraft.getMinecraft().thePlayer.isSneaking() && Minecraft.getMinecraft().thePlayer.getHeldItem() == null) {
             if (blockRoute.isEmpty() || !Utils.compare(blockRoute.getLast(), e.pos)) blockRoute.add(e.pos);
         }
     }
@@ -107,6 +107,6 @@ public class RouteRecorder extends Module {
 
     @Override
     public String description() {
-        return "Records route for mining.\n Shift left click on block with hand to add it.";
+        return "Records route for mining.\n Shift right click on block with hand to add it.";
     }
 }
