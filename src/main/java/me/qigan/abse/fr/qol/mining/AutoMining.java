@@ -19,19 +19,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 @DangerousModule
 public class AutoMining extends Module {
@@ -87,6 +91,7 @@ public class AutoMining extends Module {
             case IDLE: return;
             case MINING: {
                 if (mining != null) {
+                    if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                     simTowardRotation(mining);
 
                     BlockPos trace = player.rayTrace(DIST, 1f).getBlockPos();
@@ -100,6 +105,7 @@ public class AutoMining extends Module {
             }
             break;
             case MOVING: {
+                if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                 BlockPos target = blockRoute.get(progress);
                 simTowardRotation(target);
 
@@ -133,9 +139,10 @@ public class AutoMining extends Module {
     }
 
     public static void rollOffset() {
-        offsets[0] = rand.nextInt()%300f/1000f;
-        offsets[1] = rand.nextInt()%300f/1000f;
-        offsets[2] = rand.nextInt()%300f/1000f;
+        float spread = Index.MAIN_CFG.getIntVal("auto_mining_sprd");
+        offsets[0] = rand.nextInt()%spread/1000f;
+        offsets[1] = rand.nextInt()%spread/1000f;
+        offsets[2] = rand.nextInt()%spread/1000f;
     }
 
 
@@ -246,6 +253,8 @@ public class AutoMining extends Module {
                     new BlockPos(3, 3, 9)
             ));
         }));
+        list.add(new SetsData<>("auto_mining_comment0", "Manual mode is disabling all the automation but keeps visuals enabled", ValType.COMMENT, null));
+        list.add(new SetsData<>("auto_mining_manual", "Manual mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_debug", "\u00A7cDebug mode", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_comment1", "Routes are located in config/abse/mining", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_load", "Load route", ValType.BUTTON, (Runnable) AutoMining::loadRoute));
@@ -255,6 +264,7 @@ public class AutoMining extends Module {
         list.add(new SetsData<>("auto_mining_comment2", "Active settings: ", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_force", "Force delay ticks", ValType.NUMBER, "1"));
         list.add(new SetsData<>("auto_mining_aim", "Aim speed", ValType.DOUBLE_NUMBER, "11"));
+        list.add(new SetsData<>("auto_mining_sprd", "Spread[cord/1000]", ValType.NUMBER, "300"));
         return list;
     }
 
@@ -283,11 +293,35 @@ public class AutoMining extends Module {
     }
 
     public static void loadRoute() {
-
+        File file = new File(Loader.instance().getConfigDir() + "/abse/mining/" + Index.MAIN_CFG.getStrVal("auto_mining_load_path"));
+        if (file.isFile() && file.exists()) {
+            routeReset();
+            try {
+                List<BlockPos> path = new ArrayList<>();
+                JSONObject obj = new JSONObject(new Scanner(file).useDelimiter("\\Z").next());
+                JSONArray posses = obj.getJSONArray("pos");
+                if (posses.length() != obj.getInt("size")) {
+                    Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7cInvalid route configuration!"));
+                    return;
+                }
+                for (int i = 0; i < posses.length(); i++) {
+                    JSONObject pos = posses.getJSONObject(i);
+                    path.add(new BlockPos(pos.getInt("x"), pos.getInt("y"), pos.getInt("z")));
+                }
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7aLoaded " + obj.getString("name") + " by " + obj.getString("author") + ". Length: " + obj.getInt("size") + "."));
+                blockRoute = path;
+            } catch (FileNotFoundException e) {
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7cUnpredicted thing went wrong!"));
+                throw new RuntimeException(e);
+            }
+        } else {
+            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7cRoute file not found!"));
+        }
     }
 
     public static void init() {
-
+        File file = new File(Loader.instance().getConfigDir() + "/abse/mining");
+        if (!file.exists()) file.mkdirs();
     }
 
     public static void routeReset() {

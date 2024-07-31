@@ -12,6 +12,7 @@ import me.qigan.abse.crp.ovr.CustomEntRender;
 import me.qigan.abse.crp.ovr.ExtendedController;
 import me.qigan.abse.crp.ovr.MCMainMenu;
 import me.qigan.abse.fr.exc.TickTasks;
+import me.qigan.abse.fr.qol.mining.AutoMining;
 import me.qigan.abse.mapping.Rooms;
 import me.qigan.abse.mapping.mod.M7Route;
 import me.qigan.abse.fr.exc.ClickSimTick;
@@ -127,6 +128,8 @@ public class MainWrapper {
 
         File file = new File(Loader.instance().getConfigDir() + "/abse/configs");
         if (!file.exists()) file.mkdirs();
+
+        AutoMining.init();
 
         Holder.link();
         System.out.println("ABSE SOUND REG: " + SoundUtils.initialise() + " sounds registered.");
