@@ -101,7 +101,7 @@ public class AutoMining extends Module {
             case MINING: {
                 if (mining != null) {
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
-                    simTowardRotation(mining);
+                    simTowardRotation(mining, 1d);
 
                     BlockPos trace = player.rayTrace(DIST, 1f).getBlockPos();
                     if (Utils.compare(trace, mining)) {
@@ -116,7 +116,7 @@ public class AutoMining extends Module {
             case MOVING: {
                 if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                 BlockPos target = blockRoute.get(progress);
-                simTowardRotation(target);
+                simTowardRotation(target, 1.3d);
 
                 BlockPos trace = player.rayTrace(56, 1f).getBlockPos();
                 if (Utils.compare(trace, target)) {
@@ -129,7 +129,7 @@ public class AutoMining extends Module {
 
                     ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
 
-                    forceDelay = 15;
+                    forceDelay = 18;
                 }
             }
             break;
@@ -144,14 +144,14 @@ public class AutoMining extends Module {
         return -1;
     }
 
-    public static void simTowardRotation(BlockPos target) {
+    public static void simTowardRotation(BlockPos target, double speedMod) {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         Block block = Minecraft.getMinecraft().theWorld.getBlockState(target).getBlock();
         double dx = target.getX() + 0.5d - player.posX + (block == Blocks.stained_glass_pane ? 0 : offsets[0]);
         double dy = target.getY() - player.posY - 1d + offsets[1];
         double dz = target.getZ() + 0.5d - player.posZ + (block == Blocks.stained_glass_pane ? 0 : offsets[2]);
         Float[] angles = Utils.getRotationsTo(dx, dy, dz, new float[]{player.rotationYaw, player.rotationPitch});
-        SmoothAimControl.set(angles, 2, 20, Index.MAIN_CFG.getDoubleVal("auto_mining_aim"));
+        SmoothAimControl.set(angles, 2, 20, Index.MAIN_CFG.getDoubleVal("auto_mining_aim")*speedMod);
     }
 
     public static void rollOffset() {
@@ -216,6 +216,7 @@ public class AutoMining extends Module {
                     BlockPos scanPos = playerPos.add(x, y, z);
                     double sq = scanPos.distanceSq(playerPos);
                     if (sq > DIST*DIST || sq < 1.3d*1.3d) continue;
+                    if (scanPos.getX() == playerPos.getX() && scanPos.getZ() == playerPos.getZ() && scanPos.getY() <= playerPos.getY()) continue;
                     Block curBlock = Minecraft.getMinecraft().theWorld.getBlockState(scanPos).getBlock();
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
                     if (sel == null) {
