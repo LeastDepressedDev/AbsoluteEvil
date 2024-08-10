@@ -22,6 +22,7 @@ import net.minecraft.network.play.server.S22PacketMultiBlockChange;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -40,6 +41,8 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
 
+//Pass msg: Click here to purchase a new 6 hour pass for 10,000 Coins
+
 @DangerousModule
 public class AutoMining extends Module {
 
@@ -51,6 +54,7 @@ public class AutoMining extends Module {
     public static boolean active = false;
     public static BlockPos mining = null;
     public static float[] offsets = new float[]{0, 0, 0};
+    public static long lastUseAbility = 0;
 
     public static int aotvSlot = -1;
 
@@ -100,6 +104,7 @@ public class AutoMining extends Module {
             case IDLE: return;
             case MINING: {
                 if (mining != null) {
+                    if (Index.MAIN_CFG.getBoolVal("auto_mining_abil") && System.currentTimeMillis()-lastUseAbility > 130000) clickAbility();
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                     simTowardRotation(mining, 1d);
 
@@ -134,6 +139,21 @@ public class AutoMining extends Module {
             }
             break;
         }
+    }
+
+    @SubscribeEvent
+    void chat(ClientChatReceivedEvent e) {
+        if (!isEnabled()) return;
+        String text = e.message.getFormattedText();
+        if (text.equalsIgnoreCase("Mining Speed Boost is now available!") && Index.MAIN_CFG.getBoolVal("auto_mining_abil")) clickAbility();
+        if (text.equalsIgnoreCase("You used your Mining Speed Boost Pickaxe Ability!")) {
+            lastUseAbility = System.currentTimeMillis();
+        }
+    }
+
+    private static void clickAbility() {
+        TickTasks.call(() -> ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2), 2);
+        lastUseAbility = System.currentTimeMillis();
     }
 
     private static int findSlot(String str) {
@@ -286,6 +306,7 @@ public class AutoMining extends Module {
         list.add(new SetsData<>("auto_mining_clear", "Clear route", ValType.BUTTON, (Runnable) AutoMining::clearRoute));
         list.add(new SetsData<>("auto_mining_reset", "Reset route", ValType.BUTTON, (Runnable) AutoMining::routeReset));
         list.add(new SetsData<>("auto_mining_comment2", "Active settings: ", ValType.COMMENT, null));
+        list.add(new SetsData<>("auto_mining_abil", "Auto ability on ready", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_force", "Force delay ticks", ValType.NUMBER, "1"));
         list.add(new SetsData<>("auto_mining_aim", "Aim speed", ValType.DOUBLE_NUMBER, "11"));
         list.add(new SetsData<>("auto_mining_sprd", "Spread[cord/1000]", ValType.NUMBER, "300"));
