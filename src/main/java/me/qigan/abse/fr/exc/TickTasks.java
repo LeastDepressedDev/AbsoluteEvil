@@ -34,4 +34,8 @@ public class TickTasks {
     public static void call(Runnable rbl, int ticks) {
         queue.add(new AddressedData<>(rbl, ticks));
     }
+
+    public static void clearQ() {
+        queue.clear();
+    }
 }

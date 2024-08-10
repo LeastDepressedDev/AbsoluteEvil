@@ -67,7 +67,8 @@ public class AutoMining extends Module {
     public enum STAGE {
         IDLE,
         MINING,
-        MOVING
+        MOVING,
+        MOBS
     }
 
     @SubscribeEvent
@@ -85,20 +86,8 @@ public class AutoMining extends Module {
         }
         aotvSlot = findSlot("ASPECT_OF_THE_VOID");
         if (aotvSlot == -1 && !Index.MAIN_CFG.getBoolVal("auto_mining_debug")) return;
-        BlockPos playerPos = Sync.playerPosAsBlockPos();
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (active) {
-            reselect();
-            if (Utils.compare(playerPos, blockRoute.get(progress).add(0, 1, 0))) {
-                if (stage != STAGE.MINING) reselect();
-                stage = STAGE.MINING;
-            } else {
-                stage = STAGE.MOVING;
-            }
-        } else {
-            stage = STAGE.IDLE;
-            mining = null;
-        }
+        stateProc();
 
         switch (stage) {
             case IDLE: return;
@@ -108,9 +97,12 @@ public class AutoMining extends Module {
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                     simTowardRotation(mining, 1d);
 
-                    BlockPos trace = player.rayTrace(DIST, 1f).getBlockPos();
-                    if (Utils.compare(trace, mining)) {
-                        ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 2);
+                    BlockPos trace = Minecraft.getMinecraft().objectMouseOver.getBlockPos();
+                    if (trace != null) {
+                        Block block = Minecraft.getMinecraft().theWorld.getBlockState(trace).getBlock();
+                        if (Utils.compare(trace, mining) || block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
+                            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 2);
+                        }
                     }
                 } else {
                     if (progress+1 < blockRoute.size()) progress++;
@@ -132,8 +124,7 @@ public class AutoMining extends Module {
                         TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 4);
                     }, 10);
 
-                    ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
-
+                    ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
                     forceDelay = 18;
                 }
             }
@@ -151,8 +142,31 @@ public class AutoMining extends Module {
         }
     }
 
+    private static void stateProc() {
+        BlockPos playerPos = Sync.playerPosAsBlockPos();
+        if (active) {
+
+            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 2);
+            reselect();
+            if (Utils.compare(playerPos, blockRoute.get(progress).add(0, 1, 0))) {
+                if (stage != STAGE.MINING) reselect();
+                stage = STAGE.MINING;
+            } else {
+                stage = STAGE.MOVING;
+            }
+        } else {
+            if (stage != STAGE.IDLE) TickTasks.clearQ();
+            stage = STAGE.IDLE;
+            mining = null;
+        }
+    }
+
     private static void clickAbility() {
-        TickTasks.call(() -> ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2), 2);
+        active = false;
+        TickTasks.call(() -> {
+            ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 4);
+            active = true;
+        }, 2);
         lastUseAbility = System.currentTimeMillis();
     }
 
@@ -230,13 +244,16 @@ public class AutoMining extends Module {
 
     public static BlockPos crystalScan(BlockPos playerPos, BlockPos lastMinedPos) {
         BlockPos sel = null;
-        for (int x = -4; x < 4; x++) {
-            for (int y = -4; y < 4; y++) {
-                for (int z = -4; z < 4; z++) {
+        for (int x = -5; x < 5; x++) {
+            for (int y = -5; y < 5; y++) {
+                for (int z = -5; z < 5; z++) {
+                    //TODO: Add better distance between corner of block and player cuz fuck this shit i cannot think rn
                     BlockPos scanPos = playerPos.add(x, y, z);
                     double sq = scanPos.distanceSq(playerPos);
-                    if (sq > DIST*DIST || sq < 1.3d*1.3d) continue;
-                    if (scanPos.getX() == playerPos.getX() && scanPos.getZ() == playerPos.getZ() && scanPos.getY() <= playerPos.getY()) continue;
+                    if (sq > DIST*DIST) continue;
+                    if (
+                            (Math.abs(scanPos.getX() - playerPos.getX()) <= 1 && Math.abs(scanPos.getZ() - playerPos.getZ()) <= 1)
+                            && scanPos.getY() < playerPos.getY()) continue;
                     Block curBlock = Minecraft.getMinecraft().theWorld.getBlockState(scanPos).getBlock();
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
                     if (sel == null) {
@@ -264,14 +281,14 @@ public class AutoMining extends Module {
             BlockPos curPos = blockRoute.get(i);
             if (prePos != null) Esp.drawTracer(prePos.getX()+0.5d, prePos.getY()+0.5d, prePos.getZ()+0.5d,
                     curPos.getX()+0.5d, curPos.getY()+0.5d, curPos.getZ()+0.5d,
-                    Color.magenta, 8f, true);
+                    Color.magenta, 3f, true);
             Esp.autoBox3D(curPos, i == progress ? Color.green : Color.yellow, 2f, true);
             prePos = curPos;
             if (i == blockRoute.size()-1) {
                 BlockPos sp = blockRoute.get(0);
                 Esp.drawTracer(prePos.getX()+0.5d, prePos.getY()+0.5d, prePos.getZ()+0.5d,
                         sp.getX()+0.5d, sp.getY()+0.5d, sp.getZ()+0.5d,
-                        Color.magenta, 8f, true);
+                        Color.magenta, 3f, true);
             }
         }
         if (mining != null) Esp.autoBox3D(mining, Color.magenta, 4f, false);
@@ -306,6 +323,7 @@ public class AutoMining extends Module {
         list.add(new SetsData<>("auto_mining_clear", "Clear route", ValType.BUTTON, (Runnable) AutoMining::clearRoute));
         list.add(new SetsData<>("auto_mining_reset", "Reset route", ValType.BUTTON, (Runnable) AutoMining::routeReset));
         list.add(new SetsData<>("auto_mining_comment2", "Active settings: ", ValType.COMMENT, null));
+        list.add(new SetsData<>("auto_mining_mobs", "Kill mobs", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_abil", "Auto ability on ready", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_force", "Force delay ticks", ValType.NUMBER, "1"));
         list.add(new SetsData<>("auto_mining_aim", "Aim speed", ValType.DOUBLE_NUMBER, "11"));
