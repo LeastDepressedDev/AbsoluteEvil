@@ -11,6 +11,7 @@ import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.CustomEntRender;
 import me.qigan.abse.crp.ovr.ExtendedController;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.fr.exc.Alert;
 import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.fr.qol.mining.AutoMining;
 import me.qigan.abse.mapping.Rooms;
@@ -120,6 +121,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new ClickSimTick());
         MinecraftForge.EVENT_BUS.register(new TickTasks());
         MinecraftForge.EVENT_BUS.register(new RouteUpdater());
+        MinecraftForge.EVENT_BUS.register(new Alert());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 
