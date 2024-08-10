@@ -4,6 +4,7 @@ import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.exc.Alert;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
@@ -63,13 +64,7 @@ public class FireballDetector extends Module {
 
             for (int i = 0; i <= 100; i++) {
                 if (Minecraft.getMinecraft().thePlayer.getDistance(ent.posX + moveX * i, ent.posY + moveY * i, ent.posZ + moveZ * i) < 7) {
-                    if (tickCd == 0) {
-                        GuiNotifier.call("\u00A7cFireball incoming", 30, true, 0xFFFFFF);
-                        Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
-                        tickCd = 7;
-                    } else {
-                        tickCd--;
-                    }
+                    Alert.call("\u00A7cFireball incoming", 2);
                 }
             }
         }
