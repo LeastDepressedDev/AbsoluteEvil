@@ -29,7 +29,7 @@ import java.util.List;
 
 public class GrottoFinder extends Module {
 
-    public static List<BlockPos> grottos = new ArrayList<>();
+    public static List<AddressedData<BlockPos, Integer>> grottos = new ArrayList<>();
 
     public static Set<AddressedData<Integer, Integer>> vChunks = new HashSet<>();
 
@@ -73,9 +73,11 @@ public class GrottoFinder extends Module {
                     if (state.getBlock() != Blocks.stained_glass) continue;
                     if (state.getValue(BlockStainedGlass.COLOR) == EnumDyeColor.MAGENTA) {
                         boolean preq = false;
-                        for (BlockPos grot : grottos) {
-                            if (pos.distanceSq(grot.getX(), grot.getY(), grot.getZ()) < DISTANCE_PARA_CONST) {
+                        for (AddressedData<BlockPos, Integer> grot : grottos) {
+                            BlockPos bp = grot.getNamespace();
+                            if (pos.distanceSq(bp.getX(), bp.getY(), bp.getZ()) < DISTANCE_PARA_CONST) {
                                 preq = true;
+                                grot.setObject(grot.getObject()+1);
                                 break;
                             }
                         }
@@ -97,15 +99,17 @@ public class GrottoFinder extends Module {
         if (!isEnabled()) return;
 
         for (int i = 0; i < grottos.size(); i++) {
-            BlockPos pos = grottos.get(i);
+            AddressedData<BlockPos, Integer> data = grottos.get(i);
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_wp")) {
-                Esp.autoBox3D(pos, Color.magenta, 2f, true);
+                Esp.autoBox3D(data.getNamespace(), Color.magenta, 2f, true);
                 //Esp.autoBeaconBeam(pos.getX(), pos.getY(), pos.getZ(), Color.magenta.getRGB(), 100, e.partialTicks);
-                Esp.renderTextInWorld("Grotto #" + i, pos, Color.magenta.getRGB(), 3f, e.partialTicks);
+                Esp.renderTextInWorld("Grotto #" + i, data.getNamespace().add(0, 3, 0), Color.magenta.getRGB(), 3f, e.partialTicks);
+                Esp.renderTextInWorld("Crystals: " + data.getObject(), data.getNamespace(), Color.magenta.getRGB(), 2f, e.partialTicks);
             }
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_tracer")) {
                 EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-                Esp.drawTracer(player.posX, player.posY, player.posY, pos.getX()+0.5d, pos.getY()+0.5d, pos.getZ()+0.5d,
+                Esp.drawTracer(player.posX, player.posY, player.posY,
+                        data.getNamespace().getX()+0.5d, data.getNamespace().getY()+0.5d, data.getNamespace().getZ()+0.5d,
                         Color.magenta, 2f, true);
             }
         }
@@ -120,7 +124,7 @@ public class GrottoFinder extends Module {
     }
 
     public static void found(BlockPos pos) {
-        grottos.add(pos);
+        grottos.add(new AddressedData<>(pos, 1));
 
         String plLine = "[";
         int amt = 0;

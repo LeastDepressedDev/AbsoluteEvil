@@ -115,8 +115,8 @@ public class AutoMining extends Module {
                         if (moveTicks <= 0) {
                             if (Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(blockRoute.get(progress).add(0, 1, 0)) < 0.6) {
                                 int side = rand.nextInt() % 3;
-                                moveTicks = 20 + rand.nextInt() % 41;
-                                ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 1 + moveTicks / 20 + rand.nextInt() % 2);
+                                moveTicks = 60 + rand.nextInt() % 41;
+                                ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 1 + moveTicks / 40);
 //                            if (side == 0) ClickSimTick.updatableClick(rand.nextBoolean() ?
 //                                    Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode() : Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode(), 4);
                             }
@@ -145,6 +145,7 @@ public class AutoMining extends Module {
                     TickTasks.call(() -> {
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2);
                         TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 6);
+                        rollOffset();
                     }, 10);
 
                     ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
@@ -218,17 +219,8 @@ public class AutoMining extends Module {
     }
 
     private static void clickAbility() {
-        active = false;
-        new Thread(() -> {
-            try {
-                ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 4);
-                Thread.sleep(100);
-                active = true;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-        }).start();
+        forceDelay = 8;
+        TickTasks.call(() -> ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2), 4);
         lastUseAbility = System.currentTimeMillis();
     }
 
@@ -324,13 +316,13 @@ public class AutoMining extends Module {
                     //TODO: Complete selector
                     BlockPos centralPos = blockRoute.get(progress).add(0, 2, 0);
                     BlockPos scanPos = centralPos.add(x, y, z);
-                    double sq = scanPos.distanceSq(centralPos);
-                    double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.7 : 0);
+                    IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(scanPos);
+                    Block curBlock = state.getBlock();
+                    double sq = curBlock == Blocks.stained_glass ? scanPos.distanceSq(centralPos) : scanPos.distanceSqToCenter(centralPos.getX(), centralPos.getY(), centralPos.getZ());
+                    double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.5 : 0);
                     if (sq > subDist*subDist) continue;
                     if ((Math.abs(scanPos.getX() - centralPos.getX()) <= 1 && Math.abs(scanPos.getZ() - centralPos.getZ()) <= 1)
                             && scanPos.getY() <= centralPos.getY()) continue;
-                    IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(scanPos);
-                    Block curBlock = state.getBlock();
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_fil")) {
                         Collection<EnumDyeColor> colors = AutoMiningFilter.allowedColors();
