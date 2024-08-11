@@ -15,6 +15,8 @@ import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStainedGlass;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -23,6 +25,7 @@ import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.network.play.server.S21PacketChunkData;
 import net.minecraft.network.play.server.S22PacketMultiBlockChange;
 import net.minecraft.network.play.server.S23PacketBlockChange;
@@ -314,19 +317,26 @@ public class AutoMining extends Module {
 
     public static BlockPos crystalScan(BlockPos playerPos, BlockPos lastMinedPos) {
         BlockPos sel = null;
-        for (int x = -5; x < 5; x++) {
-            for (int y = -3; y < 4; y++) {
-                for (int z = -5; z < 5; z++) {
+        int corner = Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 4 : 5;
+        for (int x = -corner; x < corner; x++) {
+            for (int y = -5; y < 5; y++) {
+                for (int z = -corner; z < corner; z++) {
                     //TODO: Complete selector
-                    BlockPos centralPos = blockRoute.get(progress);
+                    BlockPos centralPos = blockRoute.get(progress).add(0, 2, 0);
                     BlockPos scanPos = centralPos.add(x, y, z);
                     double sq = scanPos.distanceSq(centralPos);
                     double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.7 : 0);
                     if (sq > subDist*subDist) continue;
                     if ((Math.abs(scanPos.getX() - centralPos.getX()) <= 1 && Math.abs(scanPos.getZ() - centralPos.getZ()) <= 1)
                             && scanPos.getY() <= centralPos.getY()) continue;
-                    Block curBlock = Minecraft.getMinecraft().theWorld.getBlockState(scanPos).getBlock();
+                    IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(scanPos);
+                    Block curBlock = state.getBlock();
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
+                    if (Index.MAIN_CFG.getBoolVal("auto_mining_fil")) {
+                        Collection<EnumDyeColor> colors = AutoMiningFilter.allowedColors();
+                        if (!colors.contains(state.getValue(BlockStainedGlass.COLOR))) continue;
+                    }
+
                     if (sel == null) {
                         sel = scanPos;
                     } else {

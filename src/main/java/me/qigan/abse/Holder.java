@@ -23,10 +23,7 @@ import me.qigan.abse.fr.cbh.*;
 import me.qigan.abse.fr.dungons.*;
 import me.qigan.abse.fr.other.*;
 import me.qigan.abse.fr.qol.*;
-import me.qigan.abse.fr.qol.mining.AutoMining;
-import me.qigan.abse.fr.qol.mining.AutoMiningSecCheck;
-import me.qigan.abse.fr.qol.mining.GrottoFinder;
-import me.qigan.abse.fr.qol.mining.RouteRecorder;
+import me.qigan.abse.fr.qol.mining.*;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import me.qigan.abse.mapping.mod.M7Route;
 import me.qigan.abse.mapping.mod.Remapping;
@@ -100,6 +97,7 @@ public class Holder {
 		register(new AbsoluteReach());
 		register(new GrottoFinder());
 		register(new AutoMining());
+		register(new AutoMiningFilter());
 		register(new AutoMiningSecCheck());
 		register(new RouteRecorder());
 	}
