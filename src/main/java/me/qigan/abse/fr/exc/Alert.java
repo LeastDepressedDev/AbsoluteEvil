@@ -7,8 +7,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class Alert {
 
-    public static int globalTick = 0;
-    public static String alertText = "Def";
+    private static int globalTick = 0;
+    private static String alertText = "Def";
+    private static int vol = 2;
 
     @SubscribeEvent
     void tick(TickEvent.ClientTickEvent e) {
@@ -16,13 +17,19 @@ public class Alert {
         if (globalTick == 0) return;
 
         GuiNotifier.call(alertText, 30, true, 0xFFFFFF);
-        Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
-        Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
+        for (int i = 0; i < vol; i++) {
+            Minecraft.getMinecraft().thePlayer.playSound("note.pling", 2f, 1f);
+        }
         globalTick--;
     }
 
-    public static void call(String text, int ticks) {
+    public static void call(String text, int ticks, int volume) {
         alertText = text;
         globalTick = ticks;
+        vol = volume;
+    }
+
+    public static void forceStop() {
+        globalTick = 0;
     }
 }

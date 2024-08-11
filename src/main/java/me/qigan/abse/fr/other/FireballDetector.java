@@ -64,7 +64,7 @@ public class FireballDetector extends Module {
 
             for (int i = 0; i <= 100; i++) {
                 if (Minecraft.getMinecraft().thePlayer.getDistance(ent.posX + moveX * i, ent.posY + moveY * i, ent.posZ + moveZ * i) < 7) {
-                    Alert.call("\u00A7cFireball incoming", 2);
+                    Alert.call("\u00A7cFireball incoming", 2, 2);
                 }
             }
         }

@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.Module;
+import me.qigan.abse.fr.exc.Alert;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.fr.exc.TickTasks;
@@ -15,6 +16,11 @@ import me.qigan.abse.vp.Esp;
 import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityMagmaCube;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S21PacketChunkData;
@@ -57,9 +63,12 @@ public class AutoMining extends Module {
     public static long lastUseAbility = 0;
 
     public static int aotvSlot = -1;
+    public static int hypSlot = -1;
 
     public static STAGE stage = STAGE.IDLE;
     public static int progress = 0;
+
+    public static int moveTicks = 0;
 
 
     public static int forceDelay = 0;
@@ -85,7 +94,9 @@ public class AutoMining extends Module {
             return;
         }
         aotvSlot = findSlot("ASPECT_OF_THE_VOID");
+        hypSlot = findSlot("NECRON_BLADE", "HYPERION", "ASTRAEA", "SCYLLA", "VALKYRIE");
         if (aotvSlot == -1 && !Index.MAIN_CFG.getBoolVal("auto_mining_debug")) return;
+        if (hypSlot == -1 && Index.MAIN_CFG.getBoolVal("auto_mining_mobs")) return;
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         stateProc();
 
@@ -97,6 +108,18 @@ public class AutoMining extends Module {
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                     simTowardRotation(mining, 1d);
 
+                    if (Index.MAIN_CFG.getBoolVal("auto_mining_advm")) {
+                        if (moveTicks <= 0) {
+                            if (Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(blockRoute.get(progress).add(0, 1, 0)) < 0.6) {
+                                int side = rand.nextInt() % 3;
+                                moveTicks = 20 + rand.nextInt() % 41;
+                                ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 1 + moveTicks / 20 + rand.nextInt() % 2);
+//                            if (side == 0) ClickSimTick.updatableClick(rand.nextBoolean() ?
+//                                    Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode() : Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode(), 4);
+                            }
+                        } else moveTicks--;
+                    }
+
                     BlockPos trace = Minecraft.getMinecraft().objectMouseOver.getBlockPos();
                     if (trace != null) {
                         Block block = Minecraft.getMinecraft().theWorld.getBlockState(trace).getBlock();
@@ -104,10 +127,7 @@ public class AutoMining extends Module {
                             ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 2);
                         }
                     }
-                } else {
-                    if (progress+1 < blockRoute.size()) progress++;
-                    else progress = 0;
-                }
+                } else next();
             }
             break;
             case MOVING: {
@@ -121,7 +141,7 @@ public class AutoMining extends Module {
                     Minecraft.getMinecraft().thePlayer.inventory.currentItem = aotvSlot;
                     TickTasks.call(() -> {
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2);
-                        TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 4);
+                        TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 6);
                     }, 10);
 
                     ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
@@ -129,7 +149,25 @@ public class AutoMining extends Module {
                 }
             }
             break;
+            case MOBS: {
+                SmoothAimControl.set(new Float[]{null, 90f}, 2, 20, 11);
+                if (player.rotationPitch == 90f) {
+                    int slot = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
+                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = hypSlot;
+                    TickTasks.call(() -> {
+                        ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2);
+                        TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 8);
+                    }, 5);
+                    forceDelay = 15;
+                }
+            }
+            break;
         }
+    }
+
+    private static void next() {
+        if (progress+1 < blockRoute.size()) progress++;
+        else progress = 0;
     }
 
     @SubscribeEvent
@@ -143,12 +181,23 @@ public class AutoMining extends Module {
     }
 
     private static void stateProc() {
-        BlockPos playerPos = Sync.playerPosAsBlockPos();
         if (active) {
+
+            if (Index.MAIN_CFG.getBoolVal("auto_mining_mobs")) {
+                for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+                    if (ent instanceof EntityIronGolem || ent instanceof EntityMagmaCube) {
+                        if (ent.getDistanceToEntity(Minecraft.getMinecraft().thePlayer) < 6) {
+                            stage = STAGE.MOBS;
+                            return;
+                        }
+                    }
+                }
+            }
 
             ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 2);
             reselect();
-            if (Utils.compare(playerPos, blockRoute.get(progress).add(0, 1, 0))) {
+
+            if (checkIn()) {
                 if (stage != STAGE.MINING) reselect();
                 stage = STAGE.MINING;
             } else {
@@ -161,19 +210,31 @@ public class AutoMining extends Module {
         }
     }
 
+    private static boolean checkIn() {
+        return Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(blockRoute.get(progress).add(0, 1, 0)) < 0.7;
+    }
+
     private static void clickAbility() {
         active = false;
-        TickTasks.call(() -> {
-            ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 4);
-            active = true;
-        }, 2);
+        new Thread(() -> {
+            try {
+                ClickSimTick.clickWCheck(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 4);
+                Thread.sleep(100);
+                active = true;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }).start();
         lastUseAbility = System.currentTimeMillis();
     }
 
-    private static int findSlot(String str) {
+    private static int findSlot(String... str) {
         for (int i = 0; i < 9; i++) {
-            if (Utils.getSbData(Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(i))
-                    .getString("id").equalsIgnoreCase(str)) return i;
+            for (String line : str) {
+                if (Utils.getSbData(Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(i))
+                        .getString("id").equalsIgnoreCase(line)) return i;
+            }
         }
         return -1;
     }
@@ -182,10 +243,18 @@ public class AutoMining extends Module {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         Block block = Minecraft.getMinecraft().theWorld.getBlockState(target).getBlock();
         double dx = target.getX() + 0.5d - player.posX + (block == Blocks.stained_glass_pane ? 0 : offsets[0]);
-        double dy = target.getY() - player.posY - 1d + offsets[1];
+        double dy = target.getY() - player.posY - 1d + (isClosedBlock(target) ? (target.getY() < player.posY ? +0.5d : -0.5d ) : offsets[1]);
         double dz = target.getZ() + 0.5d - player.posZ + (block == Blocks.stained_glass_pane ? 0 : offsets[2]);
         Float[] angles = Utils.getRotationsTo(dx, dy, dz, new float[]{player.rotationYaw, player.rotationPitch});
         SmoothAimControl.set(angles, 2, 20, Index.MAIN_CFG.getDoubleVal("auto_mining_aim")*speedMod);
+    }
+
+    private static boolean isClosedBlock(BlockPos pos) {
+        WorldClient world = Minecraft.getMinecraft().theWorld;
+        return world.getBlockState(pos.add(1, 0 ,0)).getBlock() != Blocks.air &&
+                world.getBlockState(pos.add(-1, 0 ,0)).getBlock() != Blocks.air &&
+                world.getBlockState(pos.add(0, 0 ,-1)).getBlock() != Blocks.air &&
+                world.getBlockState(pos.add(0, 0 ,1)).getBlock() != Blocks.air;
     }
 
     public static void rollOffset() {
@@ -227,6 +296,7 @@ public class AutoMining extends Module {
     void onGuiOpen(GuiScreenEvent.InitGuiEvent e) {
         if (!isEnabled()) return;
         active = false;
+        Alert.forceStop();
         forceDelay = 0;
     }
 
@@ -245,15 +315,16 @@ public class AutoMining extends Module {
     public static BlockPos crystalScan(BlockPos playerPos, BlockPos lastMinedPos) {
         BlockPos sel = null;
         for (int x = -5; x < 5; x++) {
-            for (int y = -5; y < 5; y++) {
+            for (int y = -3; y < 4; y++) {
                 for (int z = -5; z < 5; z++) {
-                    //TODO: Add better distance between corner of block and player cuz fuck this shit i cannot think rn
-                    BlockPos scanPos = playerPos.add(x, y, z);
-                    double sq = scanPos.distanceSq(playerPos);
-                    if (sq > DIST*DIST) continue;
-                    if (
-                            (Math.abs(scanPos.getX() - playerPos.getX()) <= 1 && Math.abs(scanPos.getZ() - playerPos.getZ()) <= 1)
-                            && scanPos.getY() < playerPos.getY()) continue;
+                    //TODO: Complete selector
+                    BlockPos centralPos = blockRoute.get(progress);
+                    BlockPos scanPos = centralPos.add(x, y, z);
+                    double sq = scanPos.distanceSq(centralPos);
+                    double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.7 : 0);
+                    if (sq > subDist*subDist) continue;
+                    if ((Math.abs(scanPos.getX() - centralPos.getX()) <= 1 && Math.abs(scanPos.getZ() - centralPos.getZ()) <= 1)
+                            && scanPos.getY() <= centralPos.getY()) continue;
                     Block curBlock = Minecraft.getMinecraft().theWorld.getBlockState(scanPos).getBlock();
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
                     if (sel == null) {
@@ -282,7 +353,8 @@ public class AutoMining extends Module {
             if (prePos != null) Esp.drawTracer(prePos.getX()+0.5d, prePos.getY()+0.5d, prePos.getZ()+0.5d,
                     curPos.getX()+0.5d, curPos.getY()+0.5d, curPos.getZ()+0.5d,
                     Color.magenta, 3f, true);
-            Esp.autoBox3D(curPos, i == progress ? Color.green : Color.yellow, 2f, true);
+            Block block = Minecraft.getMinecraft().theWorld.getBlockState(curPos).getBlock();
+            Esp.autoBox3D(curPos, block == Blocks.air ? Color.red : (i == progress ? Color.green : Color.yellow), 2f, true);
             prePos = curPos;
             if (i == blockRoute.size()-1) {
                 BlockPos sp = blockRoute.get(0);
@@ -320,10 +392,12 @@ public class AutoMining extends Module {
         list.add(new SetsData<>("auto_mining_comment1", "Routes are located in config/abse/mining", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_load", "Load route", ValType.BUTTON, (Runnable) AutoMining::loadRoute));
         list.add(new SetsData<>("auto_mining_load_path", "Route file name", ValType.STRING, ""));
-        list.add(new SetsData<>("auto_mining_clear", "Clear route", ValType.BUTTON, (Runnable) AutoMining::clearRoute));
+        list.add(new SetsData<>("auto_mining_next", "Skip point", ValType.BUTTON, (Runnable) AutoMining::next));
         list.add(new SetsData<>("auto_mining_reset", "Reset route", ValType.BUTTON, (Runnable) AutoMining::routeReset));
+        list.add(new SetsData<>("auto_mining_clear", "Clear route", ValType.BUTTON, (Runnable) AutoMining::clearRoute));
         list.add(new SetsData<>("auto_mining_comment2", "Active settings: ", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_mobs", "Kill mobs", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("auto_mining_advm", "Advanced movement", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_abil", "Auto ability on ready", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_force", "Force delay ticks", ValType.NUMBER, "1"));
         list.add(new SetsData<>("auto_mining_aim", "Aim speed", ValType.DOUBLE_NUMBER, "11"));
