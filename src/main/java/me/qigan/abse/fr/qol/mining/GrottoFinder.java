@@ -103,7 +103,8 @@ public class GrottoFinder extends Module {
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_wp")) {
                 Esp.autoBox3D(data.getNamespace(), Color.magenta, 2f, true);
                 //Esp.autoBeaconBeam(pos.getX(), pos.getY(), pos.getZ(), Color.magenta.getRGB(), 100, e.partialTicks);
-                Esp.renderTextInWorld("Grotto #" + i, data.getNamespace().add(0, 3, 0), Color.magenta.getRGB(), 3f, e.partialTicks);
+                Esp.renderTextInWorld("Grotto y: " + data.getNamespace().getY(), data.getNamespace().add(0, 8, 0),
+                        data.getNamespace().getY() < 68 ? Color.red.getRGB() : Color.magenta.getRGB(), 3f, e.partialTicks);
                 Esp.renderTextInWorld("Crystals: " + data.getObject(), data.getNamespace(), Color.magenta.getRGB(), 2f, e.partialTicks);
             }
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_tracer")) {

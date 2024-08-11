@@ -47,6 +47,7 @@ public class AutoMiningSecCheck extends Module {
             for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                 if (ent instanceof EntityPlayer && ent.getEntityId() != player.getEntityId()) {
                     if (ent.getDistance(player.posX, player.posY, player.posZ) < 1.3) {
+                        //TODO: Add check for a goblin
                         alert("\u00A7c!!PLAYER NEARBY!!");
                     }
                 }

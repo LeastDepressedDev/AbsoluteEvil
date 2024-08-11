@@ -20,6 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntitySlime;
@@ -59,9 +60,11 @@ public class AutoMining extends Module {
     public static final Random rand = new Random();
 
     public static List<BlockPos> blockRoute = new ArrayList<>();
+    public static Set<BlockPos> skipPos = new HashSet<>();
 
     public static boolean active = false;
     public static BlockPos mining = null;
+    public static int tickSince = 0;
     public static float[] offsets = new float[]{0, 0, 0};
     public static long lastUseAbility = 0;
 
@@ -110,6 +113,7 @@ public class AutoMining extends Module {
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_abil") && System.currentTimeMillis()-lastUseAbility > 130000) clickAbility();
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_manual")) return;
                     simTowardRotation(mining, 1d);
+                    tickSince++;
 
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_advm")) {
                         if (moveTicks <= 0) {
@@ -190,7 +194,7 @@ public class AutoMining extends Module {
             if (Index.MAIN_CFG.getBoolVal("auto_mining_mobs")) {
                 for (Entity ent : Minecraft.getMinecraft().theWorld.loadedEntityList) {
                     if (ent instanceof EntityIronGolem || ent instanceof EntityMagmaCube) {
-                        if (ent.getDistanceToEntity(Minecraft.getMinecraft().thePlayer) < 6) {
+                        if (ent.getDistanceToEntity(Minecraft.getMinecraft().thePlayer) < 4) {
                             stage = STAGE.MOBS;
                             return;
                         }
@@ -241,6 +245,11 @@ public class AutoMining extends Module {
         double dy = target.getY() - player.posY - 1d + (isClosedBlock(target) ? (target.getY() < player.posY ? +0.5d : -0.5d ) : offsets[1]);
         double dz = target.getZ() + 0.5d - player.posZ + (block == Blocks.stained_glass_pane ? 0 : offsets[2]);
         Float[] angles = Utils.getRotationsTo(dx, dy, dz, new float[]{player.rotationYaw, player.rotationPitch});
+        if (Minecraft.getMinecraft().thePlayer.rotationYaw == angles[0] && Minecraft.getMinecraft().thePlayer.rotationPitch == angles[1]
+        && tickSince > 35) {
+            skipPos.add(target);
+            reselect();
+        }
         SmoothAimControl.set(angles, 2, 20, Index.MAIN_CFG.getDoubleVal("auto_mining_aim")*speedMod);
     }
 
@@ -316,10 +325,11 @@ public class AutoMining extends Module {
                     //TODO: Complete selector
                     BlockPos centralPos = blockRoute.get(progress).add(0, 2, 0);
                     BlockPos scanPos = centralPos.add(x, y, z);
+                    if (skipPos.contains(scanPos)) continue;
                     IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(scanPos);
                     Block curBlock = state.getBlock();
                     double sq = curBlock == Blocks.stained_glass ? scanPos.distanceSq(centralPos) : scanPos.distanceSqToCenter(centralPos.getX(), centralPos.getY(), centralPos.getZ());
-                    double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.5 : 0);
+                    double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.5 : 0)/*+(curBlock == Blocks.stained_glass_pane ? -0.7 : 0)*/;
                     if (sq > subDist*subDist) continue;
                     if ((Math.abs(scanPos.getX() - centralPos.getX()) <= 1 && Math.abs(scanPos.getZ() - centralPos.getZ()) <= 1)
                             && scanPos.getY() <= centralPos.getY()) continue;
@@ -399,6 +409,7 @@ public class AutoMining extends Module {
         list.add(new SetsData<>("auto_mining_clear", "Clear route", ValType.BUTTON, (Runnable) AutoMining::clearRoute));
         list.add(new SetsData<>("auto_mining_comment2", "Active settings: ", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_mobs", "Kill mobs", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("auto_mining_skips", "Skip unreachable blocks", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_advm", "Advanced movement", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_abil", "Auto ability on ready", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_force", "Force delay ticks", ValType.NUMBER, "1"));
@@ -429,7 +440,10 @@ public class AutoMining extends Module {
 
     public static void reselect() {
         BlockPos pseudoMining = crystalScan(Sync.playerPosAsBlockPos().add(0, 1, 0), mining);
-        if (!Utils.compare(pseudoMining, mining)) rollOffset();
+        if (!Utils.compare(pseudoMining, mining)) {
+            rollOffset();
+            tickSince = 0;
+        }
         mining = pseudoMining;
     }
 
