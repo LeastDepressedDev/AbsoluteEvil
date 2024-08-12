@@ -59,6 +59,10 @@ public class AutoMiningSecCheck extends Module {
                 if (Utils.getSbData(stack).getInteger("drill_fuel") == 0) alert("\u00A7cINSUFICCIENT FUEL");
             }
         }
+        if (Index.MAIN_CFG.getBoolVal("auto_mining_sec_far")) {
+            double dist = Math.sqrt(Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(AutoMining.blockRoute.get(AutoMining.progress)));
+            if (dist > 60) alert("\u00A7c!!TOO FAR AWAY!!");
+        }
     }
 
     @SubscribeEvent
@@ -89,7 +93,7 @@ public class AutoMiningSecCheck extends Module {
         list.add(new SetsData<>("auto_mining_sec_int_size", "Integrity size", ValType.NUMBER, "5"));
         list.add(new SetsData<>("auto_mining_sec_player", "Nearby player alert", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_sec_fuel", "Fuel check", ValType.BOOLEAN, "true"));
-
+        list.add(new SetsData<>("auto_mining_sec_far", "Far away check", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_sec_chat", "Chat mentioned check", ValType.BOOLEAN, "true"));
         return list;
     }

@@ -131,7 +131,7 @@ public class AutoMining extends Module {
                     if (trace != null) {
                         Block block = Minecraft.getMinecraft().theWorld.getBlockState(trace).getBlock();
                         if (Utils.compare(trace, mining) || block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
-                            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 2);
+                            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 1);
                         }
                     }
                 } else next();
@@ -246,7 +246,7 @@ public class AutoMining extends Module {
         double dz = target.getZ() + 0.5d - player.posZ + (block == Blocks.stained_glass_pane ? 0 : offsets[2]);
         Float[] angles = Utils.getRotationsTo(dx, dy, dz, new float[]{player.rotationYaw, player.rotationPitch});
         if (Minecraft.getMinecraft().thePlayer.rotationYaw == angles[0] && Minecraft.getMinecraft().thePlayer.rotationPitch == angles[1]
-        && tickSince > 35) {
+        && tickSince > 35 && Index.MAIN_CFG.getBoolVal("auto_mining_skips")) {
             skipPos.add(target);
             reselect();
         }
