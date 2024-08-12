@@ -5,6 +5,7 @@ import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.ClickSimTick;
+import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -49,17 +50,17 @@ public class AutoLeapDungeon extends Module {
                         int tnt = findTNT();
                         int pearl = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
                         if (pearl == -1 || tnt == -1) return;
-                        Minecraft.getMinecraft().thePlayer.inventory.currentItem = tnt;
+                        Utils.selectHotbarSlot(tnt);
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 1);
                         Thread.sleep(250);
-                        Minecraft.getMinecraft().thePlayer.inventory.currentItem = pearl;
+                        Utils.selectHotbarSlot(pearl);
                         Thread.sleep(100);
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
                         Thread.sleep(100);
                         if (Index.MAIN_CFG.getBoolVal("aldwp_ap")) {
                             int p = findPicake();
                             if (p == -1) return;
-                            Minecraft.getMinecraft().thePlayer.inventory.currentItem = p;
+                            Utils.selectHotbarSlot(p);
                         }
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);

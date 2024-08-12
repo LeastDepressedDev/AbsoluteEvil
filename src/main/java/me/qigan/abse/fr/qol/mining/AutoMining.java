@@ -145,10 +145,10 @@ public class AutoMining extends Module {
                 BlockPos trace = player.rayTrace(56, 1f).getBlockPos();
                 if (Utils.compare(trace, target)) {
                     int slot = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = aotvSlot;
+                    Utils.selectHotbarSlot(aotvSlot);
                     TickTasks.call(() -> {
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2);
-                        TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 6);
+                        TickTasks.call(() -> Utils.selectHotbarSlot(slot), 6);
                         rollOffset();
                     }, 10);
 
@@ -161,10 +161,10 @@ public class AutoMining extends Module {
                 SmoothAimControl.set(new Float[]{null, 90f}, 2, 20, 11);
                 if (player.rotationPitch == 90f) {
                     int slot = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = hypSlot;
+                    Utils.selectHotbarSlot(hypSlot);
                     TickTasks.call(() -> {
                         ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 2);
-                        TickTasks.call(() -> Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot, 8);
+                        TickTasks.call(() -> Utils.selectHotbarSlot(slot), 8);
                     }, 5);
                     forceDelay = 15;
                 }

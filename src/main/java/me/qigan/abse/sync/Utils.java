@@ -33,6 +33,10 @@ public class Utils {
         romanHash.put('X', 10);
     }
 
+    public static void selectHotbarSlot(int n) {
+        Minecraft.getMinecraft().thePlayer.inventory.currentItem = Math.max(0, Math.min(8, n));
+    }
+
     public static BlockPos unify(BlockPos pos) {
         return new BlockPos(pos.getX(), pos.getY(), pos.getZ());
     }

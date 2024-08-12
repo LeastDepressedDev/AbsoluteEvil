@@ -34,12 +34,12 @@ public class AutoDebuff extends Module {
             if (SPRAY_SLOT == -1 || SW_SLOT == -1) return;
             new Thread(() -> {
                 try {
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = SPRAY_SLOT;
+                    Utils.selectHotbarSlot(SPRAY_SLOT);
                     Thread.sleep(80);
                     KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), true);
                     use = true;
                     Thread.sleep(150);
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = SW_SLOT;
+                    Utils.selectHotbarSlot(SW_SLOT);
                     Thread.sleep(70);
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);

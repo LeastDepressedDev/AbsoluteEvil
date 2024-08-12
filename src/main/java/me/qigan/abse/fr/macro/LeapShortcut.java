@@ -35,12 +35,12 @@ public class LeapShortcut extends Module {
                 int slot = find();
                 if (slot == -1) return;
                 int pre = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
-                Minecraft.getMinecraft().thePlayer.inventory.currentItem = slot;
+                Utils.selectHotbarSlot(slot);
                 Thread.sleep(70);
                 ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), 1);
                 if (ret) {
                     Thread.sleep(40);
-                    Minecraft.getMinecraft().thePlayer.inventory.currentItem = pre;
+                    Utils.selectHotbarSlot(pre);
                 }
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
