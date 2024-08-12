@@ -2,50 +2,53 @@ package me.qigan.abse.gui.inst;
 
 import me.qigan.abse.Holder;
 import me.qigan.abse.Index;
-import me.qigan.abse.config.Loc2d;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.QGuiScreen;
 import me.qigan.abse.gui.inst.elem.*;
 import me.qigan.abse.sync.Utils;
-import me.qigan.abse.vp.Esp;
-import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.util.ChatComponentText;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class NewMainMenu extends QGuiScreen {
 
     public static FontRenderer fntj = Minecraft.getMinecraft().fontRendererObj;
 
+    //Colors
     public static Color BG_COL_1 = new Color(32, 106, 125);
     public static Color LINES_COL = new Color(41, 73, 84);
     public static Color LL_COL = new Color(12, 54, 55);
     public static Color SEMI_BG_COL_1 = new Color(2, 34, 35);
     public static Color BG_COL_2 = new Color(4, 17, 20);
 
+    //Collections
     public List<WidgetElement> elements = new ArrayList<>();
     public static List<RenderableModule> modToRender = null;
 
+    //Shit for rescaling
     public static double scaleFactorW = 1;
     public static double scaleFactorH = 1;
 
+    //Points and triggers
     private Point clickDef = null;
     private Point matrixSavePrev = null;
+    private Point lastPosMousePt = null;
     private boolean translationTrigger = false;
 
+    //Matrix related
     private static Dimension PREV_DIM;
 
     public static Point MATRIX_BEGIN = null;
@@ -53,12 +56,16 @@ public class NewMainMenu extends QGuiScreen {
     public static int scroll = 0;
     public static int scrollSpeed = 12;
 
+    //Req for opening
     public static boolean queue = false;
 
+    //Inner gui related stuff
+    public static final String CONFIG_HELP_STRING = "All configs are located in \"config/abse/configs\".\nTo select config for future actions \n click on its name in config list.";
     public static Module.Specification selectedCategory = Module.Specification.COMBAT;
     public static int viewMode = 0;
 
     public static WidgetUpperBar upperBar = new WidgetUpperBar();
+    public static WidgetOpenSelector configSelector;
 
     public NewMainMenu(QGuiScreen screen) {
         super(screen);
@@ -90,11 +97,58 @@ public class NewMainMenu extends QGuiScreen {
 
         elements.add(new WidgetCategoryRenderer());
         elements.add(upperBar);
+        configSelector = new WidgetOpenSelector((int) (5*MATRIX_SIZES.width/6f)+6, (int) (MATRIX_SIZES.height/7)+12,
+                (int) (MATRIX_SIZES.width/6d-19), 200, buildCfgList());
+        elements.add(configSelector);
+
+        elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+6, configSelector.cordY + configSelector.boxY + 12,
+                (int) (MATRIX_SIZES.width/6d-19), 20, ConfigActions::load).text("Load").textScale(1.2f));
+        elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+6, configSelector.cordY + configSelector.boxY + 35,
+                (int) (MATRIX_SIZES.width/6d-19), 20, ConfigActions::save).text("Save").textScale(1.2f));
+        elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+6, configSelector.cordY + configSelector.boxY + 58,
+                (int) (MATRIX_SIZES.width/6d-19), 20, ConfigActions::create).text("Create").textScale(1.2f));
+
+        elements.add(new WidgetText("\u00A77[?]", (int) (5*MATRIX_SIZES.width/6f)+4, (int) (MATRIX_SIZES.height/7)+4));
+        elements.add(new WidgetHoveringTextBox(CONFIG_HELP_STRING, (int) (5*MATRIX_SIZES.width/6f)+6, (int) (MATRIX_SIZES.height/7)+4, 15, 6));
 
 
         if (modToRender == null) updateRenderedModules();
 
         super.initGui();
+    }
+
+    public static class ConfigActions {
+        public static void load() {
+            if (configSelector.sel == -1) {
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7cFailed to load! Config was not selected!"));
+            } else {
+                String cfgName = configSelector.opts.get(configSelector.sel);
+                Index.CFG_MANAGER.loadFrom(cfgName);
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7aLoaded config: \u00A76" + cfgName));
+                updateRenderedModules();
+            }
+        }
+
+        public static void save() {
+            if (configSelector.sel == -1) {
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7cFailed to save! Config was not selected!"));
+            } else {
+                String cfgName = configSelector.opts.get(configSelector.sel);
+                Index.CFG_MANAGER.saveTo(cfgName);
+                Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7aSaved config: \u00A76" + cfgName));
+            }
+        }
+
+        public static void create() {
+            Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7eCOMING SOON! Create config manually in config/abse/configs."));
+        }
+    }
+
+    public static List<String> buildCfgList() {
+        List<String> list = new ArrayList<>();
+        File[] files = Index.CFG_MANAGER.getConfigFiles();
+        for (File file : files) list.add(file.getName().substring(0, file.getName().length()-4));
+        return list;
     }
 
     private static int compareInnerText(String in, String obj) {
@@ -188,6 +242,8 @@ public class NewMainMenu extends QGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        lastPosMousePt = new Point(mouseX, mouseY);
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(MATRIX_BEGIN.x, MATRIX_BEGIN.y, 0f);
         GlStateManager.scale(scaleFactorW, scaleFactorH, 0d);
@@ -251,7 +307,8 @@ public class NewMainMenu extends QGuiScreen {
                         (int) ((MATRIX_SIZES.height-2*((float) MATRIX_SIZES.height/40)))), scaleFactorW, scaleFactorH)
                 );
 
-        Dimension subDim = new Dimension((int) (5*MATRIX_SIZES.width/6f)+2-((int) (MATRIX_SIZES.width/4f)+10), (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)-(int) (MATRIX_SIZES.height/7f)));
+        Dimension subDim = new Dimension((int) (5*MATRIX_SIZES.width/6f)+2-((int) (MATRIX_SIZES.width/4f)+10),
+                (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)-(int) (MATRIX_SIZES.height/7f)));
         if (Utils.pointInMovedDim(innerCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)), subDim)) {
             for (WidgetElement elem : elements) {
                 if (elem instanceof WidgetTextField) ((WidgetTextField) elem).deselect();
@@ -305,20 +362,33 @@ public class NewMainMenu extends QGuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
+        if (lastPosMousePt == null) return;
         ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         int dwheel = Mouse.getEventDWheel();
         if (dwheel != 0) {
-            if (dwheel < 0) {
-                if (scroll+scrollSpeed < 1000) scroll+=scrollSpeed;
-            } else {
-                if (scroll-scrollSpeed >= 0) scroll-=scrollSpeed;
+            Point realCords = new Point(lastPosMousePt.x-MATRIX_BEGIN.x, lastPosMousePt.y-MATRIX_BEGIN.y);
+            Point innerCords = Utils.scaleDim(realCords, 1/scaleFactorW, 1/scaleFactorH);
+            innerCords.x-=3;
+            innerCords.y-=6;
+            Dimension subDim = new Dimension((int) (5*MATRIX_SIZES.width/6f)+2-((int) (MATRIX_SIZES.width/4f)+10),
+                    (int) (MATRIX_SIZES.height-((float)MATRIX_SIZES.height/50)-(int) (MATRIX_SIZES.height/7f)));
+            if (Utils.pointInMovedDim(innerCords, new Point((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)), subDim)) {
+                if (dwheel < 0) {
+                    if (scroll + scrollSpeed < 1000) scroll += scrollSpeed;
+                } else {
+                    if (scroll - scrollSpeed >= 0) scroll -= scrollSpeed;
+                }
             }
         }
     }
 
+    public static void forceSaveTextFields() {
+        for (RenderableModule module : modToRender) module.onClose();
+    }
+
     @Override
     public void onGuiClosed() {
-        for (RenderableModule module : modToRender) module.onClose();
+        forceSaveTextFields();
         super.onGuiClosed();
     }
 }

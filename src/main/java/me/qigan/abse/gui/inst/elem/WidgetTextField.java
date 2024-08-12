@@ -22,10 +22,16 @@ public class WidgetTextField extends WidgetUpdatable{
     public int limit = 256;
 
     public boolean useAutoUpdates = false;
+    public boolean instaCfgSync = false;
 
     public WidgetTextField(int x, int y, int w, int h) {
         super(x, y);
         box(w, h);
+    }
+
+    public WidgetTextField allowInstaSync() {
+        this.instaCfgSync = true;
+        return this;
     }
 
     public WidgetTextField allowAutoUpdate() {
@@ -101,7 +107,10 @@ public class WidgetTextField extends WidgetUpdatable{
             GuiScreen.setClipboardString(innerText);
             innerText = "";
         } else if (ChatAllowedCharacters.isAllowedCharacter(typedChar) && innerText.length() < limit) {
-            if (filterLine.length() == 0 || filterLine.contains(Character.toString(typedChar))) innerText += typedChar;
+            if (filterLine.length() == 0 || filterLine.contains(Character.toString(typedChar))) {
+                innerText += typedChar;
+                if (instaCfgSync) NewMainMenu.forceSaveTextFields();
+            }
         }
         if (useAutoUpdates) NewMainMenu.updateRenderedModules();
         super.keyTyped(typedChar, keyCode);

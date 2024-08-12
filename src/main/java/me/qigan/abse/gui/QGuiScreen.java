@@ -18,10 +18,6 @@ import java.util.List;
 
 public class QGuiScreen extends GuiScreen {
 
-//    public static class Constants {
-//        public static final ResourceLocation DEFAULT_TEXTFIELD_TEXTURE = new ResourceLocation("abse", "gui/text.png");;
-//    }
-
     public static final long MS_WAIT_OPEN = 100;
 
     private final QGuiScreen prev;
