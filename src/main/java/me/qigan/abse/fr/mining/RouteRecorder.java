@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.qol.mining;
+package me.qigan.abse.fr.mining;
 
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
@@ -102,7 +102,7 @@ public class RouteRecorder extends Module {
 
     @Override
     public Specification category() {
-        return Specification.SB_QOL;
+        return Specification.MINING;
     }
 
     @Override

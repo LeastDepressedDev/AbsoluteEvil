@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.qol.mining;
+package me.qigan.abse.fr.mining;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
@@ -20,16 +20,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.network.play.server.S21PacketChunkData;
 import net.minecraft.network.play.server.S22PacketMultiBlockChange;
-import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -430,7 +426,7 @@ public class AutoMining extends Module {
 
     @Override
     public Specification category() {
-        return Specification.SB_QOL;
+        return Specification.MINING;
     }
 
     @Override

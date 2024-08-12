@@ -23,7 +23,7 @@ import me.qigan.abse.fr.cbh.*;
 import me.qigan.abse.fr.dungons.*;
 import me.qigan.abse.fr.other.*;
 import me.qigan.abse.fr.qol.*;
-import me.qigan.abse.fr.qol.mining.*;
+import me.qigan.abse.fr.mining.*;
 import me.qigan.abse.gui.overlay.ImportantChatOVR;
 import me.qigan.abse.mapping.mod.M7Route;
 import me.qigan.abse.mapping.mod.Remapping;

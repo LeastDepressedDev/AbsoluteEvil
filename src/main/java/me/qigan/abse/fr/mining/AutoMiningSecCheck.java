@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.qol.mining;
+package me.qigan.abse.fr.mining;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.SetsData;
@@ -7,7 +7,6 @@ import me.qigan.abse.crp.Module;
 import me.qigan.abse.fr.exc.Alert;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -100,7 +99,7 @@ public class AutoMiningSecCheck extends Module {
 
     @Override
     public Specification category() {
-        return Specification.SB_QOL;
+        return Specification.MINING;
     }
 
     @Override

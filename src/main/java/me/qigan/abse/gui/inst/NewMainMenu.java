@@ -108,7 +108,7 @@ public class NewMainMenu extends QGuiScreen {
         elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+6, configSelector.cordY + configSelector.boxY + 58,
                 (int) (MATRIX_SIZES.width/6d-19), 20, ConfigActions::create).text("Create").textScale(1.2f));
 
-        elements.add(new WidgetText("\u00A77[?]", (int) (5*MATRIX_SIZES.width/6f)+4, (int) (MATRIX_SIZES.height/7)+4));
+        elements.add(new WidgetText("\u00A77[?]", (int) (5*MATRIX_SIZES.width/6f)+6, (int) (MATRIX_SIZES.height/7)+4));
         elements.add(new WidgetHoveringTextBox(CONFIG_HELP_STRING, (int) (5*MATRIX_SIZES.width/6f)+6, (int) (MATRIX_SIZES.height/7)+4, 15, 6));
 
 

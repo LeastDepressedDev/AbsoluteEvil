@@ -1,4 +1,4 @@
-package me.qigan.abse.fr.qol.mining;
+package me.qigan.abse.fr.mining;
 
 import me.qigan.abse.Index;
 import me.qigan.abse.config.AddressedData;
@@ -167,7 +167,7 @@ public class GrottoFinder extends Module {
 
     @Override
     public Specification category() {
-        return Specification.SB_QOL;
+        return Specification.MINING;
     }
 
     @Override

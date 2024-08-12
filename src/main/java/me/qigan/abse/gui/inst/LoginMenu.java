@@ -48,17 +48,17 @@ public class LoginMenu extends QGuiScreen {
         GuiLabel header = new GuiLabel(fontRendererObj, Id, res.getScaledWidth()/2-(fontRendererObj.getStringWidth(in)/2), res.getScaledHeight()/7*3, fontRendererObj.getStringWidth(in), 20, 0xFFFFFF);
         labelList.add(header);
 
-        uname = new WidgetTextField(res.getScaledWidth()/2-CONST_TF_WIDTH/2, 7*res.getScaledHeight()/25, CONST_TF_WIDTH, CONST_TF_HEIGHT)
+        uname = new WidgetTextField(res.getScaledWidth()/2-CONST_TF_WIDTH/2, 8*res.getScaledHeight()/25, CONST_TF_WIDTH, CONST_TF_HEIGHT)
                 .textScale(1.8f).placeholder("Username");
-        token = new WidgetTextField(res.getScaledWidth()/2-CONST_TF_WIDTH/2, 11*res.getScaledHeight()/25, CONST_TF_WIDTH, CONST_TF_HEIGHT)
+        token = new WidgetTextField(res.getScaledWidth()/2-CONST_TF_WIDTH/2, 10*res.getScaledHeight()/25, CONST_TF_WIDTH, CONST_TF_HEIGHT)
                 .textScale(1.8f).placeholder("Token[req for license]");
-        pid = new WidgetTextField(res.getScaledWidth()/2-CONST_TF_WIDTH/2, 15*res.getScaledHeight()/25, CONST_TF_WIDTH, CONST_TF_HEIGHT)
+        pid = new WidgetTextField(res.getScaledWidth()/2-CONST_TF_WIDTH/2, 12*res.getScaledHeight()/25, CONST_TF_WIDTH, CONST_TF_HEIGHT)
                 .textScale(1.8f).placeholder("Player id[preferable to have]");
 
         elems.add(uname);
         elems.add(token);
         elems.add(pid);
-        elems.add(new WidgetButton(res.getScaledWidth()/2-50, 18*res.getScaledHeight()/25, 100, 40,
+        elems.add(new WidgetButton(res.getScaledWidth()/2-70, 15*res.getScaledHeight()/25, 140, 40,
                 () -> Index.relog(uname.innerText, token.innerText, pid.innerText)
         ).textScale(1.3f).text("Login"));
 
