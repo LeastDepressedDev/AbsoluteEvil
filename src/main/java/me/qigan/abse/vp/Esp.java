@@ -470,8 +470,9 @@ public class Esp {
 
     public static void drawCenteredString(String str, int x, int y, Color color, S2Dtype mode) { drawCenteredString(str, x, y, color.getRGB(), mode); }
 
-    public static void drawCenteredString(String str, int x, int y, int color, S2Dtype mode) {
-        FontRenderer fntj = Minecraft.getMinecraft().fontRendererObj;
+    public static void drawCenteredString(String str, int x, int y, int color, S2Dtype mode) { drawCenteredString(Minecraft.getMinecraft().fontRendererObj, str, x, y, color, mode);}
+
+    public static void drawCenteredString(FontRenderer fntj, String str, int x, int y, int color, S2Dtype mode) {
         x-=fntj.getStringWidth(str)/2;
         drawOverlayString(fntj, str, x, y, color, mode);
     }

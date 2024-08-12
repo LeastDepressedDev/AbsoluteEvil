@@ -98,7 +98,7 @@ public class NewMainMenu extends QGuiScreen {
         elements.add(new WidgetCategoryRenderer());
         elements.add(upperBar);
         configSelector = new WidgetOpenSelector((int) (5*MATRIX_SIZES.width/6f)+6, (int) (MATRIX_SIZES.height/7)+12,
-                (int) (MATRIX_SIZES.width/6d-19), 200, buildCfgList());
+                (int) (MATRIX_SIZES.width/6d-19), 200, buildCfgList()).setPageSize(10).doRenderPages();
         elements.add(configSelector);
 
         elements.add(new WidgetButton((int) (5*MATRIX_SIZES.width/6f)+6, configSelector.cordY + configSelector.boxY + 12,

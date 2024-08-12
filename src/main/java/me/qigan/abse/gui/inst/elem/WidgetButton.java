@@ -11,8 +11,10 @@ import java.awt.*;
 
 public class WidgetButton extends WidgetUpdatable{
 
-    public static Color colorMain = new Color(36, 97, 129);
+    public static Color colorEnabled = new Color(36, 97, 129);
+    public static Color colorDisabled = new Color(23, 59, 76);
     public double textScale = 1;
+    private boolean enabled = true;
 
     private String text = "";
     private final Runnable fun;
@@ -40,6 +42,11 @@ public class WidgetButton extends WidgetUpdatable{
         return this;
     }
 
+    public WidgetButton enabled(boolean v) {
+        this.enabled = v;
+        return this;
+    }
+
     public Runnable getFun() {
         return fun;
     }
@@ -48,13 +55,20 @@ public class WidgetButton extends WidgetUpdatable{
         return text;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     @Override
     public boolean draw(int mouseX, int mouseY, float partialTicks) {
-        Color colIn = new Color(colorMain.getRed()-20, colorMain.getGreen()-20, colorMain.getBlue()-20);
-        if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY))) {
+
+        Color colRef = enabled ? colorEnabled : colorDisabled;
+
+        Color colIn = new Color(colRef.getRed()-20, colRef.getGreen()-20, colRef.getBlue()-20);
+        if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY)) && enabled) {
             Gui.drawRect(cordX-1, cordY-1, cordX+boxX+1, cordY+boxY+1, Color.white.getRGB());
         }
-        Gui.drawRect(cordX, cordY, cordX+boxX, cordY+boxY, colorMain.getRGB());
+        Gui.drawRect(cordX, cordY, cordX+boxX, cordY+boxY, colRef.getRGB());
         Gui.drawRect(cordX+2, cordY+2, cordX+boxX-2, cordY+boxY-2, colIn.getRGB());
 
         if (text.length() > 0) {
@@ -69,7 +83,7 @@ public class WidgetButton extends WidgetUpdatable{
 
     @Override
     public void onClick(int mouseX, int mouseY, int mouseButton) {
-        if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY))) fun.run();
+        if (Utils.pointInMovedDim(new Point(mouseX, mouseY), new Point(cordX, cordY), new Dimension(boxX, boxY)) && enabled) fun.run();
     }
 
     @Override
