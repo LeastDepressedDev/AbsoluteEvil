@@ -431,7 +431,7 @@ public class AutoMining extends Module {
 
     @Override
     public String description() {
-        return "Solution for your poor nw. Instruction:\n1. Get aotv with etherwarp.\n2. To start mining left click on green box\n3. To stop mining open any gui(inventroy and etc)\n4. Enjoy free money go brrrr.";
+        return "Solution for your poor nw. Instruction:\n1. Get aotv with etherwarp.\n2. To start mining right click on green box with mining tool\n  Warn: it will start mining even if you are not holding your mining tool.\n3. To stop mining open any gui(inventroy, chat, etc)\n4. Enjoy free money go brrrr.";
     }
 
     public static void reselect() {
