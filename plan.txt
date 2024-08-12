@@ -1,4 +1,4 @@
-Move logginer into gui - Semi-Done
+Move logginer into gui - Done
 Fix party utils not detecting classes correctly - Not started
 Add dungeon dry tracker - Not started
 Dynamic route concept - Done
@@ -15,6 +15,7 @@ Added auto Harp - done
 Finally auto melody - Done
 Added auto chocolate Farm - Done
 Improved m7 route - Almot-Done
+Added auto mining
 
 Colored chat - Not started
 Auto save - Not started

@@ -33,7 +33,7 @@ public class MCMainMenu {
                 MainWrapper.ls.setVisible(true);
             } else if (e.button.id == NEW_LOGIN) {
                 Minecraft.getMinecraft().addScheduledTask(() ->
-                        Minecraft.getMinecraft().displayGuiScreen(new LoginMenu(new QGuiScreen(e.gui))));
+                        Minecraft.getMinecraft().displayGuiScreen(new LoginMenu(null)));
             }
         }
     }
