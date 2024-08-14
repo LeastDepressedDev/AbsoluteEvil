@@ -21,7 +21,10 @@ import java.util.List;
 public class MovementController {
     private Path path = null;
     private boolean paused = true;
-    public boolean sprint = true;
+    public boolean sprint = false;
+
+
+    public int progress = 0;
 
     public MovementController() {
 
@@ -34,30 +37,33 @@ public class MovementController {
 
     @SubscribeEvent
     void onWorldRender(RenderWorldLastEvent e) {
+        int step = 1;
         try {
             if (path != null && !paused) {
-                BlockPos cur = getClosest();
-                BlockPos next = getNext(cur);
-                if (Utils.compare(cur, path.to)) path = null;
-                if (next == null) return;
+                BlockPos cur = Sync.playerPosAsBlockPos();
+                BlockPos next = path.getPosPath().get(progress);
+                if (Utils.compare(cur, path.to)) {
+                    stop();
+                    return;
+                }
+                if (progress == path.getPosPath().size()) return;
+                if (Minecraft.getMinecraft().thePlayer.getDistanceSq(next) < 2) next(step);
                 EntityPlayer staticPlayer = Minecraft.getMinecraft().thePlayer;
                 if (next.getY() - cur.getY() > 0)
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), 2);
-                double dist = staticPlayer.getDistance(next.getX() + 0.5d, next.getY() + 0.5d, next.getZ() + 0.5d);
-                double cd = staticPlayer.getDistance(cur.getX() + 0.5d, cur.getY() + 0.5d, cur.getZ() + 0.5d);
+                double distHor = Math.sqrt(Math.pow(staticPlayer.posX-next.getX(), 2) + Math.pow(staticPlayer.posZ-next.getZ(), 2));
 
                 double dx = next.getX() + 0.5d - staticPlayer.posX;
                 double dz = next.getZ() + 0.5d - staticPlayer.posZ;
 
-                if (dist > 3)
+                if (distHor > step+2)
                     path = new Path(Sync.playerPosAsBlockPos(), path.to).build();
 
                 Float[] rotations = Utils.getRotationsTo(dx, 0, dz, new float[]{staticPlayer.rotationYaw, staticPlayer.rotationPitch});
                 rotations[1] = null;
-                //rotations[0] = cd > 0.35d ? rotations[0] : null;
-//                SmoothAimControl.set(rotations, 1, 20, Math.min(16*cd, 18));
-                Minecraft.getMinecraft().thePlayer.rotationYaw= rotations[0];
-                if (Math.abs(rotations[0] - Minecraft.getMinecraft().thePlayer.rotationYawHead) < 3d)
+                SmoothAimControl.set(rotations, 1, 20, Math.min(11, 18));
+                //Minecraft.getMinecraft().thePlayer.rotationYaw = rotations[0];
+                if (Math.abs(rotations[0] - Minecraft.getMinecraft().thePlayer.rotationYawHead) < 30d)
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
                 if (sprint) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), 2);
                 Esp.autoBox3D(path.from, Color.green, 2f, true);
@@ -68,7 +74,7 @@ public class MovementController {
                 }
                 Esp.drawAsSingleLine(points, Color.cyan, 4f, false);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {ignored.printStackTrace();}
     }
 
     private BlockPos getClosest() {
@@ -84,13 +90,16 @@ public class MovementController {
         return pos;
     }
 
-    private BlockPos getNext(BlockPos pos) {
-        for (int i = 0; i < path.getPosPath().size(); i++) {
-            if (path.getPosPath().get(i) == pos) {
-                if (i + 1 < path.getPosPath().size()) return path.getPosPath().get(i+1);
+    private void next(int step) {
+        BlockPos cur = path.getPosPath().get(progress);
+        for (int i = progress; i < progress+step && i < path.getPosPath().size()-1; i++) {
+            BlockPos pos = path.getPosPath().get(progress);
+            if (cur.getY() < pos.getY()) {
+                progress = i;
+                return;
             }
         }
-        return null;
+        progress = (Math.min(progress+step, path.getPosPath().size()-1));
     }
 
     public void go(Path path) {
@@ -104,6 +113,7 @@ public class MovementController {
 
     public void stop() {
         this.paused = true;
+        this.progress = 0;
     }
 
     public void pause() {

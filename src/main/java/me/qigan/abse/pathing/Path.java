@@ -57,6 +57,7 @@ public class Path{
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
+                        if (y == 1 && x != 0 && z != 0) continue;
                         BlockPos subPos = pos.add(x, y, z);
                         if (usedGeneric.contains(subPos) || poses.contains(subPos)) continue;
                         if (!MappingConstants.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos.add(0, -1, 0)).getBlock())

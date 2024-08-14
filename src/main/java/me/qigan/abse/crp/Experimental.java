@@ -12,6 +12,7 @@ import me.qigan.abse.pathing.Path;
 import me.qigan.abse.sync.Sync;
 
 import me.qigan.abse.vp.Esp;
+import me.qigan.abse.vp.S2Dtype;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -25,6 +26,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.*;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -70,6 +72,17 @@ public class Experimental extends Module implements EDLogic {
             Esp.autoBox3D(Minecraft.getMinecraft().objectMouseOver.getBlockPos(), Color.cyan, 2f, true);
         if (Minecraft.getMinecraft().objectMouseOver.entityHit != null)
             Esp.autoBox3D(Minecraft.getMinecraft().objectMouseOver.entityHit, Color.cyan, 2f, true);
+    }
+
+    @SubscribeEvent
+    void rend(RenderGameOverlayEvent.Text e) {
+        if (!isEnabled()) return;
+
+        try {
+            Esp.drawCenteredString(Index.MOVEMENT_CONTROLLER.getPath().getPosPath().size() + " : " + Index.MOVEMENT_CONTROLLER.isPaused(), 400, 200, 0xFFFFFF, S2Dtype.DEFAULT);
+        } catch (Exception ex) {
+
+        }
     }
 
     @Override

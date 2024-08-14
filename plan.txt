@@ -16,6 +16,7 @@ Finally auto melody - Done
 Added auto chocolate Farm - Done
 Improved m7 route - Done
 Added auto mining - Done
+Added custom main menu - In progress(Maybe)
 
 Auto save - Not started
 
