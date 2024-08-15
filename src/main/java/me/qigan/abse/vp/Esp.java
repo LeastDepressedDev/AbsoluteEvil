@@ -152,6 +152,83 @@ public class Esp {
         GL11.glColor4f(255, 255, 255, 1f);
         GL11.glPopMatrix();
     }
+
+    public static void drawFilledBox3D(double x, double y, double z, double width, double height, Color color, float lineWidth, boolean esp) {
+
+        double posX = x - width / 2;
+        double posY = y - height;
+        double posZ = z - width / 2;
+
+        GL11.glPushMatrix();
+        if (esp) {
+            VisualApi.prepareGLL();
+        }
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+
+        VisualApi.setupLine(lineWidth, color);
+        GlStateManager.translate(posX, posY, posZ);
+
+        GL11.glBegin(GL11.GL_QUADS);
+
+        GL11.glVertex3d(0, 0, 0);
+        GL11.glVertex3d(width, 0, 0);
+        GL11.glVertex3d(width, 0, width);
+        GL11.glVertex3d(0, 0, width);
+
+        GL11.glVertex3d(0, height, width);
+        GL11.glVertex3d(width, height, width);
+        GL11.glVertex3d(width, height, 0);
+        GL11.glVertex3d(0, height, 0);
+
+        GL11.glVertex3d(0, 0, 0);
+        GL11.glVertex3d(0, height, 0);
+        GL11.glVertex3d(width, height, 0);
+        GL11.glVertex3d(width, 0, 0);
+
+        GL11.glVertex3d(0, 0, width);
+        GL11.glVertex3d(0, height, width);
+        GL11.glVertex3d(0, height, 0);
+        GL11.glVertex3d(0, 0, 0);
+
+        GL11.glVertex3d(width, 0, 0);
+        GL11.glVertex3d(width, height, 0);
+        GL11.glVertex3d(width, height, width);
+        GL11.glVertex3d(width, 0, width);
+
+        GL11.glVertex3d(width, 0, width);
+        GL11.glVertex3d(width, height, width);
+        GL11.glVertex3d(0, height, width);
+        GL11.glVertex3d(0, 0, width);
+
+        GL11.glEnd();
+
+
+        if (esp) {
+            VisualApi.endGLL();
+        }
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GL11.glColor4f(255, 255, 255, 1f);
+        GL11.glPopMatrix();
+    }
+
+    public static void autoFilledBox3D(BlockPos pos, Color color, float lf, boolean esp) {
+        autoFilledBox3D(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d, 1, 1, color, lf, esp);
+    }
+
+    public static void autoFilledBox3D(double x, double y, double z, double width, double height, Color color, float lf, boolean esp) {
+        double renderPosX = Minecraft.getMinecraft().getRenderManager().viewerPosX;
+        double renderPosY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
+        double renderPosZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+
+        double xPos = x - renderPosX;
+        double yPos = y - renderPosY;
+        double zPos = z - renderPosZ;
+
+        drawFilledBox3D(xPos, yPos, zPos, width, height, color, lf, esp);
+    }
     
     public static void drawBox3D(double x, double y, double z, double width, double height, Color color, float lineWidth, boolean esp) {
 

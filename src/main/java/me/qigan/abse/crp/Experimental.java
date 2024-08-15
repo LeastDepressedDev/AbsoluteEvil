@@ -68,6 +68,8 @@ public class Experimental extends Module implements EDLogic {
     void tick(RenderWorldLastEvent e) {
         if (!isEnabled()) return;
 
+        Esp.autoFilledBox3D(new BlockPos(5, 5, 5), new Color(255, 0, 255, 155), 2f, false);
+
         if (Minecraft.getMinecraft().objectMouseOver.getBlockPos() != null)
             Esp.autoBox3D(Minecraft.getMinecraft().objectMouseOver.getBlockPos(), Color.cyan, 2f, true);
         if (Minecraft.getMinecraft().objectMouseOver.entityHit != null)
