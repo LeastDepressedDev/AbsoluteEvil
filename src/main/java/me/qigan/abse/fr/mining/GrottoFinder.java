@@ -29,7 +29,7 @@ import java.util.List;
 
 public class GrottoFinder extends Module {
 
-    public static List<AddressedData<BlockPos, Integer>> grottos = new ArrayList<>();
+    public static List<GrottoObj> grottos = new ArrayList<>();
 
     public static Set<AddressedData<Integer, Integer>> vChunks = new HashSet<>();
 
@@ -73,11 +73,11 @@ public class GrottoFinder extends Module {
                     if (state.getBlock() != Blocks.stained_glass) continue;
                     if (state.getValue(BlockStainedGlass.COLOR) == EnumDyeColor.MAGENTA) {
                         boolean preq = false;
-                        for (AddressedData<BlockPos, Integer> grot : grottos) {
-                            BlockPos bp = grot.getNamespace();
+                        for (GrottoObj grot : grottos) {
+                            BlockPos bp = grot.grottoCentralPos();
                             if (pos.distanceSq(bp.getX(), bp.getY(), bp.getZ()) < DISTANCE_PARA_CONST) {
                                 preq = true;
-                                grot.setObject(grot.getObject()+1);
+                                grot.add(bp);
                                 break;
                             }
                         }
@@ -99,19 +99,28 @@ public class GrottoFinder extends Module {
         if (!isEnabled()) return;
 
         for (int i = 0; i < grottos.size(); i++) {
-            AddressedData<BlockPos, Integer> data = grottos.get(i);
+            GrottoObj data = grottos.get(i);
+            BlockPos cp = data.grottoCentralPos();
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_wp")) {
-                Esp.autoBox3D(data.getNamespace(), Color.magenta, 2f, true);
+                Color color = new Color(255, 0, 255, 100);
+                Esp.autoFilledBox3D(cp, color, 2f, true);
                 //Esp.autoBeaconBeam(pos.getX(), pos.getY(), pos.getZ(), Color.magenta.getRGB(), 100, e.partialTicks);
-                Esp.renderTextInWorld("Grotto y: " + data.getNamespace().getY(), data.getNamespace().add(0, 8, 0),
-                        data.getNamespace().getY() < 68 ? Color.red.getRGB() : Color.magenta.getRGB(), 3f, e.partialTicks);
-                Esp.renderTextInWorld("Crystals: " + data.getObject(), data.getNamespace(), Color.magenta.getRGB(), 2f, e.partialTicks);
+                Esp.renderTextInWorld("Grotto y: " + cp.getY(), cp.add(0, 8, 0),
+                        cp.getY() < 68 ? Color.red.getRGB() : Color.magenta.getRGB(), 3f, e.partialTicks);
+                Esp.renderTextInWorld("Crystals: " + data.veins.size() + "[" + data.crystalsAmt + "] (" + data.mfPercent() + "% in MF)", cp,
+                        cp.getY() < 68 ? Color.red.getRGB() : Color.magenta.getRGB(), 2f, e.partialTicks);
             }
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_tracer")) {
                 EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-                Esp.drawTracer(player.posX, player.posY, player.posY,
-                        data.getNamespace().getX()+0.5d, data.getNamespace().getY()+0.5d, data.getNamespace().getZ()+0.5d,
-                        Color.magenta, 2f, true);
+                Esp.drawTracer(player.posX, player.posY, player.posY, cp.getX()+0.5d, cp.getY()+0.5d, cp.getZ()+0.5d, Color.magenta, 2f, true);
+            }
+            if (Index.MAIN_CFG.getBoolVal("grotto_finder_veins")) {
+                Color col = new Color(0, 100, 200, 150);
+                for (GrottoVein vein : data.veins) {
+                    BlockPos pos = vein.getVeinPosition();
+                    Esp.autoFilledBox3D(pos, col, 2, true);
+                    Esp.renderTextInWorld(vein.crystals.size() + "", pos, Color.magenta.getRGB(), 1f, e.partialTicks);
+                }
             }
         }
 
@@ -125,7 +134,7 @@ public class GrottoFinder extends Module {
     }
 
     public static void found(BlockPos pos) {
-        grottos.add(new AddressedData<>(pos, 1));
+        grottos.add(new GrottoObj(pos));
 
         String plLine = "[";
         int amt = 0;
@@ -174,6 +183,7 @@ public class GrottoFinder extends Module {
     public List<SetsData<?>> sets() {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("grotto_finder_wp", "Show waypoints", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("grotto_finder_veins", "Highlight veins", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("grotto_finder_tracer", "Show tracer", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("grotto_finder_fix", "Fix", ValType.BUTTON, (Runnable) GrottoFinder::fix));
         list.add(new SetsData<>("grotto_finder_stat", "Status", ValType.BUTTON, (Runnable) () -> {
