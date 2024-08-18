@@ -1,5 +1,6 @@
 package me.qigan.abse.pathing;
 
+import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.sync.Sync;
@@ -37,27 +38,30 @@ public class MovementController {
 
     @SubscribeEvent
     void onWorldRender(RenderWorldLastEvent e) {
-        int step = 1;
         try {
             if (path != null && !paused) {
+                AddressedData<BlockPos, Integer> data = path.getPosPath().get(progress);
                 BlockPos cur = Sync.playerPosAsBlockPos();
-                BlockPos next = path.getPosPath().get(progress);
-                if (Utils.compare(cur, path.to)) {
+                BlockPos next = data.getNamespace();
+                if (Minecraft.getMinecraft().thePlayer.getDistance(path.to.getX(), path.to.getY(), path.to.getZ()) < 1d) {
                     stop();
                     return;
                 }
                 if (progress == path.getPosPath().size()) return;
-                if (Minecraft.getMinecraft().thePlayer.getDistanceSq(next) < 2) next(step);
+                if (Minecraft.getMinecraft().thePlayer.getDistanceSq(next) < 2d && Sync.playerPosAsBlockPos().getY() >= next.getY()) next(data.getObject());
                 EntityPlayer staticPlayer = Minecraft.getMinecraft().thePlayer;
-                if (next.getY() - cur.getY() > 0)
+                if (next.getY() - cur.getY() > 0 && staticPlayer.getDistance(next.getX()+0.5d, next.getY()-1, next.getZ()+0.5d) < 0.85d)
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), 2);
                 double distHor = Math.sqrt(Math.pow(staticPlayer.posX-next.getX(), 2) + Math.pow(staticPlayer.posZ-next.getZ(), 2));
 
                 double dx = next.getX() + 0.5d - staticPlayer.posX;
                 double dz = next.getZ() + 0.5d - staticPlayer.posZ;
 
-                if (distHor > step+2)
+                if (distHor > data.getObject()*3) {
                     path = new Path(Sync.playerPosAsBlockPos(), path.to).build();
+                    progress = 0;
+                    return;
+                }
 
                 Float[] rotations = Utils.getRotationsTo(dx, 0, dz, new float[]{staticPlayer.rotationYaw, staticPlayer.rotationPitch});
                 rotations[1] = null;
@@ -65,13 +69,15 @@ public class MovementController {
                 //Minecraft.getMinecraft().thePlayer.rotationYaw = rotations[0];
                 if (Math.abs(rotations[0] - Minecraft.getMinecraft().thePlayer.rotationYawHead) < 30d)
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
-                if (sprint) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), 2);
+                if (sprint && data.getObject() > 1) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), 2);
                 Esp.autoBox3D(path.from, Color.green, 2f, true);
                 Esp.autoBox3D(path.to, Color.red, 2f, true);
                 List<Point3d> points = new ArrayList<>();
-                for (BlockPos pos : path.getPosPath()) {
-                    points.add(new Point3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5));
+                for (AddressedData<BlockPos, Integer> pos : path.getPosPath()) {
+                    Esp.renderTextInWorld(pos.getObject()+"",pos.getNamespace(), 0xFFFFFF, 2f, e.partialTicks);
+                    points.add(new Point3d(pos.getNamespace().getX() + 0.5, pos.getNamespace().getY() + 1, pos.getNamespace().getZ() + 0.5));
                 }
+                Esp.autoBox3D(data.getNamespace(), Color.cyan, 4f, false);
                 Esp.drawAsSingleLine(points, Color.cyan, 4f, false);
             }
         } catch (Exception ignored) {ignored.printStackTrace();}
@@ -80,10 +86,10 @@ public class MovementController {
     private BlockPos getClosest() {
         double dist = 255;
         BlockPos pos = null;
-        for (BlockPos s : path.getPosPath()) {
-            double subDist = Minecraft.getMinecraft().thePlayer.getDistance(s.getX(), s.getY(), s.getZ());
+        for (AddressedData<BlockPos, Integer> s : path.getPosPath()) {
+            double subDist = Minecraft.getMinecraft().thePlayer.getDistance(s.getNamespace().getX(), s.getNamespace().getY(), s.getNamespace().getZ());
             if (subDist < dist) {
-                pos = s;
+                pos = s.getNamespace();
                 dist = subDist;
             }
         }
@@ -91,10 +97,14 @@ public class MovementController {
     }
 
     private void next(int step) {
-        BlockPos cur = path.getPosPath().get(progress);
-        for (int i = progress; i < progress+step && i < path.getPosPath().size()-1; i++) {
-            BlockPos pos = path.getPosPath().get(progress);
-            if (cur.getY() < pos.getY()) {
+        BlockPos cur = path.getPosPath().get(progress).getNamespace();
+        for (int i = progress; i < progress+step && i < path.getPosPath().size(); i++) {
+            AddressedData<BlockPos, Integer> pos = path.getPosPath().get(i);
+            if (cur.getY() < pos.getNamespace().getY()) {
+                progress = i;
+                return;
+            }
+            if (pos.getObject() < step) {
                 progress = i;
                 return;
             }
@@ -113,6 +123,7 @@ public class MovementController {
 
     public void stop() {
         this.paused = true;
+        this.path = null;
         this.progress = 0;
     }
 

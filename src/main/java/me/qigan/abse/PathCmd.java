@@ -27,7 +27,7 @@ public class PathCmd extends CommandBase {
                                 Integer.parseInt(args[1]),
                                 Integer.parseInt(args[2]),
                                 Integer.parseInt(args[3])
-                        )).build());
+                        )).allowAbstractPoint().build());
             }
         }
     }

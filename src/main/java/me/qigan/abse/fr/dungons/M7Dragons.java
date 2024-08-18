@@ -1,6 +1,7 @@
 package me.qigan.abse.fr.dungons;
 
 import me.qigan.abse.Index;
+import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.config.SetsData;
 import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
@@ -228,8 +229,8 @@ public class M7Dragons extends Module {
             Esp.autoBox3D(currentPath.from, Color.green, 2f, false);
             Esp.autoBox3D(currentPath.to, Color.green, 2f, false);
             List<Point3d> points = new ArrayList<>();
-            for (BlockPos pos : currentPath.getPosPath()) {
-                points.add(new Point3d(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5));
+            for (AddressedData<BlockPos, ?> pos : currentPath.getPosPath()) {
+                points.add(new Point3d(pos.getNamespace().getX()+0.5, pos.getNamespace().getY()+1, pos.getNamespace().getZ()+0.5));
             }
             Esp.drawAsSingleLine(points, Color.cyan, 4f, false);
         }

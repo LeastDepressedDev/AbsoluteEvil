@@ -1,5 +1,6 @@
 package me.qigan.abse.pathing;
 
+import me.qigan.abse.config.AddressedData;
 import me.qigan.abse.mapping.MappingConstants;
 import me.qigan.abse.sync.Utils;
 import net.minecraft.client.Minecraft;
@@ -17,10 +18,17 @@ public class Path{
     private final Map<BlockPos, Integer> map = new HashMap<>();
 
     public final BlockPos from;
-    public final BlockPos to;
+    public BlockPos to;
 
-    private final List<BlockPos> path = new ArrayList<>();
+    private final List<AddressedData<BlockPos, Integer>> path = new ArrayList<>();
     private boolean failed = true;
+
+
+    //Abstract point mec
+    private boolean absPt = false;
+    private double distancePt = Double.MAX_VALUE;
+    private BlockPos newPoint = null;
+
 
     public Path(BlockPos from, BlockPos to) {
         this.from = Utils.unify(from);
@@ -34,6 +42,11 @@ public class Path{
         this.limit = lim;
     }
 
+    public Path allowAbstractPoint() {
+        this.absPt = true;
+        return this;
+    }
+
 
     //Wave algoritm
     public Path build() {
@@ -45,8 +58,15 @@ public class Path{
             if (wave.contains(to)) {
                 failed = false;
                 bph(to);
+                path.add(new AddressedData<>(to, 1));
                 break;
             }
+        }
+        if (absPt && newPoint != null) {
+            failed = false;
+            this.to = newPoint;
+            bph(to);
+            path.add(new AddressedData<>(to, 1));
         }
         return this;
     }
@@ -66,6 +86,10 @@ public class Path{
                             wave.add(subPos);
                             map.put(subPos, val);
                             usedGeneric.add(subPos);
+                            if (absPt && subPos.distanceSq(to) < distancePt) {
+                                distancePt = subPos.distanceSq(to);
+                                newPoint = subPos;
+                            }
                         }
                     }
                 }
@@ -76,16 +100,18 @@ public class Path{
 
     private void bph(BlockPos pos) {
         if (pos == from) {
-            path.add(pos);
+            path.add(new AddressedData<>(pos, 1));
             return;
         }
         double distSQ = limit;
         BlockPos dl = null;
+        int vars = 0;
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
                     BlockPos subPos = pos.add(x, y, z);
                     if (map.containsKey(subPos) && map.get(subPos) < map.get(pos)) {
+                        vars++;
                         if (pos.distanceSq(subPos) < distSQ) {
                             distSQ = pos.distanceSq(subPos);
                             dl = subPos;
@@ -96,7 +122,7 @@ public class Path{
         }
         if (dl != null) {
             bph(dl);
-            path.add(dl);
+            path.add(new AddressedData<>(dl, vars));
         }
         else fail();
     }
@@ -109,7 +135,7 @@ public class Path{
         return failed;
     }
 
-    public List<BlockPos> getPosPath() {
+    public List<AddressedData<BlockPos, Integer>> getPosPath() {
         return path;
     }
 }
