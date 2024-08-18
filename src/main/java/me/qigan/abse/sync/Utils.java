@@ -33,6 +33,12 @@ public class Utils {
         romanHash.put('X', 10);
     }
 
+    public static boolean isPosLinkedToPos(BlockPos pos, BlockPos rel) {
+        return Utils.compare(rel.add(0, 1, 0), pos) || Utils.compare(rel.add(0, -1, 0), pos) ||
+                Utils.compare(rel.add(1, 0, 0), pos) || Utils.compare(rel.add(-1, 0, 0), pos) ||
+                Utils.compare(rel.add(0, 0, 1), pos) || Utils.compare(rel.add(0, 0, -1), pos);
+    }
+
     public static void selectHotbarSlot(int n) {
         Minecraft.getMinecraft().thePlayer.inventory.currentItem = Math.max(0, Math.min(8, n));
     }

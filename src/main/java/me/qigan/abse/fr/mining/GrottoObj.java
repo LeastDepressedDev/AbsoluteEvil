@@ -3,24 +3,26 @@ package me.qigan.abse.fr.mining;
 import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GrottoObj {
     public final BlockPos srcPos;
 
-    public final List<GrottoVein> veins;
+    public List<GrottoVein> veins = new ArrayList<>();
 
-    public int crystalsAmt = 0;
+    public Set<BlockPos> gen = new HashSet<>();
     public int mfAmount = 0;
 
     public GrottoObj(BlockPos pos) {
         this.srcPos = pos;
-        this.veins = new ArrayList<>();
         this.add(pos);
     }
 
     public void add(BlockPos pos) {
-        this.crystalsAmt++;
+        if (gen.contains(pos)) return;
+        gen.add(pos);
         if (pos.getY() < 68) mfAmount++;
         for (GrottoVein vein : veins) {
             if (vein.add(pos)) return;
@@ -41,6 +43,6 @@ public class GrottoObj {
     }
 
     public int mfPercent() {
-        return (int) Math.floor((float) mfAmount / (float) crystalsAmt * 100f);
+        return (int) Math.floor((float) mfAmount / (float) gen.size() * 100f);
     }
 }

@@ -7,6 +7,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.packets.PacketEvent;
+import me.qigan.abse.sync.Sync;
 import me.qigan.abse.vp.Esp;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.network.play.server.S21PacketChunkData;
+import net.minecraft.network.play.server.S26PacketMapChunkBulk;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -51,6 +53,10 @@ public class GrottoFinder extends Module {
                 queue.add(new Thread(() -> scan(packet.getChunkX(), packet.getChunkZ())));
             }
         }
+//        if (e.packet instanceof S26PacketMapChunkBulk) {
+//            S26PacketMapChunkBulk packet = (S26PacketMapChunkBulk) e.packet;
+//            for (packet.)
+//        }
     }
 
     @SubscribeEvent
@@ -70,22 +76,21 @@ public class GrottoFinder extends Module {
                 for (int y = 31; y < 170; y++) {
                     BlockPos pos = new BlockPos(x, y, z);
                     IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
-                    if (state.getBlock() != Blocks.stained_glass) continue;
+                    if (pos.distanceSq(513, 116, 559) > 400) continue;
+                    if (state.getBlock() != Blocks.stained_glass && state.getBlock() != Blocks.stained_glass_pane) continue;
                     if (state.getValue(BlockStainedGlass.COLOR) == EnumDyeColor.MAGENTA) {
                         boolean preq = false;
                         for (GrottoObj grot : grottos) {
                             BlockPos bp = grot.grottoCentralPos();
                             if (pos.distanceSq(bp.getX(), bp.getY(), bp.getZ()) < DISTANCE_PARA_CONST) {
                                 preq = true;
-                                grot.add(bp);
+                                grot.add(pos);
                                 break;
                             }
                         }
                         if (preq) continue;
                         System.out.println("You found!");
                         found(pos);
-                        active = false;
-                        return;
                     }
                 }
             }
@@ -107,7 +112,7 @@ public class GrottoFinder extends Module {
                 //Esp.autoBeaconBeam(pos.getX(), pos.getY(), pos.getZ(), Color.magenta.getRGB(), 100, e.partialTicks);
                 Esp.renderTextInWorld("Grotto y: " + cp.getY(), cp.add(0, 8, 0),
                         cp.getY() < 68 ? Color.red.getRGB() : Color.magenta.getRGB(), 3f, e.partialTicks);
-                Esp.renderTextInWorld("Crystals: " + data.veins.size() + "[" + data.crystalsAmt + "] (" + data.mfPercent() + "% in MF)", cp,
+                Esp.renderTextInWorld("Crystals: " + data.veins.size() + "[" + data.gen.size() + "] (" + data.mfPercent() + "% in MF)", cp,
                         cp.getY() < 68 ? Color.red.getRGB() : Color.magenta.getRGB(), 2f, e.partialTicks);
             }
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_tracer")) {
@@ -115,11 +120,13 @@ public class GrottoFinder extends Module {
                 Esp.drawTracer(player.posX, player.posY, player.posY, cp.getX()+0.5d, cp.getY()+0.5d, cp.getZ()+0.5d, Color.magenta, 2f, true);
             }
             if (Index.MAIN_CFG.getBoolVal("grotto_finder_veins")) {
-                Color col = new Color(0, 100, 200, 150);
-                for (GrottoVein vein : data.veins) {
+                Color col = new Color(0, 100, 200, 100);
+                List<GrottoVein> copy = new ArrayList<>(data.veins);
+                for (GrottoVein vein : copy) {
+                    if (vein.crystals.size() < 4) continue;
                     BlockPos pos = vein.getVeinPosition();
                     Esp.autoFilledBox3D(pos, col, 2, true);
-                    Esp.renderTextInWorld(vein.crystals.size() + "", pos, Color.magenta.getRGB(), 1f, e.partialTicks);
+                    Esp.renderTextInWorld(vein.crystals.size() + "", pos.add(0, -1, 0), Color.magenta.getRGB(), 1f, e.partialTicks);
                 }
             }
         }
@@ -184,6 +191,17 @@ public class GrottoFinder extends Module {
         List<SetsData<?>> list = new ArrayList<>();
         list.add(new SetsData<>("grotto_finder_wp", "Show waypoints", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("grotto_finder_veins", "Highlight veins", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("grotto_finder_force", "Force rescan", ValType.BUTTON, (Runnable) () -> {
+            BlockPos pos = Sync.playerPosAsBlockPos();
+            int cx = pos.getX()/16, cz = pos.getZ()/16;
+            for (int x = cx-3; x <= cx+3; x++) {
+                for (int z = cz-3; z <= cz+3; z++) {
+                    final int finalX = x;
+                    final int finalZ = z;
+                    queue.add(new Thread(() -> scan(finalX, finalZ)));
+                }
+            }
+        }));
         list.add(new SetsData<>("grotto_finder_tracer", "Show tracer", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("grotto_finder_fix", "Fix", ValType.BUTTON, (Runnable) GrottoFinder::fix));
         list.add(new SetsData<>("grotto_finder_stat", "Status", ValType.BUTTON, (Runnable) () -> {

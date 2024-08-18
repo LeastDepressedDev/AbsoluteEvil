@@ -1,5 +1,6 @@
 package me.qigan.abse.fr.mining;
 
+import me.qigan.abse.sync.Utils;
 import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
@@ -7,18 +8,19 @@ import java.util.List;
 
 public class GrottoVein {
 
-    public final List<BlockPos> crystals;
+    public List<BlockPos> crystals = new ArrayList<>();
 
 
     public GrottoVein(BlockPos pos) {
-        this.crystals = new ArrayList<>();
         crystals.add(pos);
     }
 
     public boolean add(BlockPos pos) {
-        if (pos.distanceSq(getVeinPosition()) < 64) {
-            crystals.add(pos);
-            return true;
+        for (BlockPos under : crystals) {
+            if (under.distanceSq(pos) < 16) {
+                crystals.add(pos);
+                return true;
+            }
         }
         return false;
     }
