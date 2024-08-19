@@ -50,7 +50,7 @@ public class GrottoFinder extends Module {
             AddressedData<Integer, Integer> dat = new AddressedData<>(packet.getChunkX(), packet.getChunkZ());
             if (!vChunks.contains(dat)) {
                 vChunks.add(dat);
-                queue.add(new Thread(() -> scan(packet.getChunkX(), packet.getChunkZ())));
+                queue.add(new Thread(() -> scan(packet.getChunkX(), packet.getChunkZ(), Index.MAIN_CFG.getIntVal("grotto_finder_skip"))));
             }
         }
 //        if (e.packet instanceof S26PacketMapChunkBulk) {
@@ -67,13 +67,13 @@ public class GrottoFinder extends Module {
         }
     }
 
-    public static void scan(final int cx, final int cz) {
+    public static void scan(final int cx, final int cz, int skip) {
         lastScannedChunk = new AddressedData<>(cx, cz);
         int mx = cx * 16;
         int mz = cz * 16;
-        for (int x = mx; x < mx + 16; x++) {
-            for (int z = mz; z < mz + 16; z++) {
-                for (int y = 31; y < 170; y++) {
+        for (int x = mx; x < mx + 16; x+=1+skip) {
+            for (int z = mz; z < mz + 16; z+=1+skip) {
+                for (int y = 31; y < 170; y+=1+skip) {
                     BlockPos pos = new BlockPos(x, y, z);
                     IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
                     if (pos.distanceSq(513, 116, 559) > 400) continue;
@@ -161,6 +161,15 @@ public class GrottoFinder extends Module {
                 new ChatComponentText("\u00A7aFound potential grotto at " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + ". " + finalLine)
         );
         GuiNotifier.call("Found grotto", 20, true, Color.magenta.getRGB());
+
+        int cx = pos.getX()/16, cz = pos.getZ()/16;
+        for (int x = cx-3; x <= cx+3; x++) {
+            for (int z = cz-3; z <= cz+3; z++) {
+                final int finalX = x;
+                final int finalZ = z;
+                queue.add(new Thread(() -> scan(finalX, finalZ, 0)));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -198,10 +207,11 @@ public class GrottoFinder extends Module {
                 for (int z = cz-3; z <= cz+3; z++) {
                     final int finalX = x;
                     final int finalZ = z;
-                    queue.add(new Thread(() -> scan(finalX, finalZ)));
+                    queue.add(new Thread(() -> scan(finalX, finalZ, Index.MAIN_CFG.getIntVal("grotto_finder_skip"))));
                 }
             }
         }));
+        list.add(new SetsData<>("grotto_finder_skip", "Scan skip[the higher the faster but less accurate]", ValType.NUMBER, "0"));
         list.add(new SetsData<>("grotto_finder_tracer", "Show tracer", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("grotto_finder_fix", "Fix", ValType.BUTTON, (Runnable) GrottoFinder::fix));
         list.add(new SetsData<>("grotto_finder_stat", "Status", ValType.BUTTON, (Runnable) () -> {

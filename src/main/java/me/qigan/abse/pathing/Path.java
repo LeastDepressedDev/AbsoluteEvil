@@ -10,22 +10,25 @@ import java.util.*;
 
 public class Path{
 
-    private final int limit;
+    protected final int limit;
 
-    private final Set<BlockPos> usedGeneric = new HashSet<>();
-    private final Float pitchOverride = null;
+    protected final Set<BlockPos> usedGeneric = new HashSet<>();
+    protected final Float pitchOverride = null;
 
-    private final Map<BlockPos, Integer> map = new HashMap<>();
+    protected final Map<BlockPos, Integer> map = new HashMap<>();
 
     public final BlockPos from;
     public BlockPos to;
 
-    private final List<AddressedData<BlockPos, Integer>> path = new ArrayList<>();
+    protected final List<AddressedData<BlockPos, Integer>> path = new ArrayList<>();
     private boolean failed = true;
+
+    public boolean allowDiagonalWave = true;
+    public boolean sprint = false;
 
 
     //Abstract point mec
-    private boolean absPt = false;
+    public boolean absPt = false;
     private double distancePt = Double.MAX_VALUE;
     private BlockPos newPoint = null;
 
@@ -42,8 +45,26 @@ public class Path{
         this.limit = lim;
     }
 
+
+    public Path copyParam(Path pth) {
+        this.absPt = pth.absPt;
+        this.sprint = pth.sprint;
+        this.allowDiagonalWave = pth.allowDiagonalWave;
+        return this;
+    }
+
     public Path allowAbstractPoint() {
         this.absPt = true;
+        return this;
+    }
+
+    public Path disallowDiagonalWave() {
+        this.allowDiagonalWave = false;
+        return this;
+    }
+
+    public Path allowSprint() {
+        this.sprint = true;
         return this;
     }
 
@@ -78,6 +99,7 @@ public class Path{
                 for (int y = -1; y <= 1; y++) {
                     for (int z = -1; z <= 1; z++) {
                         if (y == 1 && x != 0 && z != 0) continue;
+                        if (x != 0 && z != 0 && !allowDiagonalWave) continue;
                         BlockPos subPos = pos.add(x, y, z);
                         if (usedGeneric.contains(subPos) || poses.contains(subPos)) continue;
                         if (!MappingConstants.NOT_COLLIDABLE.contains(Minecraft.getMinecraft().theWorld.getBlockState(subPos.add(0, -1, 0)).getBlock())

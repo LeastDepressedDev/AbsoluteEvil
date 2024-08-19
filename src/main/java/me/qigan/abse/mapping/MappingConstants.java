@@ -24,9 +24,6 @@ public class MappingConstants {
         NOT_COLLIDABLE.add(Blocks.cake);
         NOT_COLLIDABLE.add(Blocks.carpet);
         NOT_COLLIDABLE.add(Blocks.bed);
-        NOT_COLLIDABLE.add(Blocks.stone_slab);
-        NOT_COLLIDABLE.add(Blocks.stone_slab2);
-        NOT_COLLIDABLE.add(Blocks.wooden_slab);
         NOT_COLLIDABLE.add(Blocks.vine);
         NOT_COLLIDABLE.add(Blocks.tallgrass);
 

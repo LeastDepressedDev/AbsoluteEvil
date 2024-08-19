@@ -27,7 +27,12 @@ public class PathCmd extends CommandBase {
                                 Integer.parseInt(args[1]),
                                 Integer.parseInt(args[2]),
                                 Integer.parseInt(args[3])
-                        )).allowAbstractPoint().build());
+                        )).allowSprint().allowAbstractPoint().build());
+            }
+            else if (args[0].equalsIgnoreCase("gone") && args.length > 3) {
+                BlockPos fin = new BlockPos(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                Index.MOVEMENT_CONTROLLER.continuous(fin);
+                Index.MOVEMENT_CONTROLLER.go(new Path(Sync.playerPosAsBlockPos(), fin).allowSprint().allowAbstractPoint().build());
             }
         }
     }

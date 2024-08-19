@@ -17,12 +17,18 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import javax.vecmath.Point3d;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class MovementController {
     private Path path = null;
     private boolean paused = true;
-    public boolean sprint = false;
+
+    private boolean continuous = false;
+    private BlockPos prefFinish = null;
+
+    public Queue<Path> queuePath = new LinkedList<>();
 
 
     public int progress = 0;
@@ -69,7 +75,20 @@ public class MovementController {
                 //Minecraft.getMinecraft().thePlayer.rotationYaw = rotations[0];
                 if (Math.abs(rotations[0] - Minecraft.getMinecraft().thePlayer.rotationYawHead) < 30d)
                     ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 2);
-                if (sprint && data.getObject() > 1) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), 2);
+                if (Math.abs(rotations[0] - Minecraft.getMinecraft().thePlayer.rotationYawHead) > 80d)
+                    ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 2);
+                if (path.sprint && data.getObject() > 1) ClickSimTick.click(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), 2);
+
+                if (continuous && progress > path.getPosPath().size()-10 && queuePath.size() < 1) {
+                    Path newPath = new Path(path.to, this.prefFinish).copyParam(path).build();
+                    if (Utils.compare(path.to, newPath.to) || Utils.compare(newPath.from, newPath.to) || newPath.getPosPath().size() == 0) {
+                        continuous = false;
+                        return;
+                    }
+                    queuePath.add(newPath);
+                }
+
+
                 Esp.autoBox3D(path.from, Color.green, 2f, true);
                 Esp.autoBox3D(path.to, Color.red, 2f, true);
                 List<Point3d> points = new ArrayList<>();
@@ -112,6 +131,11 @@ public class MovementController {
         progress = (Math.min(progress+step, path.getPosPath().size()-1));
     }
 
+    public void continuous(BlockPos absoluteFinish) {
+        this.prefFinish = absoluteFinish;
+        this.continuous = true;
+    }
+
     public void go(Path path) {
         this.path = path;
         start();
@@ -125,6 +149,9 @@ public class MovementController {
         this.paused = true;
         this.path = null;
         this.progress = 0;
+        if (continuous) {
+            go(queuePath.poll());
+        }
     }
 
     public void pause() {
