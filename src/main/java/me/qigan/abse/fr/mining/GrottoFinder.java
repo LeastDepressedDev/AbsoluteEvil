@@ -76,7 +76,7 @@ public class GrottoFinder extends Module {
                 for (int y = 31; y < 170; y+=1+skip) {
                     BlockPos pos = new BlockPos(x, y, z);
                     IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
-                    if (pos.distanceSq(513, 116, 559) > 400) continue;
+                    if (pos.distanceSq(513, 116, 559) < 200) continue;
                     if (state.getBlock() != Blocks.stained_glass && state.getBlock() != Blocks.stained_glass_pane) continue;
                     if (state.getValue(BlockStainedGlass.COLOR) == EnumDyeColor.MAGENTA) {
                         boolean preq = false;
