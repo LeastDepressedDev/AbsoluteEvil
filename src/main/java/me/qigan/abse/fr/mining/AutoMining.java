@@ -70,8 +70,6 @@ public class AutoMining extends Module {
     public static STAGE stage = STAGE.IDLE;
     public static int progress = 0;
 
-    public static int moveTicks = 0;
-
 
     public static int forceDelay = 0;
 
@@ -111,23 +109,16 @@ public class AutoMining extends Module {
                     simTowardRotation(mining, 1d);
                     tickSince++;
 
-                    if (Index.MAIN_CFG.getBoolVal("auto_mining_advm")) {
-                        if (moveTicks <= 0) {
-                            if (Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(blockRoute.get(progress).add(0, 1, 0)) < 0.6) {
-                                int side = rand.nextInt() % 3;
-                                moveTicks = 60 + rand.nextInt() % 41;
-                                ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 1 + moveTicks / 40);
-//                            if (side == 0) ClickSimTick.updatableClick(rand.nextBoolean() ?
-//                                    Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode() : Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode(), 4);
-                            }
-                        } else moveTicks--;
-                    }
-
                     BlockPos trace = Minecraft.getMinecraft().objectMouseOver.getBlockPos();
                     if (trace != null) {
                         Block block = Minecraft.getMinecraft().theWorld.getBlockState(trace).getBlock();
-                        if (Utils.compare(trace, mining) || block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
-                            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 1);
+                        if (block != Blocks.air) {
+                            if (Utils.compare(trace, mining) || block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
+                                ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 1);
+                            }
+                        } else if (Index.MAIN_CFG.getBoolVal("auto_mining_advm") &&
+                                player.getDistance(mining.getX()+0.5, mining.getY()-1, mining.getZ()+0.5) > 4) {
+                            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 1);
                         }
                     }
                 } else next();
@@ -177,7 +168,7 @@ public class AutoMining extends Module {
     @SubscribeEvent
     void chat(ClientChatReceivedEvent e) {
         if (!isEnabled()) return;
-        String text = e.message.getFormattedText();
+        String text = Utils.cleanSB(e.message.getFormattedText());
         if (text.equalsIgnoreCase("Mining Speed Boost is now available!") && Index.MAIN_CFG.getBoolVal("auto_mining_abil")) clickAbility();
         if (text.equalsIgnoreCase("You used your Mining Speed Boost Pickaxe Ability!")) {
             lastUseAbility = System.currentTimeMillis();
@@ -314,17 +305,17 @@ public class AutoMining extends Module {
 
     public static BlockPos crystalScan(BlockPos playerPos, BlockPos lastMinedPos) {
         BlockPos sel = null;
-        int corner = Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 4 : 5;
-        for (int x = -corner; x < corner; x++) {
-            for (int y = -5; y < 5; y++) {
-                for (int z = -corner; z < corner; z++) {
+        int corner = Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 5 : 4;
+        for (int x = -corner; x <= corner; x++) {
+            for (int y = -5; y <= 5; y++) {
+                for (int z = -corner; z <= corner; z++) {
                     //TODO: Complete selector
                     BlockPos centralPos = blockRoute.get(progress).add(0, 2, 0);
                     BlockPos scanPos = centralPos.add(x, y, z);
                     if (skipPos.contains(scanPos)) continue;
                     IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(scanPos);
                     Block curBlock = state.getBlock();
-                    double sq = curBlock == Blocks.stained_glass ? scanPos.distanceSq(centralPos) : scanPos.distanceSqToCenter(centralPos.getX(), centralPos.getY(), centralPos.getZ());
+                    double sq = scanPos.distanceSq(centralPos);
                     double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.5 : 0)/*+(curBlock == Blocks.stained_glass_pane ? -0.7 : 0)*/;
                     if (sq > subDist*subDist) continue;
                     if ((Math.abs(scanPos.getX() - centralPos.getX()) <= 1 && Math.abs(scanPos.getZ() - centralPos.getZ()) <= 1)
