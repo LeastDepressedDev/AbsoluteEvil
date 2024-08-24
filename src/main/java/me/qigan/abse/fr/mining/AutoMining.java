@@ -206,7 +206,7 @@ public class AutoMining extends Module {
     }
 
     private static boolean checkIn() {
-        return Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(blockRoute.get(progress).add(0, 1, 0)) < 0.7;
+        return Minecraft.getMinecraft().thePlayer.getDistanceSqToCenter(blockRoute.get(progress).add(0, 1, 0)) < 2;
     }
 
     private static void clickAbility() {

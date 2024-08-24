@@ -60,15 +60,15 @@ public class RenderableModule extends WidgetUpdatable {
                     break;
                 case STRING:
                     triggers.add(new WidgetTextField(250, calcYPos, 85, WidgetSwitch.CONST_SIZE_H)
-                            .setText(Index.MAIN_CFG.getStrVal(data.setId)));
+                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).allowInstaSync());
                     break;
                 case NUMBER:
                     triggers.add(new WidgetTextField(250, calcYPos, 85, WidgetSwitch.CONST_SIZE_H)
-                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).filter("-1234567890"));
+                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).filter("-1234567890").allowInstaSync());
                     break;
                 case DOUBLE_NUMBER:
                     triggers.add(new WidgetTextField(250, calcYPos, 85, WidgetSwitch.CONST_SIZE_H)
-                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).filter("-.1234567890"));
+                            .setText(Index.MAIN_CFG.getStrVal(data.setId)).filter("-.1234567890").allowInstaSync());
                     break;
 
                 case COMMENT:
