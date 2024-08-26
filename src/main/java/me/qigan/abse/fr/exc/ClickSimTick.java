@@ -3,6 +3,7 @@ package me.qigan.abse.fr.exc;
 import me.qigan.abse.config.AddressedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -12,7 +13,7 @@ public class ClickSimTick {
 
     public static Map<Integer, Integer> data = new HashMap<>();
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     void tick(TickEvent.ClientTickEvent e) {
         if (e.phase == TickEvent.Phase.END) return;
         try {

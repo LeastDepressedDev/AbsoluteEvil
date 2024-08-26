@@ -141,6 +141,14 @@ public class AutoMining extends Module {
 
                     ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), 13);
                     forceDelay = 18;
+                } else {
+                    BlockPos pos = Minecraft.getMinecraft().objectMouseOver.getBlockPos();
+                    if (pos != null) {
+                        Block block = Minecraft.getMinecraft().theWorld.getBlockState(pos).getBlock();
+                        if (block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
+                            ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 1);
+                        }
+                    }
                 }
             }
             break;
@@ -233,7 +241,7 @@ public class AutoMining extends Module {
         double dz = target.getZ() + 0.5d - player.posZ + (block == Blocks.stained_glass_pane ? 0 : offsets[2]);
         Float[] angles = Utils.getRotationsTo(dx, dy, dz, new float[]{player.rotationYaw, player.rotationPitch});
         if (Minecraft.getMinecraft().thePlayer.rotationYaw == angles[0] && Minecraft.getMinecraft().thePlayer.rotationPitch == angles[1]
-        && tickSince > 35 && Index.MAIN_CFG.getBoolVal("auto_mining_skips")) {
+        && Index.MAIN_CFG.getBoolVal("auto_mining_skips") && tickSince > Index.MAIN_CFG.getIntVal("auto_mining_st")) {
             skipPos.add(target);
             reselect();
         }
@@ -319,7 +327,7 @@ public class AutoMining extends Module {
                     double subDist = DIST+(Index.MAIN_CFG.getBoolVal("auto_mining_advm") ? 0.5 : 0)/*+(curBlock == Blocks.stained_glass_pane ? -0.7 : 0)*/;
                     if (sq > subDist*subDist) continue;
                     if ((Math.abs(scanPos.getX() - centralPos.getX()) <= 1 && Math.abs(scanPos.getZ() - centralPos.getZ()) <= 1)
-                            && scanPos.getY() <= centralPos.getY()) continue;
+                            && scanPos.getY() < centralPos.getY()-2) continue;
                     if (curBlock != Blocks.stained_glass && curBlock != Blocks.stained_glass_pane) continue;
                     if (Index.MAIN_CFG.getBoolVal("auto_mining_fil")) {
                         Collection<EnumDyeColor> colors = AutoMiningFilter.allowedColors();
@@ -397,6 +405,7 @@ public class AutoMining extends Module {
         list.add(new SetsData<>("auto_mining_comment2", "Active settings: ", ValType.COMMENT, null));
         list.add(new SetsData<>("auto_mining_mobs", "Kill mobs", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_skips", "Skip unreachable blocks", ValType.BOOLEAN, "true"));
+        list.add(new SetsData<>("auto_mining_st", "Skip after ticks", ValType.NUMBER, "90"));
         list.add(new SetsData<>("auto_mining_advm", "Advanced movement", ValType.BOOLEAN, "false"));
         list.add(new SetsData<>("auto_mining_abil", "Auto ability on ready", ValType.BOOLEAN, "true"));
         list.add(new SetsData<>("auto_mining_force", "Force delay ticks", ValType.NUMBER, "1"));
@@ -452,6 +461,9 @@ public class AutoMining extends Module {
                 }
                 Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7aLoaded " + obj.getString("name") + " by " + obj.getString("author") + ". Length: " + obj.getInt("size") + "."));
                 blockRoute = path;
+                for (BlockPos pos : blockRoute) {
+                    skipPos.add(pos.add(0, -1, 0));
+                }
             } catch (FileNotFoundException e) {
                 Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText("\u00A7cUnpredicted thing went wrong!"));
                 throw new RuntimeException(e);
