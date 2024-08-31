@@ -8,14 +8,11 @@ import me.qigan.abse.crp.DangerousModule;
 import me.qigan.abse.crp.EDLogic;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.overlay.GuiNotifier;
-import me.qigan.abse.packets.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.network.Packet;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;

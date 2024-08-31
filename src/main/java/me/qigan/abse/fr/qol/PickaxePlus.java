@@ -2,10 +2,9 @@ package me.qigan.abse.fr.qol;
 
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.crp.TagConstants;
-import me.qigan.abse.packets.PacketEvent;
+import me.qigan.abse.events.PacketEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

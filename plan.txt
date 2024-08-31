@@ -8,6 +8,7 @@ Add remapping:
 
 
 Fix supply pearl no throwing - Done
+Fixed Combat helper sprint - Done
 Modify autoskip - Done
 Added auto p4 - Done
 Added a lot of other shit done

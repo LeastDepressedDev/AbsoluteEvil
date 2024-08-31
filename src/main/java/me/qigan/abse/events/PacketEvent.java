@@ -16,7 +16,7 @@
  * with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.qigan.abse.packets;
+package me.qigan.abse.events;
 
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;

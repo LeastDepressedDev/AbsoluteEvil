@@ -7,7 +7,7 @@ import me.qigan.abse.config.ValType;
 import me.qigan.abse.crp.Module;
 import me.qigan.abse.gui.overlay.GuiNotifier;
 import me.qigan.abse.pathing.Path;
-import me.qigan.abse.packets.PacketEvent;
+import me.qigan.abse.events.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;

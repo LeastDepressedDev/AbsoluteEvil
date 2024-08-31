@@ -10,6 +10,7 @@ import me.qigan.abse.config.MuConfig;
 import me.qigan.abse.config.PositionConfig;
 import me.qigan.abse.crp.ovr.CustomEntRender;
 import me.qigan.abse.crp.ovr.MCMainMenu;
+import me.qigan.abse.events.CoreEventProfiler;
 import me.qigan.abse.fr.exc.Alert;
 import me.qigan.abse.fr.exc.TickTasks;
 import me.qigan.abse.fr.mining.AutoMining;
@@ -24,7 +25,7 @@ import me.qigan.abse.mapping.MappingConstants;
 import me.qigan.abse.mapping.MappingController;
 import me.qigan.abse.pathing.MovementController;
 import me.qigan.abse.mapping.routing.RouteUpdater;
-import me.qigan.abse.packets.PacketHandler;
+import me.qigan.abse.events.PacketHandler;
 import me.qigan.abse.sync.SoundUtils;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
@@ -121,6 +122,7 @@ public class MainWrapper {
         MinecraftForge.EVENT_BUS.register(new TickTasks());
         MinecraftForge.EVENT_BUS.register(new RouteUpdater());
         MinecraftForge.EVENT_BUS.register(new Alert());
+        MinecraftForge.EVENT_BUS.register(new CoreEventProfiler());
         //MinecraftForge.EVENT_BUS.register(new Mapping());
 
 

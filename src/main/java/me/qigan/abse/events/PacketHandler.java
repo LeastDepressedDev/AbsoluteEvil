@@ -16,7 +16,7 @@
  * with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.qigan.abse.packets;
+package me.qigan.abse.events;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;

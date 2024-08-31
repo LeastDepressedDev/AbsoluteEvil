@@ -9,7 +9,7 @@ import me.qigan.abse.fr.exc.Alert;
 import me.qigan.abse.fr.exc.ClickSimTick;
 import me.qigan.abse.fr.exc.SmoothAimControl;
 import me.qigan.abse.fr.exc.TickTasks;
-import me.qigan.abse.packets.PacketEvent;
+import me.qigan.abse.events.PacketEvent;
 import me.qigan.abse.sync.Sync;
 import me.qigan.abse.sync.Utils;
 import me.qigan.abse.vp.Esp;
@@ -116,7 +116,7 @@ public class AutoMining extends Module {
                             if (Utils.compare(trace, mining) || block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
                                 ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindAttack.getKeyCode(), 1);
                             }
-                        } else if (Index.MAIN_CFG.getBoolVal("auto_mining_advm") &&
+                        } else if (Index.MAIN_CFG.getBoolVal("auto_mining_advm") && mining != null &&
                                 player.getDistance(mining.getX()+0.5, mining.getY()-1, mining.getZ()+0.5) > 4) {
                             ClickSimTick.updatableClick(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode(), 1);
                         }
@@ -237,7 +237,7 @@ public class AutoMining extends Module {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         Block block = Minecraft.getMinecraft().theWorld.getBlockState(target).getBlock();
         double dx = target.getX() + 0.5d - player.posX + (block == Blocks.stained_glass_pane ? 0 : offsets[0]);
-        double dy = target.getY() - player.posY - 1d + (isClosedBlock(target) ? (target.getY() < player.posY ? +0.5d : -0.5d ) : offsets[1]);
+        double dy = target.getY() - player.posY - 1d + (isClosedBlock(target) || block == Blocks.stained_glass_pane ? (target.getY() < player.posY ? +0.5d : -0.5d ) : offsets[1]);
         double dz = target.getZ() + 0.5d - player.posZ + (block == Blocks.stained_glass_pane ? 0 : offsets[2]);
         Float[] angles = Utils.getRotationsTo(dx, dy, dz, new float[]{player.rotationYaw, player.rotationPitch});
         if (Minecraft.getMinecraft().thePlayer.rotationYaw == angles[0] && Minecraft.getMinecraft().thePlayer.rotationPitch == angles[1]
