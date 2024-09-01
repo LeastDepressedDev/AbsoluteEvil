@@ -221,8 +221,8 @@ public class NewMainMenu extends QGuiScreen {
         GlStateManager.pushMatrix();
         GlStateManager.translate((int) (MATRIX_SIZES.width/4f)+10, (int) (MATRIX_SIZES.height/7f)+15-scroll, 0d);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(0, (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight()-MATRIX_BEGIN.y-(MATRIX_SIZES.height-4)*scaleFactorH)*2),
-                100000, (int) ((6d*MATRIX_SIZES.height/7d-15)*2*scaleFactorH));
+        GL11.glScissor(0, (int) ((new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight()-MATRIX_BEGIN.y-(MATRIX_SIZES.height-4)*scaleFactorH)*Minecraft.getMinecraft().gameSettings.guiScale),
+                100000, (int) ((6d*MATRIX_SIZES.height/7d-15)*scaleFactorH*Minecraft.getMinecraft().gameSettings.guiScale));
         int d = 0;
         for (RenderableModule mod : modToRender) {
             GlStateManager.pushMatrix();

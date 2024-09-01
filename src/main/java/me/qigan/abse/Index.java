@@ -44,9 +44,6 @@ public class Index
         Field sessionField = ReflectionHelper.findField(Minecraft.class, "session", "field_71449_j");
         ReflectionHelper.setPrivateValue(Field.class, sessionField, sessionField.getModifiers() & ~Modifier.FINAL, "modifiers");
         ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), session, "session", "field_71449_j");
-
-
-        JOptionPane.showMessageDialog(null, "Logged as " + username, "Asolute Evil", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void absoluteFix() {

@@ -152,6 +152,7 @@ public class InputField extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Index.relog(uname.comp.getText(), token.comp.getText(), pid.comp.getText());
+                        JOptionPane.showMessageDialog(null, "Logged as " + uname.comp.getText(), "Asolute Evil", JOptionPane.INFORMATION_MESSAGE);
                         MainWrapper.ls.setVisible(false);
                     }
                 });
