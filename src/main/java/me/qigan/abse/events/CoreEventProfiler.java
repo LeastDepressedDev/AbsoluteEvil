@@ -16,7 +16,7 @@ public class CoreEventProfiler {
 
     @SubscribeEvent
     void entityUpdate(LivingEvent.LivingUpdateEvent e) {
-        if (e.entityLiving.hurtTime != 0) {
+        if (e.entityLiving.hurtTime > 3) {
             if (!hurtEventCollect.contains(e.entityLiving.getEntityId())) {
                 hurtEventCollect.add(e.entityLiving.getEntityId());
                 MinecraftForge.EVENT_BUS.post(new LivingHurtEvent(e.entityLiving));
